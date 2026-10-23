@@ -1,20 +1,29 @@
+;-	〜
 ~	〜
 z-	〜
 z/	・
 ,	、
+;,	‥
 z,	‥
+;.	…
 z.	…
 .	。
 [	「
 ]	」
+;[	『
 z[	『
+;]	』
 z]	』
+;d	←
 zh	←
+;n	→
 zl	→
+;t	↑
 zk	↑
+;h	↓
 zj	↓
 -	ー
-www	w
+www	w	ww
 la	ぁ
 xa	ぁ
 a	あ
@@ -58,16 +67,22 @@ xka	ヵ
 ca	か
 ka	か
 ga	が
+ci	き
 ki	き
 gi	ぎ
+cyi	きぃ
 kyi	きぃ
 gyi	ぎぃ
+cye	きぇ
 kye	きぇ
 gye	ぎぇ
+cya	きゃ
 kya	きゃ
 gya	ぎゃ
+cyu	きゅ
 kyu	きゅ
 gyu	ぎゅ
+cyo	きょ
 kyo	きょ
 gyo	ぎょ
 cu	く
@@ -90,6 +105,7 @@ qo	くぉ
 gwo	ぐぉ
 lke	ヶ
 xke	ヶ
+ce	け
 ke	け
 ge	げ
 co	こ
@@ -97,7 +113,6 @@ ko	こ
 go	ご
 sa	さ
 za	ざ
-ci	し
 shi	し
 si	し
 ji	じ
@@ -137,7 +152,6 @@ swe	すぇ
 zwe	ずぇ
 swo	すぉ
 zwo	ずぉ
-ce	せ
 se	せ
 ze	ぜ
 so	そ
@@ -147,50 +161,45 @@ da	だ
 chi	ち
 ti	ち
 di	ぢ
-cyi	ちぃ
 tyi	ちぃ
 dyi	ぢぃ
 che	ちぇ
-cye	ちぇ
 tye	ちぇ
 dye	ぢぇ
 cha	ちゃ
-cya	ちゃ
 tya	ちゃ
 dya	ぢゃ
 chu	ちゅ
-cyu	ちゅ
 tyu	ちゅ
 dyu	ぢゅ
 cho	ちょ
-cyo	ちょ
 tyo	ちょ
 dyo	ぢょ
-bb	っ
-cc	っ
-dd	っ
-ff	っ
-gg	っ
-hh	っ
-jj	っ
-kk	っ
-ll	っ
+bb	っ	b
+cc	っ	c
+dd	っ	d
+ff	っ	f
+gg	っ	g
+hh	っ	h
+jj	っ	j
+kk	っ	k
+ll	っ	l
 ltsu	っ
 ltu	っ
-mm	っ
-pp	っ
-qq	っ
-rr	っ
-ss	っ
-tch	っ
-tt	っ
-vv	っ
-ww	っ
+mm	っ	m
+pp	っ	p
+qq	っ	q
+rr	っ	r
+ss	っ	s
+tch	っ	ch
+tt	っ	t
+vv	っ	v
+ww	っ	w
 xtsu	っ
 xtu	っ
-xx	っ
-yy	っ
-zz	っ
+xx	っ	x
+yy	っ	y
+zz	っ	z
 tsu	つ
 tu	つ
 du	づ

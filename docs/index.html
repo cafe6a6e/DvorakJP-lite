@@ -43,7 +43,7 @@
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
       <p class="lead">
-        DvorakJP の拡張ローマ字入力のうち、<strong>QWERTY のローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。
+        <a href="#dvorakjp">DvorakJP</a> 拡張ローマ字入力のうち、<strong>QWERTY ローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。
       </p>
 
       <figure>
@@ -55,7 +55,7 @@
       <h2>設計思想</h2>
 
       <h3>1. QWERTY と共存する</h3>
-      <p>元祖 DvorakJP の拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。</p>
+      <p>オリジナルの <a href="#dvorakjp">DvorakJP</a> 拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。</p>
       <div class="table-wrap">
         <table>
           <thead><tr><th>打鍵</th><th>QWERTY ローマ字</th><th>元祖 DvorakJP</th></tr></thead>
@@ -68,12 +68,15 @@
       </div>
       <p>DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWERTY ローマ字の打ち方を一切変えません。</p>
       <ul class="points">
-        <li><strong>効果の小さいものは採用しない。</strong>
-          例: <code>nh*</code>（にゃ行。<code>ny*</code> で打てる）、<code>zh*</code>（じゃ行。<code>ja</code> で打てる）</li>
         <li><strong>効果の大きいものは、QWERTY ローマ字で打たない組み合わせを最小限使って採用する。</strong> 例:
           <ul>
             <li>な行の拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
             <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいので、h による拗音のうち <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）</li>
+          </ul>
+        </li>
+        <li><strong>効果が限定的なものは採用しない。</strong> 例:
+          <ul>
+            <li>ぴゃ行以外の<code>h</code>,<code>n</code>拗音拡張は採用しない。主要な拗音は、QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
           </ul>
         </li>
       </ul>
@@ -183,6 +186,72 @@
         <p class="pg-status" id="pg-status">読み込み中…</p>
         <div class="pg-text" id="pg-text"></div>
       </div>
+    </section>
+
+    <!-- DvorakJP とは（ナビゲーションには出さず、本文のリンクから開く） -->
+    <section id="page-dvorakjp" class="page" hidden>
+      <h1>DvorakJP とは</h1>
+      <p class="lead">
+        Dvorak 配列で日本語を打ちやすくするために、ローマ字入力を拡張したローマ字テーブルです。キーの物理配置は Dvorak 配列のまま、<strong>打鍵の数と左右の手の偏りを減らします</strong>。
+      </p>
+
+      <figure>
+        <img src="images/layout-dvorakjp.webp" width="1200" height="455"
+             alt="DvorakJP のキー配置図。左手に母音と拡張キー、右手に子音と拗音キーが並ぶ。h で拗音を打つ子音は黄色、n で打つ子音は水色。">
+        <figcaption>左手に母音と拡張キー、右手に子音。子音の後に赤いキーを打つと二重母音や「ん」を入力できます。拗音は、黄色の子音なら h、水色の子音なら n を続けて打ちます。</figcaption>
+      </figure>
+
+      <h2>設計思想</h2>
+
+      <h3>1. 母音は左手、子音は右手で打つ</h3>
+      <p>Dvorak 配列は左手のホーム段に母音（<code>a</code> <code>o</code> <code>e</code> <code>u</code> <code>i</code>）が並び、子音の多くは右手にあります。ローマ字の「子音＋母音」が左右交互の打鍵になり、日本語でも打ちやすい配列です。</p>
+
+      <h3>2. 左手に残った子音を右手で打てるようにする</h3>
+      <p>ただし、か行の <code>k</code> と拗音の <code>y</code> は左手にあり、左右交互が崩れます。DvorakJP では右手のキーで代わりに打てるようにします。</p>
+      <ul class="points">
+        <li><strong>か行は <code>c</code> でも打てる。</strong> 例: <code>ca</code> か、<code>ci</code> き、<code>co</code> こ</li>
+        <li><strong>拗音は <code>y</code> の代わりに <code>h</code> か <code>n</code> で打てる。</strong> 例: <code>rha</code> りゃ、<code>cna</code> きゃ</li>
+      </ul>
+
+      <h3>3. よく出る母音の組み合わせと「ん」を1打にする</h3>
+      <p>「こう」「かい」「せん」のような二重母音や撥音（ん）は、日本語にとても多く出てきます。左手の母音のまわりにある、ローマ字では使わないキー（<code>'</code> <code>,</code> <code>.</code> <code>p</code> <code>;</code> <code>q</code> <code>j</code> <code>k</code> <code>x</code>）に割り当て、子音の後に1打で打てるようにします。例: <code>c,c'</code> こうかい（公開）、<code>t,cn,</code> とうきょう（東京）</p>
+
+      <h2>拡張キー</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行の例</th><th>拗音の例</th></tr></thead>
+          <tbody>
+            <tr><td><code>'</code></td><td>ア段＋い</td><td><code>s'</code> さい</td><td><code>n'</code> ない</td><td><code>rh'</code> りゃい</td></tr>
+            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td><td><code>n;</code> なん</td><td><code>cn;</code> きゃん</td></tr>
+            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td><td><code>n.</code> ねい</td><td><code>hn.</code> ひぇい</td></tr>
+            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td><td><code>n,</code> のう</td><td><code>rh,</code> りょう</td></tr>
+            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td><td><code>np</code> ぬう</td><td><code>rhp</code> りゅう</td></tr>
+            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td><td><code>nk</code> ぬん</td><td><code>cnk</code> きゅん</td></tr>
+            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td><td><code>nj</code> ねん</td><td><code>mnj</code> みぇん</td></tr>
+            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td><td><code>nq</code> のん</td><td><code>rhq</code> りょん</td></tr>
+            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td><td><code>nx</code> にん</td><td><code>bnx</code> びぃん</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>拗音に <code>h</code> と <code>n</code> のどちらを使うかは、子音で決まります（<code>y</code> もそのまま使えます）。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>拗音キー</th><th>子音と例</th></tr></thead>
+          <tbody>
+            <tr><td><code>h</code></td><td><code>kha</code> きゃ、<code>sha</code> しゃ、<code>jha</code> じゃ、<code>nha</code> にゃ、<code>rha</code> りゃ、<code>pha</code> ぴゃ、<code>tha</code> てゃ、<code>dha</code> でゃ</td></tr>
+            <tr><td><code>n</code></td><td><code>cna</code> きゃ、<code>gna</code> ぎゃ、<code>tna</code> ちゃ、<code>dna</code> ぢゃ、<code>hna</code> ひゃ、<code>bna</code> びゃ、<code>mna</code> みゃ</td></tr>
+          </tbody>
+        </table>
+      </div>
+        
+      <h2>参考資料</h2>
+      <ul class="refs">
+        <li><strong>本家サイト</strong>: <code>http://www7.plala.or.jp/dvorakjp/index.htm</code><br>
+          2021 年ごろに閉鎖され、現在は見られません。</li>
+        <li><a href="https://zenn.dev/shinespark/articles/c6c53453be6c31">AI全盛期の今だからこそ、改めてオススメしたいDvorak, DvorakJP配列</a>（Zenn, shinespark氏）</li>
+        <li><a href="https://github.com/shinespark/dvorakjp-roman-table">dvorakjp-roman-table（DvorakJP Prime）</a>（GitHub, shinespark氏）</li>
+      </ul>
     </section>
   </main>
 

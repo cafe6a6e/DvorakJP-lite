@@ -89,7 +89,7 @@ DvorakJP lite では、DvorakJP 拡張ローマ字変換ルールの一部を不
 
 | パス | 内容 |
 |---|---|
-| `google-japanese-input/romantable_dvorakjplite.txt` | DvorakJP lite 本体 |
+| `docs/romantable_dvorakjplite.txt` | DvorakJP lite 本体 |
 
 ## 使い方
 

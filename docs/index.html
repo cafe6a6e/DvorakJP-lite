@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DvorakJP lite</title>
+  <meta name="description" content="QWERTY と共存できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#about">DvorakJP <span>lite</span></a>
+    <nav class="tabs">
+      <a href="#about" data-page="about">DvorakJP lite とは</a>
+      <a href="#install" data-page="install">導入方法</a>
+      <a href="#playground" data-page="playground">練習</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- DvorakJP lite とは -->
+    <section id="page-about" class="page">
+      <h1>DvorakJP lite とは</h1>
+      <p class="lead">
+        DvorakJP の拡張ローマ字入力のうち、<strong>QWERTY のローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。
+      </p>
+
+      <figure>
+        <img src="images/layout.webp" width="1200" height="455"
+             alt="Dvorak 配列のキー配置図。左手に母音と拡張キー、右手に子音が並ぶ。">
+        <figcaption>左手に母音と拡張キー、右手に子音。子音の後に赤いキーを打つと、二重母音や「ん」をまとめて入力できます。</figcaption>
+      </figure>
+
+      <h2>設計思想</h2>
+      <ul class="points">
+        <li><strong>QWERTY と共存する。</strong>
+          同じ変換表のまま、QWERTY ローマ字を今までどおりに打てます。
+          <code>un.</code>→うん。 <code>enpou</code>→えんぽう <code>konbanha</code>→こんばんは のような打ち方は変わりません。</li>
+        <li><strong>QWERTY ローマ字で打たない列にだけ、拡張を割り当てる。</strong>
+          <code>k'</code> や <code>c,</code> は QWERTY ローマ字では打たないので、<code>k'</code>→かい、<code>c,</code>→こう のように使えます。</li>
+        <li><strong>衝突するものは採用しないか、別のキーに移す。</strong>
+          元祖 DvorakJP の <code>n.</code>(ねい) や <code>nk</code>(ぬん) は、QWERTY ローマ字の「ん＋次の音」と区別できません。
+          そこで な行 の拡張は、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打ちます（<code>vj</code>→ねん、<code>v,</code>→のう）。</li>
+        <li><strong>記号キーの置き場所を選べる。</strong>
+          「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>t'</code> / <code>t-</code>→たい）。</li>
+      </ul>
+
+      <h2>拡張キー</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>キー</th><th>意味</th><th>例</th></tr></thead>
+          <tbody>
+            <tr><td><code>'</code> <code>-</code></td><td>ア段＋い</td><td><code>s'</code> さい</td></tr>
+            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td></tr>
+            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td></tr>
+            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td></tr>
+            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td></tr>
+            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td></tr>
+            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td></tr>
+            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td></tr>
+            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        拗音にも使えます（<code>ky,</code> きょう、<code>sh,</code> しょう、<code>jp</code> じゅう）。
+        ぴゃ行だけは、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいため、<code>h</code> でも拗音になります（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう、<code>php</code> ぴゅう）。
+        詳しい仕様は <a href="https://github.com/cafe6a6e/DvorakJP-lite">GitHub の README</a> を見てください。
+      </p>
+    </section>
+
+    <!-- 導入方法 -->
+    <section id="page-install" class="page" hidden>
+      <h1>導入方法</h1>
+
+      <div class="os-switch" role="tablist" aria-label="OS の選択">
+        <button type="button" role="tab" data-os="mac">Mac</button>
+        <button type="button" role="tab" data-os="windows">Windows</button>
+        <button type="button" role="tab" data-os="linux">Linux</button>
+      </div>
+
+      <p>
+        <a class="button" href="romantable_dvorakjplite.txt" download>ローマ字テーブルをダウンロード</a>
+      </p>
+
+      <!-- Mac -->
+      <div class="os-panel" data-os="mac">
+        <h2><span class="step">1</span>Google日本語入力のローマ字テーブルを更新する</h2>
+        <ol>
+          <li>メニューバーの入力メニューから、Google日本語入力の「環境設定…」を開きます。</li>
+          <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
+          <li>左下の「編集」→「インポート…」で、ダウンロードした <code>romantable_dvorakjplite.txt</code> を選びます。</li>
+          <li>「OK」→「適用」で保存します。</li>
+        </ol>
+        <h2><span class="step">2</span>Dvorak 配列を追加する</h2>
+        <ol>
+          <li>「システム設定」→「キーボード」→「入力ソース」の「編集…」を開きます。</li>
+          <li>「＋」を押し、「英語」から「Dvorak」を追加します。</li>
+          <li>Google日本語入力でかな入力をしたときも Dvorak 配列で打てるか確かめてください。</li>
+        </ol>
+      </div>
+
+      <!-- Windows -->
+      <div class="os-panel" data-os="windows" hidden>
+        <div class="placeholder">
+          <p class="placeholder-title">準備中</p>
+          <p>Windows での導入方法が確立できたら公開します。</p>
+        </div>
+      </div>
+
+      <!-- Linux -->
+      <div class="os-panel" data-os="linux" hidden>
+        <p class="note">Linux 版の Google日本語入力はないので、オープンソース版の <strong>Mozc</strong>（<code>fcitx5-mozc</code> など）を使います。ローマ字テーブルの形式は同じです。</p>
+        <h2><span class="step">1</span>Mozc のローマ字テーブルを更新する</h2>
+        <ol>
+          <li>Mozc の設定ツールを開きます。
+            <pre><code>/usr/lib/mozc/mozc_tool --mode=config_dialog</code></pre>
+            ディストリビューションによっては <code>/usr/libexec/mozc/mozc_tool</code> にあります。</li>
+          <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
+          <li>左下の「編集」→「インポート…」で、ダウンロードした <code>romantable_dvorakjplite.txt</code> を選びます。</li>
+          <li>「OK」→「適用」で保存します。</li>
+        </ol>
+        <h2><span class="step">2</span>Dvorak 配列を追加する（fcitx5 の場合）</h2>
+        <ol>
+          <li><code>fcitx5-configtool</code> を開きます。</li>
+          <li>入力メソッドのグループで、キーボードレイアウトを「English (Dvorak)」にします。</li>
+          <li>同じグループに「Mozc」を追加します。Mozc はグループのレイアウトに従うので、かな入力も Dvorak 配列になります。</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 練習 -->
+    <section id="page-playground" class="page" hidden>
+      <h1>練習</h1>
+      <p class="lead">ローマ字ベースの長文タイピング練習です。</p>
+      <div class="placeholder">
+        <p class="placeholder-title">準備中</p>
+        <p>DvorakJP lite の拡張入力を使って、長文を打つ練習ができるようにする予定です。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="https://github.com/cafe6a6e/DvorakJP-lite">GitHub</a>
+  </footer>
+</body>
+</html>

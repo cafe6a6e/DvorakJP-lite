@@ -1,0 +1,201 @@
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #5c5c5c;
+  --line: #e2e2e2;
+  --soft: #f4f4f4;
+  --accent: #d7263d;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", sans-serif;
+  line-height: 1.8;
+}
+
+a { color: var(--accent); }
+
+/* ヘッダー */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 32px;
+  padding: 12px 24px;
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.brand {
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 20px;
+  text-decoration: none;
+  letter-spacing: .02em;
+}
+.brand span { color: var(--accent); }
+
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tabs a {
+  color: #cfcfcf;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-bottom: 3px solid transparent;
+  font-size: 15px;
+}
+.tabs a:hover { color: var(--bg); }
+.tabs a[aria-current="page"] {
+  color: var(--bg);
+  border-bottom-color: var(--accent);
+}
+
+/* 本文 */
+main {
+  overflow-wrap: anywhere;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 1.4;
+  margin: 0 0 12px;
+  padding-left: 14px;
+  border-left: 6px solid var(--accent);
+}
+
+h2 {
+  font-size: 20px;
+  margin: 40px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lead { color: var(--muted); margin-top: 0; }
+
+code, kbd, pre { font-family: var(--mono); font-size: .92em; }
+code {
+  overflow-wrap: anywhere;
+  background: var(--soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+pre {
+  background: var(--fg);
+  color: var(--bg);
+  padding: 10px 14px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; color: inherit; }
+kbd {
+  border: 1px solid var(--fg);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 5px;
+}
+
+figure { margin: 24px 0; }
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+.points { padding-left: 1.2em; }
+.points li { margin-bottom: 12px; }
+.points li::marker { color: var(--accent); }
+
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; max-width: 520px; }
+th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--line); }
+th { border-bottom: 2px solid var(--fg); }
+
+.note { color: var(--muted); font-size: 14px; }
+.warn {
+  border-left: 4px solid var(--accent);
+  background: var(--soft);
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+ol li { margin-bottom: 6px; }
+
+/* 導入方法 */
+.os-switch {
+  display: inline-flex;
+  border: 2px solid var(--fg);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px 0 16px;
+}
+.os-switch button {
+  font: inherit;
+  background: var(--bg);
+  color: var(--fg);
+  border: 0;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+.os-switch button + button { border-left: 2px solid var(--fg); }
+.os-switch button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+
+.button {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 6px;
+}
+.button:hover { filter: brightness(.92); }
+
+.step {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+}
+
+/* 練習 */
+.placeholder {
+  border: 2px dashed var(--line);
+  border-radius: 10px;
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--muted);
+}
+.placeholder-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}

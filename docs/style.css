@@ -45,7 +45,22 @@ a { color: var(--accent); }
 }
 .brand span { color: var(--accent); }
 
-.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; order: 2; }
+
+/* GitHub へのリンク（ヘッダーの右端） */
+.gh-link {
+  order: 3;
+  margin-left: auto;
+  display: flex;
+  color: #cfcfcf;
+}
+.gh-link:hover { color: var(--bg); }
+
+/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に回す */
+@media (max-width: 640px) {
+  .gh-link { order: 2; }
+  .tabs { order: 3; flex-basis: 100%; }
+}
 .tabs a {
   color: #cfcfcf;
   text-decoration: none;
@@ -122,7 +137,7 @@ figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
 .points li::marker { color: var(--accent); }
 
 .table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; max-width: 520px; }
+table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--line); }
 th { border-bottom: 2px solid var(--fg); }
 
@@ -137,14 +152,14 @@ th { border-bottom: 2px solid var(--fg); }
 ol li { margin-bottom: 6px; }
 
 /* 導入方法 */
-.os-switch {
+.os-switch, .segmented {
   display: inline-flex;
   border: 2px solid var(--fg);
   border-radius: 8px;
   overflow: hidden;
   margin: 8px 0 16px;
 }
-.os-switch button {
+.os-switch button, .segmented button {
   font: inherit;
   background: var(--bg);
   color: var(--fg);
@@ -152,8 +167,8 @@ ol li { margin-bottom: 6px; }
   padding: 6px 20px;
   cursor: pointer;
 }
-.os-switch button + button { border-left: 2px solid var(--fg); }
-.os-switch button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.os-switch button + button, .segmented button + button { border-left: 2px solid var(--fg); }
+.os-switch button[aria-selected="true"], .segmented button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
 
 .button {
   display: inline-block;
@@ -200,4 +215,90 @@ ol li { margin-bottom: 6px; }
   font-size: 14px;
 }
 
+.copyright { font-size: 13px; margin: 0; }
 .privacy { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+
+/* 練習 */
+.ext-sample { color: var(--accent); font-weight: 700; }
+
+.pg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.pg-controls .segmented { margin: 0; }
+
+.button-outline {
+  font: inherit;
+  background: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--fg);
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+}
+.button-outline:hover { background: var(--soft); }
+
+.pg-stats {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--muted);
+  margin: 16px 0 8px;
+}
+
+.pg-area {
+  border: 2px solid var(--fg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  outline: none;
+  transition: box-shadow .1s, border-color .1s;
+}
+.pg-area:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(215, 38, 61, .15); }
+.pg-area.miss { box-shadow: 0 0 0 4px rgba(215, 38, 61, .45); }
+
+.pg-status {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.pg-status.warn { color: var(--accent); font-weight: 700; }
+.pg-status.done { color: var(--fg); font-weight: 700; }
+
+.pg-sentence { margin-bottom: 18px; }
+.pg-jp { font-size: 20px; line-height: 1.9; }
+.pg-romaji {
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+.pg-romaji .ext { color: var(--accent); font-weight: 700; position: relative; cursor: help; }
+.pg-romaji .ext:hover::after {
+  content: attr(data-hint);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 4px);
+  z-index: 5;
+  white-space: nowrap;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.pg-jp .done, .pg-romaji .done { color: #b5b5b5; }
+.pg-romaji .ext .done { color: #e6a3ab; }
+.pg-jp .current, .pg-romaji .current {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}

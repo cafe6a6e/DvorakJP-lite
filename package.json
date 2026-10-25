@@ -1,0 +1,17 @@
+{
+  "name": "dvorakjp-lite",
+  "description": "QWERTY と共存できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "bun": ">=1.2"
+  },
+  "scripts": {
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "serve": "bun tools/serve.js"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.16"
+  }
+}

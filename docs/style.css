@@ -140,6 +140,10 @@ figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
 .points { padding-left: 1.2em; }
 .points li { margin-bottom: 12px; }
 .points li::marker { color: var(--accent); }
+.refs { padding-left: 1.2em; }
+.refs li { margin-bottom: 12px; }
+.refs li::marker { color: var(--accent); }
+.refs code { overflow-wrap: anywhere; }
 
 .table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; }

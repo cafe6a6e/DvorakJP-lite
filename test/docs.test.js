@@ -1,15 +1,17 @@
 // README とサイトに書かれた打ち方の例が、変換表のとおりに変換されるか
+// （「DvorakJP とは」ページは、元祖 DvorakJP の変換表で確かめる）
 import { describe, expect, test } from "bun:test";
 import { flush } from "../docs/romaji.js";
 import { loadTableFile, readText } from "./helpers.js";
 
 const t = await loadTableFile();
+const original = await loadTableFile(new URL("../google-japanese-input/romantable_dvorakjplite.default.txt", import.meta.url).pathname);
 const root = new URL("../", import.meta.url);
 
 // 「`s'` `s-` さい」「`ky,` きょう、」「`vj`→ねん」のような「キー → かな」の組を抜き出す
-const PARTICLES = new Set(["または", "など", "は", "に", "で", "や", "と", "を", "が", "の"]);
-// かなの直後が「、」「）」「|」「です」「など」、次のキー、行末のときだけ例とみなす（「`ph` でも打てます」などを除く）
-const PAIR = /((?:`[^`\s]+`\s*(?:\/\s*)?)+)(?:→\s*)?([ぁ-ゖー〜‥…『』←→↑↓・][ぁ-ゖー。〜‥…『』←→↑↓・]*)(?=[、）)]|\s*(?:\||`|です|など|$))/gmu;
+const PARTICLES = new Set(["または", "など", "か", "は", "に", "で", "や", "と", "を", "が", "の"]);
+// かなの直後が「、」「（」「）」「|」「です」「など」、次のキー、行末のときだけ例とみなす（「`ph` でも打てます」などを除く）
+const PAIR = /((?:`[^`\s]+`\s*(?:\/\s*)?)+)(?:→\s*)?([ぁ-ゖー〜‥…『』←→↑↓・][ぁ-ゖー。〜‥…『』←→↑↓・]*)(?=[、（）)]|\s*(?:\||`|です|など|$))/gmu;
 
 function extractPairs(text) {
   const pairs = [];
@@ -41,26 +43,33 @@ function nagyouTable(md) {
   return keys.flatMap((k, j) => [...k.matchAll(/`([^`]+)`/g)].map(([, key]) => [key, kana[j]]));
 }
 
-// サイト: 「DvorakJP lite とは」ページ。<code> をバッククォートにしてからタグを外す
+// サイトのページ本文。<code> をバッククォートにしてからタグを外す
 const html = await readText(new URL("docs/index.html", root).pathname);
-const about = html
-  .slice(html.indexOf('id="page-about"'), html.indexOf('id="page-install"'))
-  .replace(/<code>(.*?)<\/code>/g, "`$1`")
-  .replace(/<[^>]+>/g, " ")
-  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+function pageText(id, endMarker) {
+  const start = html.indexOf(`id="page-${id}"`);
+  return html
+    .slice(start, html.indexOf(endMarker, start))
+    .replace(/<code>(.*?)<\/code>/g, "`$1`")
+    .replace(/<\/t[dh]>/g, " | ") // 表のセルの区切り（隣のセルのキーとつながらないように）
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+}
+const about = pageText("about", 'id="page-install"');
+const dvorakjp = pageText("dvorakjp", "</section>");
 
 const sources = [
-  ["README の拡張仕様", extractPairs(spec)],
-  ["README の な行 の表", nagyouTable(readme)],
-  ["サイトの「DvorakJP lite とは」", extractPairs(about)],
+  ["README の拡張仕様", extractPairs(spec), t],
+  ["README の な行 の表", nagyouTable(readme), t],
+  ["サイトの「DvorakJP lite とは」", extractPairs(about), t],
+  ["サイトの「DvorakJP とは」（元祖の変換表）", extractPairs(dvorakjp), original],
 ];
 
-describe.each(sources)("%s", (_name, pairs) => {
+describe.each(sources)("%s", (_name, pairs, table) => {
   test("例を抜き出せている", () => {
     expect(pairs.length).toBeGreaterThanOrEqual(9);
   });
 
   test.each(pairs)("%p → %p", (key, kana) => {
-    expect(flush(t, key)).toBe(kana);
+    expect(flush(table, key)).toBe(kana);
   });
 });

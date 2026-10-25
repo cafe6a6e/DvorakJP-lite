@@ -1,7 +1,7 @@
-// ページ切り替え（#about / #install / #playground）と、導入方法の OS 切り替え
+// ページ切り替え（#about / #install / #playground / #dvorakjp）と、導入方法の OS 切り替え
 
-const PAGES = ["about", "install", "playground"];
-const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習" };
+const PAGES = ["about", "install", "playground", "dvorakjp"];
+const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習", dvorakjp: "DvorakJP とは" };
 
 // Google Analytics にイベントを送る（gtag が無い環境では何もしない）
 function track(name, params) {

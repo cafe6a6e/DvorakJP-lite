@@ -53,18 +53,33 @@
       </figure>
 
       <h2>設計思想</h2>
+
+      <h3>1. QWERTY と共存する</h3>
+      <p>元祖 DvorakJP の拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>打鍵</th><th>QWERTY ローマ字</th><th>元祖 DvorakJP</th></tr></thead>
+          <tbody>
+            <tr><td><code>un.</code></td><td>うん。</td><td>うねい</td></tr>
+            <tr><td><code>enpou</code></td><td>えんぽう</td><td>えぬうおう</td></tr>
+            <tr><td><code>konbanha</code></td><td>こんばんは</td><td>こんばにゃ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWERTY ローマ字の打ち方を一切変えません。</p>
       <ul class="points">
-        <li><strong>QWERTY と共存する。</strong>
-          同じ変換表のまま、QWERTY ローマ字を今までどおりに打てます。
-          <code>un.</code>→うん。 <code>enpou</code>→えんぽう <code>konbanha</code>→こんばんは のような打ち方は変わりません。</li>
-        <li><strong>QWERTY ローマ字で打たない列にだけ、拡張を割り当てる。</strong>
-          <code>k'</code> や <code>c,</code> は QWERTY ローマ字では打たないので、<code>k'</code>→かい、<code>c,</code>→こう のように使えます。</li>
-        <li><strong>衝突するものは採用しないか、別のキーに移す。</strong>
-          元祖 DvorakJP の <code>n.</code>(ねい) や <code>nk</code>(ぬん) は、QWERTY ローマ字の「ん＋次の音」と区別できません。
-          そこで な行 の拡張は、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打ちます（<code>vj</code>→ねん、<code>v,</code>→のう）。</li>
-        <li><strong>記号キーの置き場所を選べる。</strong>
-          「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>t'</code> / <code>t-</code>→たい）。</li>
+        <li><strong>効果の小さいものは採用しない。</strong>
+          例: <code>nh*</code>（にゃ行。<code>ny*</code> で打てる）、<code>zh*</code>（じゃ行。<code>ja</code> で打てる）</li>
+        <li><strong>効果の大きいものは、QWERTY ローマ字で打たない組み合わせを最小限使って採用する。</strong> 例:
+          <ul>
+            <li>な行の拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
+            <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいので、h による拗音のうち <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）</li>
+          </ul>
+        </li>
       </ul>
+
+      <h3>2. 記号キーの自由度を担保する</h3>
+      <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code>→かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
       <h2>拡張キー</h2>
       <div class="table-wrap">
@@ -84,7 +99,6 @@
         </table>
       </div>
       <p class="note">
-        ぴゃ行だけは、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいため、<code>h</code> でも拗音になります（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう、<code>php</code> ぴゅう）。
         詳しい仕様は <a href="https://github.com/cafe6a6e/DvorakJP-lite">GitHub の README</a> を見てください。
       </p>
     </section>

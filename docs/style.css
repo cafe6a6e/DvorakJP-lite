@@ -45,7 +45,22 @@ a { color: var(--accent); }
 }
 .brand span { color: var(--accent); }
 
-.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; order: 2; }
+
+/* GitHub へのリンク（ヘッダーの右端） */
+.gh-link {
+  order: 3;
+  margin-left: auto;
+  display: flex;
+  color: #cfcfcf;
+}
+.gh-link:hover { color: var(--bg); }
+
+/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に回す */
+@media (max-width: 640px) {
+  .gh-link { order: 2; }
+  .tabs { order: 3; flex-basis: 100%; }
+}
 .tabs a {
   color: #cfcfcf;
   text-decoration: none;
@@ -200,6 +215,7 @@ ol li { margin-bottom: 6px; }
   font-size: 14px;
 }
 
+.copyright { font-size: 13px; margin: 0; }
 .privacy { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
 
 /* 練習 */

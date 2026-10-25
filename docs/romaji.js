@@ -101,6 +101,17 @@ export function judge(t, typed, key, target) {
   return { ok: true, committed, pending, done: flush(t, keys) === target };
 }
 
+// Backspace: まだかなに確定していない入力中のキーを1文字消す（確定したかなは消さない）
+// 消せたら { typed, pending }、消せなければ null を返す
+export function deletePending(t, typed) {
+  const cur = compose(t, typed);
+  if (!cur.pending) return null;
+  const next = typed.slice(0, -1);
+  const r = compose(t, next);
+  if (r.committed !== cur.committed) return null;
+  return { typed: next, pending: r.pending };
+}
+
 // ---- 表示用のローマ字 ----
 
 const KANA = /^[ぁ-ゟー]+$/;

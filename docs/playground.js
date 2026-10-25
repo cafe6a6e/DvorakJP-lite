@@ -1,5 +1,5 @@
 // 練習ページ（#playground）: 長文タイピング練習
-import { loadTable, compose, judge, romajiLayout, parseText } from "./romaji.js";
+import { loadTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
 
 const $ = (id) => document.getElementById(id);
 const area = $("pg-area");
@@ -168,13 +168,11 @@ function showPending() {
   setStatus(state.pending ? `入力中… ${state.pending}` : "入力中…");
 }
 
-// Backspace: まだかなに確定していない入力中のキーを1文字消す（確定したかなは消さない）
-function deletePending() {
-  if (!state.pending) return;
-  const typed = state.typed.slice(0, -1);
-  const r = compose(table, typed);
-  if (r.committed !== state.committed) return;
-  state.typed = typed;
+// Backspace: まだかなに確定していない入力中のキーを1文字消す
+function onBackspace() {
+  const r = deletePending(table, state.typed);
+  if (!r) return;
+  state.typed = r.typed;
   state.pending = r.pending;
   showPending();
 }
@@ -190,7 +188,7 @@ function onKeyDown(e) {
   }
   if (e.key === "Backspace") {
     e.preventDefault();
-    deletePending();
+    onBackspace();
     return;
   }
   if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;

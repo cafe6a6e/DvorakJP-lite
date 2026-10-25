@@ -6,6 +6,22 @@
   <title>DvorakJP lite</title>
   <meta name="description" content="QWERTY と共存できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
+  <script>
+    // 手元のサーバーからのアクセスは計測しない
+    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
+      window["ga-disable-G-JJE1TE4DDM"] = true;
+    }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    // ページビューは app.js でタブを切り替えるたびに送る
+    gtag('config', 'G-JJE1TE4DDM', { send_page_view: false });
+  </script>
+
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -81,7 +97,7 @@
       </div>
 
       <p>
-        <a class="button" href="romantable_dvorakjplite.txt" download>ローマ字テーブルをダウンロード</a>
+        <a class="button" id="download-romantable" href="romantable_dvorakjplite.txt" download>ローマ字テーブルをダウンロード</a>
       </p>
 
       <!-- Mac -->
@@ -143,6 +159,7 @@
 
   <footer class="site-footer">
     <a href="https://github.com/cafe6a6e/DvorakJP-lite">GitHub</a>
+    <p class="privacy">このサイトは、アクセス解析に Google Analytics を使用しています。</p>
   </footer>
 </body>
 </html>

@@ -98,6 +98,11 @@ h2 {
   gap: 10px;
 }
 
+h3 {
+  font-size: 17px;
+  margin: 24px 0 8px;
+}
+
 .lead { color: var(--muted); margin-top: 0; }
 
 code, kbd, pre { font-family: var(--mono); font-size: .92em; }

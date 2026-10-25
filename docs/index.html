@@ -23,6 +23,7 @@
   </script>
 
   <script src="app.js" defer></script>
+  <script type="module" src="playground.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -65,22 +66,21 @@
       <h2>拡張キー</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>キー</th><th>意味</th><th>例</th></tr></thead>
+          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行の例</th><th>拗音の例（きゃ行・ぴゃ行）</th></tr></thead>
           <tbody>
-            <tr><td><code>'</code> <code>-</code></td><td>ア段＋い</td><td><code>s'</code> さい</td></tr>
-            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td></tr>
-            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td></tr>
-            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td></tr>
-            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td></tr>
-            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td></tr>
-            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td></tr>
-            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td></tr>
-            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td></tr>
+            <tr><td><code>'</code> <code>-</code></td><td>ア段＋い</td><td><code>s'</code> <code>s-</code> さい</td><td><code>v'</code> <code>v-</code> ない</td><td><code>cy'</code> <code>cy-</code> きゃい、<code>ph'</code> <code>ph-</code> ぴゃい</td></tr>
+            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td><td><code>v;</code> なん</td><td><code>cy;</code> きゃん、<code>ph;</code> ぴゃん</td></tr>
+            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td><td><code>v.</code> ねい</td><td><code>cy.</code> きぇい、<code>ph.</code> ぴぇい</td></tr>
+            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td><td><code>v,</code> のう</td><td><code>cy,</code> きょう、<code>ph,</code> ぴょう</td></tr>
+            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td><td><code>vp</code> ぬう</td><td><code>cyp</code> きゅう、<code>php</code> ぴゅう</td></tr>
+            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td><td><code>vk</code> ぬん</td><td><code>cyk</code> きゅん、<code>phk</code> ぴゅん</td></tr>
+            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td><td><code>vj</code> ねん</td><td><code>cyj</code> きぇん、<code>phj</code> ぴぇん</td></tr>
+            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td><td><code>vq</code> のん</td><td><code>cyq</code> きょん、<code>phq</code> ぴょん</td></tr>
+            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td><td><code>vx</code> にん</td><td><code>cyx</code> きぃん、<code>phx</code> ぴぃん</td></tr>
           </tbody>
         </table>
       </div>
       <p class="note">
-        拗音にも使えます（<code>ky,</code> きょう、<code>sh,</code> しょう、<code>jp</code> じゅう）。
         ぴゃ行だけは、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいため、<code>h</code> でも拗音になります（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう、<code>php</code> ぴゅう）。
         詳しい仕様は <a href="https://github.com/cafe6a6e/DvorakJP-lite">GitHub の README</a> を見てください。
       </p>
@@ -149,10 +149,22 @@
     <!-- 練習 -->
     <section id="page-playground" class="page" hidden>
       <h1>練習</h1>
-      <p class="lead">ローマ字ベースの長文タイピング練習です。</p>
-      <div class="placeholder">
-        <p class="placeholder-title">準備中</p>
-        <p>DvorakJP lite の拡張入力を使って、長文を打つ練習ができるようにする予定です。</p>
+      <p class="lead">
+        ローマ字ベースの長文タイピング練習です。日本語入力をオフにして、英字の直接入力で打ってください。
+        下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。
+        かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。
+      </p>
+
+      <div class="pg-controls">
+        <div class="segmented" id="pg-genres" role="tablist" aria-label="問題文のジャンル"></div>
+        <button type="button" class="button-outline" id="pg-restart">やり直す</button>
+      </div>
+
+      <p class="pg-stats" id="pg-stats"></p>
+
+      <div class="pg-area" id="pg-area" tabindex="0" aria-label="タイピング練習エリア">
+        <p class="pg-status" id="pg-status">読み込み中…</p>
+        <div class="pg-text" id="pg-text"></div>
       </div>
     </section>
   </main>

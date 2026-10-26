@@ -102,3 +102,9 @@ DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWE
 | パス | 内容 |
 |---|---|
 | `docs/romantable_dvorakjplite.txt` | DvorakJP lite 本体 |
+
+## ライセンス
+
+- **ローマ字テーブル**（`docs/romantable_dvorakjplite.txt`、`google-japanese-input/romantable_dvorakjplite.default.txt`）: [MIT License](LICENSE)。自由に利用・改変・再配布できます。
+- **上記以外**（サイトの文章・図・コード・練習用の例文など）: © 2026 cafe6a6e. All rights reserved.
+- ローマ字テーブルは Google 日本語入力の標準ローマ字テーブルをもとにしています（Mozc のライセンスは [LICENSE](LICENSE) に記載）。

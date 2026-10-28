@@ -1,14 +1,14 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
 *{box-sizing:border-box;margin:0}
 body{width:1200px;height:455px;background:#fff;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;color:#111;padding:28px 36px}
-h1{font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:18px}
+h1{font-size:30px;font-weight:700;letter-spacing:.04em;margin-bottom:18px}
 h1 span{color:#d7263d}
 .row{display:flex;gap:8px;margin-bottom:8px}
 .k{width:96px;height:96px;border:2px solid #111;border-radius:10px;display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px;background:#fff}
 .k b{font-size:34px;font-family:Menlo,monospace;line-height:1}
 .k i{font-style:normal;font-size:14px;line-height:1.25}
 .v{background:#111;color:#fff}
-.x{border-color:#d7263d;background:#d7263d;color:#fff}
+.x{border-color:#d7263d;color:#d7263d;border-width:3px}
 /* 拗音: h を使う子音は黄、n を使う子音は水色（本家の配色に合わせる） */
 .yh{background:#ffd43b}.yn{background:#4cc3ee}
 .th{background:#fff4c2}.tn{background:#d9f2fc}
@@ -16,12 +16,12 @@ h1 span{color:#d7263d}
 .legend{display:flex;gap:22px;margin-top:20px;font-size:15px;align-items:center}
 .sw{display:inline-block;width:18px;height:18px;border-radius:4px;border:2px solid #111;vertical-align:-3px;margin-right:6px}
 </style></head><body>
-<h1>DvorakJP — キー配置と拡張キー</h1>
+<h1>DvorakJP</h1>
 <div class="row" style="margin-left:0">
  <div class="k x"><b>'</b><i>ア段＋い</i></div>
  <div class="k x"><b>,</b><i>オ段＋う</i></div>
  <div class="k x"><b>.</b><i>エ段＋い</i></div>
- <div class="k x"><b>p</b><i>ウ段＋う</i></div>
+ <div class="k x th"><b>p</b><i>ウ段＋う</i></div>
  <div class="k"><b>y</b><i>や行・拗音</i></div>
  <div class="gap"></div>
  <div class="k tn"><b>f</b><i>fn ふゃ</i></div><div class="k tn"><b>g</b><i>gn ぎゃ</i></div><div class="k tn"><b>c</b><i>か行<br>cn きゃ</i></div><div class="k th"><b>r</b><i>rh りゃ</i></div><div class="k"><b>l</b></div>
@@ -34,16 +34,16 @@ h1 span{color:#d7263d}
 <div class="row" style="margin-left:56px">
  <div class="k x"><b>;</b><i>ア段＋ん</i></div>
  <div class="k x"><b>q</b><i>オ段＋ん</i></div>
- <div class="k x"><b>j</b><i>エ段＋ん</i></div>
- <div class="k x"><b>k</b><i>ウ段＋ん</i></div>
+ <div class="k x th"><b>j</b><i>エ段＋ん</i></div>
+ <div class="k x th"><b>k</b><i>ウ段＋ん</i></div>
  <div class="k x"><b>x</b><i>イ段＋ん</i></div>
  <div class="gap"></div>
  <div class="k tn"><b>b</b><i>bn びゃ</i></div><div class="k tn"><b>m</b><i>mn みゃ</i></div><div class="k"><b>w</b></div><div class="k"><b>v</b></div><div class="k th"><b>z</b><i>zh じゃ</i></div>
 </div>
 <div class="legend">
  <span><span class="sw" style="background:#111"></span>母音（左手ホーム段）</span>
- <span><span class="sw" style="background:#d7263d;border-color:#d7263d"></span>拡張キー：子音の後に打つ（例 <b>c,</b> こう ・ <b>sj</b> せん）</span>
- <span><span class="sw" style="background:#ffd43b"></span>h で拗音（左手の k・j・p も）</span>
- <span><span class="sw" style="background:#4cc3ee"></span>n で拗音</span>
+ <span><span class="sw" style="border-color:#d7263d;border-width:3px"></span>拡張キー：子音の後に打つ（例 <b>c,</b> こう ・ <b>sj</b> せん）</span>
+ <span><span class="sw" style="background:#fff4c2"></span>h で拗音</span>
+ <span><span class="sw" style="background:#d9f2fc"></span>n で拗音</span>
 </div>
 </body></html>

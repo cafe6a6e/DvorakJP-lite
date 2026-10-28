@@ -1,6 +1,6 @@
 # DvorakJP lite
 
-DvorakJP 拡張ローマ字入力のうち、**QWERTY ローマ字入力と競合しないもの**だけを追加した、ローマ字変換表です。
+[DvorakJP](https://cafe6a6e.github.io/DvorakJP-lite/#dvorakjp) 拡張ローマ字入力のうち、**QWERTY ローマ字入力と競合しないもの**だけを追加した、ローマ字変換表です。
 
 **公式ページ: https://cafe6a6e.github.io/DvorakJP-lite/** （導入方法・タイピング練習）
 
@@ -10,9 +10,9 @@ DvorakJP 拡張ローマ字入力のうち、**QWERTY ローマ字入力と競�
 
 ### 1. QWERTY と共存する
 
-元祖 DvorakJP の拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。
+オリジナルの DvorakJP の拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。
 
-| 打鍵 | QWERTY ローマ字 | 元祖 DvorakJP |
+| 打鍵 | QWERTY ローマ字 | DvorakJP 拡張ローマ字 |
 |---|---|---|
 | `un.` | うん。 | うねい |
 | `enpou` | えんぽう | えぬうおう |
@@ -105,7 +105,7 @@ DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWE
 
 | パス | 内容 |
 |---|---|
-| `docs/romantable_dvorakjplite.txt` | DvorakJP lite 本体 |
+| `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル |
 
 ## ライセンス
 

@@ -105,10 +105,14 @@ DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWE
 
 | パス | 内容 |
 |---|---|
-| `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル |
+| `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル（Dvorak 配列用） |
+| `docs/romantable_dvorakjplite_qwerty_jis.txt` | DvorakJP lite ローマ字テーブル（QWERTY・JIS 配列用。`bun run build:qwerty` で Dvorak 配列用から生成） |
+| `docs/romantable_dvorakjplite_qwerty_us.txt` | DvorakJP lite ローマ字テーブル（QWERTY・US 配列用。同上） |
+
+QWERTY 用のテーブルは、OS のキー配列を QWERTY のまま、Dvorak 配列と同じ位置のキーで DvorakJP lite を打てるように、入力の文字を置き換えたものです（キーの対応は `docs/keymap.js`）。この README の打ち方は、すべて Dvorak 配列の文字で書いています。
 
 ## ライセンス
 
-- **ローマ字テーブル**（`docs/romantable_dvorakjplite.txt`）: [MIT License](LICENSE)。自由に利用・改変・再配布できます。
+- **ローマ字テーブル**（`docs/romantable_dvorakjplite*.txt`）: [MIT License](LICENSE)。自由に利用・改変・再配布できます。
 - **上記以外**（サイトの文章・図・コード・練習用の例文など）: © 2026 cafe6a6e. All rights reserved.
 - ローマ字テーブルは Google 日本語入力の標準ローマ字テーブルをもとにしています（Mozc のライセンスは [LICENSE](LICENSE) に記載）。

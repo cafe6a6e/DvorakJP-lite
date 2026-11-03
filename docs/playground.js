@@ -1,5 +1,7 @@
 // 練習ページ（#playground）: 長文タイピング練習
 import { loadTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
+import { LAYOUTS, convertKeys, invert } from "./keymap.js";
+import { currentLayout, onLayoutChange } from "./layout-select.js";
 
 const $ = (id) => document.getElementById(id);
 const area = $("pg-area");
@@ -8,7 +10,12 @@ const textEl = $("pg-text");
 const statsEl = $("pg-stats");
 const genresEl = $("pg-genres");
 
+// 下段のローマ字とヒントは、どのキーボード配列でも Dvorak 配列の文字で表示する（Dvorak 用の表で作る）
+let displayTable = null;
+// 入力の判定には、選んだキーボード配列のローマ字テーブルを使う
 let table = null;
+let toDvorak = null; // 押したキーの文字 → Dvorak 配列の文字（入力中の表示用）
+const tables = new Map(); // 読み込んだローマ字テーブル（ファイル名ごと）
 let texts = [];
 let state = null;
 let timer = null;
@@ -54,7 +61,7 @@ function render(text) {
       jp.append(s);
     }
 
-    const layout = romajiLayout(table, kana);
+    const layout = romajiLayout(displayTable, kana);
     if (!layout) {
       console.warn("変換表で打てない文字が含まれています:", kana);
       romaji.textContent = "（この文は変換表で打てない文字を含みます）";
@@ -165,7 +172,8 @@ function flashMiss() {
 // ---- キー入力 ----
 
 function showPending() {
-  setStatus(state.pending ? `入力中… ${state.pending}` : "入力中…");
+  const pending = convertKeys(state.pending, toDvorak);
+  setStatus(pending ? `入力中… ${pending}` : "入力中…");
 }
 
 // Backspace: まだかなに確定していない入力中のキーを1文字消す
@@ -221,24 +229,52 @@ function onKeyDown(e) {
     const { ms, accuracy, kps } = updateStats();
     setStatus(`完了しました。${Math.floor(ms / 1000)}秒、正確率 ${accuracy}%、${kps} 打鍵/秒。`, "done");
     if (typeof gtag === "function") {
-      gtag("event", "playground_complete", { genre: state.text.id, kps: Number(kps), accuracy });
+      gtag("event", "playground_complete", { genre: state.text.id, layout: currentLayout(), kps: Number(kps), accuracy });
     }
   }
   updateProgress();
 }
+
+// ---- キーボード配列 ----
+
+async function getTable(file) {
+  if (!tables.has(file)) tables.set(file, loadTable(file));
+  return tables.get(file);
+}
+
+// 選んだキーボード配列のローマ字テーブルに切り替える
+async function useLayout(id) {
+  const layout = LAYOUTS[id];
+  const t = await getTable(layout.file);
+  if (id !== currentLayout()) return; // 読み込み中に別の配列が選ばれた
+  table = t;
+  toDvorak = invert(layout.map);
+}
+
+// 練習中に切り替えたら、同じ問題文を最初からやり直す
+onLayoutChange(async (id) => {
+  try {
+    await useLayout(id);
+  } catch (err) {
+    setStatus(`読み込みに失敗しました: ${err.message}`, "warn");
+    return;
+  }
+  if (state && id === currentLayout()) start(state.text);
+});
 
 // ---- 初期化 ----
 
 async function init() {
   try {
     const [t, list] = await Promise.all([
-      loadTable("romantable_dvorakjplite.txt"),
+      getTable(LAYOUTS.dvorak.file),
       fetch("playground-texts.json").then((res) => {
         if (!res.ok) throw new Error(`問題文を読み込めませんでした (${res.status})`);
         return res.json();
       }),
+      useLayout(currentLayout()),
     ]);
-    table = t;
+    displayTable = t;
     texts = list;
   } catch (err) {
     setStatus(`読み込みに失敗しました: ${err.message}`, "warn");

@@ -1,4 +1,7 @@
-// ページ切り替え（#about / #install / #playground / #dvorakjp）と、導入方法の OS 切り替え
+// ページ切り替え（#about / #install / #playground / #dvorakjp）と、導入方法の OS・キーボード配列の切り替え
+
+import { LAYOUTS } from "./keymap.js";
+import { currentLayout, onLayoutChange } from "./layout-select.js";
 
 const PAGES = ["about", "install", "playground", "dvorakjp"];
 const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習", dvorakjp: "DvorakJP とは" };
@@ -37,26 +40,36 @@ function guessOS() {
   return "windows";
 }
 
-function selectOS(os) {
-  for (const b of document.querySelectorAll(".os-switch button")) {
+// 導入方法の選択（OS とキーボード配列）
+// QWERTY は JIS配列と US配列で記号キーの位置が違うので、ローマ字テーブルを分けている
+let os = guessOS();
+
+function updateInstall() {
+  const layout = currentLayout();
+  for (const b of document.querySelectorAll("#install-os button")) {
     b.setAttribute("aria-selected", String(b.dataset.os === os));
   }
   for (const panel of document.querySelectorAll(".os-panel")) {
     panel.hidden = panel.dataset.os !== os;
   }
+  for (const note of document.querySelectorAll(".layout-note")) {
+    note.hidden = note.dataset.layout !== layout;
+  }
+  // キーボード配列に合わせて、ダウンロードするローマ字テーブルを切り替える
+  const file = LAYOUTS[layout].file;
+  document.getElementById("download-romantable").href = file;
+  for (const code of document.querySelectorAll(".romantable-name")) code.textContent = file;
 }
 
-const guessed = guessOS();
-selectOS(guessed);
-
-for (const b of document.querySelectorAll(".os-switch button")) {
-  b.addEventListener("click", () => selectOS(b.dataset.os));
+for (const b of document.querySelectorAll("#install-os button")) {
+  b.addEventListener("click", () => { os = b.dataset.os; updateInstall(); });
 }
+onLayoutChange(updateInstall);
+updateInstall();
 
-// ローマ字テーブルのダウンロード数を、選んでいた OS 付きで記録する
+// ローマ字テーブルのダウンロード数を、選んでいた OS とキーボード配列付きで記録する
 document.getElementById("download-romantable").addEventListener("click", () => {
-  const os = document.querySelector('.os-switch button[aria-selected="true"]')?.dataset.os;
-  track("download_romantable", { os });
+  track("download_romantable", { os, layout: currentLayout() });
 });
 
 window.addEventListener("hashchange", showPage);

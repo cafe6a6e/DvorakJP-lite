@@ -3,7 +3,7 @@
 | 元の HTML | 作る画像 |
 |---|---|
 | `layout.html` | `docs/images/layout.webp`（DvorakJP lite） |
-| `layout-dvorakjp.html` | `docs/images/layout-dvorakjp.webp`（元祖 DvorakJP） |
+| `layout-dvorakjp.html` | `docs/images/layout-dvorakjp.webp`（DvorakJP） |
 
 HTML を編集したら、リポジトリのルートで次を実行して webp を作り直します（macOS、Google Chrome と `cwebp` が必要）。`NAME` は作り直す図の名前です。
 

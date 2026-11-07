@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DvorakJP lite の導入方法（Google 日本語入力・Mozc）｜DvorakJP lite</title>
+  <meta name="description" content="DvorakJP lite のローマ字テーブルを、Google 日本語入力（Mac・Windows）と Mozc（Linux）に導入する手順。Dvorak 配列用と、QWERTY 配列（JIS・US）のまま使う版をダウンロードできます。">
+  <link rel="canonical" href="https://cafe6a6e.github.io/DvorakJP-lite/install/">
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
+  <script>
+    // 手元のサーバーからのアクセスは計測しない
+    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
+      window["ga-disable-G-JJE1TE4DDM"] = true;
+    }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JJE1TE4DDM');
+  </script>
+
+  <script type="module" src="../install.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">DvorakJP <span>lite</span></a>
+    <nav class="tabs">
+      <a href="../">DvorakJP lite とは</a>
+      <a href="../install/" aria-current="page">導入方法</a>
+      <a href="../playground/">練習</a>
+      <a href="../dvorakjp/">補足：DvorakJP の解説</a>
+    </nav>
+    <a class="gh-link" href="https://github.com/cafe6a6e/DvorakJP-lite" aria-label="GitHub リポジトリ" title="GitHub リポジトリ">
+      <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <h1>導入方法</h1>
+    <p>お使いの OS とキーボード配列を選んで、下の導入手順に進んでください。</p>
+
+    <div class="choices">
+      <div class="choice">
+        <span class="choice-label" id="install-os-label">OS</span>
+        <div class="segmented" id="install-os" role="group" aria-labelledby="install-os-label">
+          <button type="button" data-os="mac">Mac</button>
+          <button type="button" data-os="windows">Windows</button>
+          <button type="button" data-os="linux">Linux</button>
+        </div>
+      </div>
+      <div class="choice">
+        <span class="choice-label" id="install-layout-label">キーボード配列</span>
+        <div class="segmented layout-select" role="group" aria-labelledby="install-layout-label">
+          <button type="button" data-layout="qwerty-jis">QWERTY(JIS)</button>
+          <button type="button" data-layout="qwerty-us">QWERTY(US)</button>
+          <button type="button" data-layout="dvorak">Dvorak</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="note layout-note" data-layout="qwerty-jis">
+      キー配列が QWERTY(JIS) の方向け。日本語入力は DvorakJP lite、英字直接入力は QWERTY(JIS) で入力できます。
+    </p>
+    <p class="note layout-note" data-layout="qwerty-us" hidden>
+      キー配列が QWERTY(US) の方向け。日本語入力は DvorakJP lite、英字直接入力は QWERTY(US) で入力できます。
+    </p>
+    <p class="note layout-note" data-layout="dvorak" hidden>
+      キー配列が Dvorak 配列の方向け。
+    </p>
+
+    <p class="download">
+      <a class="button" id="download-romantable" href="../romantable_dvorakjplite_qwerty_jis.txt" download>ローマ字テーブルをダウンロード</a>
+      <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code>
+    </p>
+
+    <!-- Mac -->
+    <div class="os-panel" data-os="mac">
+      <h2>Google日本語入力のローマ字テーブルをインポートする</h2>
+      <ol>
+        <li>メニューバーの入力メニューから、Google日本語入力の「環境設定…」を開きます。</li>
+        <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
+        <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
+        <li>「OK」→「適用」で保存します。</li>
+        <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
+      </ol>
+      <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
+    </div>
+
+    <!-- Windows -->
+    <div class="os-panel" data-os="windows" hidden>
+      <h2>Google日本語入力のローマ字テーブルをインポートする</h2>
+      <ol>
+        <li>タスクバーの入力モードのアイコン（「あ」や「A」）を右クリックし、「プロパティ」を開きます。</li>
+        <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
+        <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
+        <li>「OK」→「適用」で保存します。</li>
+        <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
+      </ol>
+      <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
+    </div>
+
+    <!-- Linux -->
+    <div class="os-panel" data-os="linux" hidden>
+      <p class="note">Linux 版の Google日本語入力はないので、オープンソースの日本語入力システム <strong>Mozc</strong>（<code>fcitx5-mozc</code> など）を使います。ローマ字テーブルの形式は同じです。</p>
+      <h2>Mozc のローマ字テーブルをインポートする</h2>
+      <ol>
+        <li>Mozc の設定ツールを開きます。
+          <pre><code>/usr/lib/mozc/mozc_tool --mode=config_dialog</code></pre>
+          ディストリビューションによっては <code>/usr/libexec/mozc/mozc_tool</code> にあります。</li>
+        <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
+        <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
+        <li>「OK」→「適用」で保存します。</li>
+        <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
+      </ol>
+      <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="copyright">&copy; 2026 cafe6a6e. All rights reserved.<br>ローマ字テーブルは <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/LICENSE">MIT License</a> で配布しています。</p>
+    <p class="privacy">このサイトは、アクセス解析に Google Analytics を使用しています。</p>
+  </footer>
+</body>
+</html>

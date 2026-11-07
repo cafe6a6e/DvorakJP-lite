@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DvorakJP lite のタイピング練習｜DvorakJP lite</title>
+  <meta name="description" content="DvorakJP lite の拡張入力を使った長文タイピング練習。拡張入力で打鍵を減らせる部分を赤字で示します。Dvorak 配列と、QWERTY 配列（JIS・US）のまま打つ版に対応しています。">
+  <link rel="canonical" href="https://cafe6a6e.github.io/DvorakJP-lite/playground/">
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
+  <script>
+    // 手元のサーバーからのアクセスは計測しない
+    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
+      window["ga-disable-G-JJE1TE4DDM"] = true;
+    }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JJE1TE4DDM');
+  </script>
+
+  <script type="module" src="../playground.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">DvorakJP <span>lite</span></a>
+    <nav class="tabs">
+      <a href="../">DvorakJP lite とは</a>
+      <a href="../install/">導入方法</a>
+      <a href="../playground/" aria-current="page">練習</a>
+      <a href="../dvorakjp/">補足：DvorakJP の解説</a>
+    </nav>
+    <a class="gh-link" href="https://github.com/cafe6a6e/DvorakJP-lite" aria-label="GitHub リポジトリ" title="GitHub リポジトリ">
+      <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <h1>練習</h1>
+    <p class="lead">日本語入力をオフにして、英字の直接入力で打つ長文タイピング練習です。</p>
+    <details class="pg-help">
+      <summary>練習のしかた</summary>
+      <ul>
+        <li>下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。</li>
+        <li>かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。</li>
+        <li>キーボード配列は、導入方法で選んだものと同じにしてください。</li>
+        <li>QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。</li>
+        <li>下段のローマ字は、どの配列でも Dvorak 配列の文字で表示します。</li>
+      </ul>
+    </details>
+
+    <div class="choices">
+      <div class="choice">
+        <span class="choice-label" id="pg-layout-label">キーボード配列</span>
+        <div class="segmented layout-select" role="group" aria-labelledby="pg-layout-label">
+          <button type="button" data-layout="qwerty-jis">QWERTY(JIS)</button>
+          <button type="button" data-layout="qwerty-us">QWERTY(US)</button>
+          <button type="button" data-layout="dvorak">Dvorak</button>
+        </div>
+      </div>
+      <div class="choice">
+        <span class="choice-label" id="pg-genres-label">題材</span>
+        <div class="pg-controls">
+          <div class="segmented" id="pg-genres" role="group" aria-labelledby="pg-genres-label"></div>
+          <button type="button" class="button-outline" id="pg-restart">やり直す</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="pg-stats" id="pg-stats"></p>
+
+    <div class="pg-area" id="pg-area" tabindex="0" aria-label="タイピング練習エリア">
+      <p class="pg-status" id="pg-status">読み込み中…</p>
+      <div class="pg-text" id="pg-text"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="copyright">&copy; 2026 cafe6a6e. All rights reserved.<br>ローマ字テーブルは <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/LICENSE">MIT License</a> で配布しています。</p>
+    <p class="privacy">このサイトは、アクセス解析に Google Analytics を使用しています。</p>
+  </footer>
+</body>
+</html>

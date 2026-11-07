@@ -43,19 +43,18 @@ function nagyouTable(md) {
   return keys.flatMap((k, j) => [...k.matchAll(/`([^`]+)`/g)].map(([, key]) => [key, kana[j]]));
 }
 
-// サイトのページ本文。<code> をバッククォートにしてからタグを外す
-const html = await readText(new URL("docs/index.html", root).pathname);
-function pageText(id, endMarker) {
-  const start = html.indexOf(`id="page-${id}"`);
+// サイトのページ本文（<main> の中）。<code> をバッククォートにしてからタグを外す
+async function pageText(path) {
+  const html = await readText(new URL(path, root).pathname);
   return html
-    .slice(start, html.indexOf(endMarker, start))
+    .slice(html.indexOf("<main>"), html.indexOf("</main>"))
     .replace(/<code>(.*?)<\/code>/g, "`$1`")
     .replace(/<\/t[dh]>/g, " | ") // 表のセルの区切り（隣のセルのキーとつながらないように）
     .replace(/<[^>]+>/g, " ")
     .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 }
-const about = pageText("about", 'id="page-install"');
-const dvorakjp = pageText("dvorakjp", "</section>");
+const about = await pageText("docs/index.html");
+const dvorakjp = await pageText("docs/dvorakjp/index.html");
 
 const sources = [
   ["README の拡張仕様", extractPairs(spec), t],

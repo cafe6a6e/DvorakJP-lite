@@ -699,3 +699,14 @@ im	かも
 nk	びと
 kn	たび
 hk	だち
+ok	れて
+on	れば
+vh	くだ
+ih	くだ
+;m	しま
+mh	まで
+jh	ほど
+;n	すべ
+mo	める
+o;	らし
+ck	じつ

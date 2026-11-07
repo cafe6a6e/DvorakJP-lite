@@ -710,3 +710,14 @@ cm	かも
 bt	びと
 tb	たび
 dt	だち
+rt	れて
+rb	れば
+kd	くだ
+cd	くだ
+sm	しま
+md	まで
+hd	ほど
+sb	すべ
+mr	める
+rs	らし
+jt	じつ

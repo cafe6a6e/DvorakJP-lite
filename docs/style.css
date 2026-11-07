@@ -245,6 +245,8 @@ ol li { margin-bottom: 6px; }
 /* 練習のしかた（開くと説明が出る） */
 .pg-help { color: var(--muted); font-size: 14px; margin: -8px 0 16px; }
 .pg-help summary { cursor: pointer; width: fit-content; }
+.fold { margin: 8px 0 16px; }
+.fold summary { cursor: pointer; width: fit-content; color: var(--accent); font-weight: 700; }
 .pg-help ul { margin: 8px 0 0; padding-left: 1.4em; }
 .pg-help li { margin-bottom: 4px; }
 

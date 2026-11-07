@@ -65,6 +65,9 @@ const COMMON_CASES = [
   ["kjb", "てぃん"], // thx
   ["hjb", "でぃん"], // dhx
   ["kjw", "てょう"], // th,
+  ["vk", "こと"], // kt
+  ["ik", "こと"], // ct
+  ["h;", "です"], // ds
 ];
 
 // 記号の位置が US と JIS で違うもの

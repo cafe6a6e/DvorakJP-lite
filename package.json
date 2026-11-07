@@ -1,6 +1,6 @@
 {
   "name": "dvorakjp-lite",
-  "description": "QWERTY と共存できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル",
+  "description": "「ん」の後も余計な打鍵なしで入力できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル",
   "private": true,
   "type": "module",
   "engines": {

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DvorakJP lite</title>
-  <meta name="description" content="QWERTY と共存できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル">
+  <meta name="description" content="「ん」の後も余計な打鍵なしで入力できる、Google日本語入力用の DvorakJP 拡張ローマ字テーブル">
   <link rel="stylesheet" href="style.css">
 
   <!-- Google tag (gtag.js) -->
@@ -43,8 +43,8 @@
     <!-- DvorakJP lite とは -->
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
-      <p><a href="#dvorakjp">DvorakJP</a> 拡張ローマ字入力のうち、<strong>QWERTY ローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。QWERTY の標準的なローマ字の打ち方はそのままで、日本語入力に DvorakJP の拡張入力を使えます。</p>
-      <p>Dvorak 配列で日本語を効率よく打ちたい方、DvorakJP を使いたいが QWERTY と同じローマ字の打ち方も残したい方を想定したものです。QWERTY 配列のキーボードのまま使うこともできます（<a href="#install">導入方法</a>）。</p>
+      <p><a href="#dvorakjp">DvorakJP</a> の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、<strong>「ん」の後も余計な打鍵なしで打てる</strong>ようにしたローマ字テーブルです。</p>
+      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。DvorakJP の二重母音や「ん」の拡張の仕組みは引き継ぎ（な行の拡張は <code>v</code> に移しています）、QWERTY で身に付けたローマ字入力の規則もそのまま使えるので、今までの打ち方を覚え直す必要もありません。</p>
 
       <figure>
         <img src="images/layout.webp" width="1200" height="455"
@@ -54,50 +54,57 @@
 
       <h2>設計思想</h2>
 
-      <h3>1. QWERTY ローマ字入力と共存する</h3>
-      <p>オリジナルの <a href="#dvorakjp">DvorakJP</a> 拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。</p>
+      <h3>1. 「ん」の後でも最小の打鍵数で打てるようにする</h3>
+      <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行の拡張」になります（<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）。また、<code>nh</code> は「にゃ行」の拗音です。そのため、「ん」の後にこれらのキーで始まる音が続くときは、<code>n</code> を 2 回打って「ん」を確定させる必要がありました。</p>
+      <p>DvorakJP lite では、な行の拡張を <code>v</code> に移し、<code>n</code> の拗音の拡張も使わないことで、この衝突をなくしました。そのため、DvorakJP では余計な打鍵が必要だった「ん」の後の入力も、通常のローマ字入力と同じ打鍵数で入力できます。</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>打鍵</th><th>QWERTY ローマ字</th><th>DvorakJP</th></tr></thead>
+          <thead><tr><th>単語</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
           <tbody>
-            <tr><td><code>un.</code></td><td>うん。</td><td>うねい</td></tr>
-            <tr><td><code>enpou</code></td><td>えんぽう</td><td>えぬうおう</td></tr>
-            <tr><td><code>konbanha</code></td><td>こんばんは</td><td>こんばにゃ</td></tr>
+            <tr><td>鉛筆（えんぴつ）</td><td><code>ennpitu</code>（7 打。<code>enpitu</code> だと「えぬういつ」）</td><td><code>enpitu</code>（6 打）</td></tr>
+            <tr><td>温情（おんじょう）</td><td><code>onnj,</code>（5 打。<code>onj,</code> だと「おねん、」）</td><td><code>onj,</code>（4 打）</td></tr>
+            <tr><td>うん。</td><td><code>unn.</code>（4 打。<code>un.</code> だと「うねい」）</td><td><code>un.</code>（3 打）</td></tr>
+            <tr><td>こんばんは</td><td><code>konbannha</code>（9 打。<code>konbanha</code> だと「こんばにゃ」）</td><td><code>konbanha</code>（8 打）</td></tr>
           </tbody>
         </table>
       </div>
-      <p>DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWERTY ローマ字の打ち方を一切変えません。</p>
+      <p>そのうえで、拡張ルールを次の方針で見直しています。</p>
       <ul class="points">
-        <li><strong>入力効率への効果が大きい拡張は、QWERTY ローマ字で打たない組み合わせを最小限使って採用する。</strong>
+        <li><strong>打鍵数を減らす拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
           <ul>
             <li>な行の拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
-            <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで h による拗音のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は QWERTY の標準的なローマ字では使わない組み合わせなので、競合しない</li>
+            <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで、<code>h</code> を使う拗音拡張のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は普通のローマ字では使わない組み合わせなので、衝突しない</li>
           </ul>
         </li>
-        <li><strong>入力効率への効果が限定的な拡張は採用しない。</strong>
+        <li><strong>打鍵数を減らさない拡張は、原則として採用しない。</strong>
           <ul>
-            <li>ぴゃ行以外の<code>h</code>,<code>n</code>拗音拡張は採用しない。主要な拗音は、QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
+            <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）が、拗音の子音と <code>h</code>・<code>n</code> を右手で続けて打てる（アルペジオ打鍵）という DvorakJP の工夫である。DvorakJP lite では、この利点よりも、普通のローマ字との互換性と覚えるルールの少なさを優先し、主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
           </ul>
         </li>
       </ul>
 
-      <h3>2. 記号キーの自由度を担保する</h3>
-      <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code>→かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
+      <h3>2. QWERTY で身に付けたローマ字入力の規則をそのまま使える</h3>
+      <p>拡張ルールを普通のローマ字で使わない組み合わせに限ったので、DvorakJP の拡張と共存しながら、かなを打つ一般的なローマ字のつづりはすべてそのまま使えます（<code>z.</code> … などの一部の記号入力は、拡張入力に使うため除きます）。</p>
+      <p>たとえば、「ん」を <code>n</code> 1 回で入力する（<code>kanji</code> → 漢字）といった、QWERTY で身に付けたローマ字入力の規則を覚え直す必要はありません。拡張入力を覚えなくても今までどおり入力でき、必要に応じて少しずつ拡張入力を取り入れられます。</p>
+
+      <h3>3. 記号キーの自由度を担保する</h3>
+      <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
       <h2>DvorakJP との主な違い</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>項目</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
           <tbody>
+            <tr><td>「ん」の後の入力</td><td>一部の組み合わせで <code>nn</code> が必要（<code>ennpitu</code> 鉛筆）</td><td>拡張ルールとの衝突による <code>nn</code> は不要（<code>enpitu</code> 鉛筆）</td></tr>
             <tr><td>な行拡張</td><td><code>n</code>（<code>n'</code> ない、<code>nj</code> ねん）</td><td><code>v</code>（<code>v'</code> ない、<code>vj</code> ねん）</td></tr>
-            <tr><td>拗音</td><td><code>y</code> に加え、<code>h</code>, <code>n</code>（<code>rha</code> りゃ、<code>cna</code> きゃ）</td><td><code>y</code> で打つ（<code>cya</code> きゃ）。ぴゃ行だけ <code>h</code> も使える（<code>pha</code> ぴゃ）</td></tr>
+            <tr><td>拗音拡張</td><td><code>h</code> と <code>n</code></td><td>原則 <code>y</code>。ぴゃ行のみ <code>h</code> による拡張も使える</td></tr>
             <tr><td>ア段＋い</td><td><code>'</code></td><td><code>'</code> と <code>-</code>（Dvorak 版）</td></tr>
-            <tr><td>記号入力</td><td><code>z</code> で打つ（<code>z.</code> …、<code>zh</code> ←）</td><td><code>;</code> で打つ（<code>;.</code> …、<code>;d</code> ←）。<code>z.</code> などは拡張入力を優先する（<code>z.</code> ぜい）</td></tr>
+            <tr><td>記号入力</td><td><code>z</code>（<code>z.</code> …）</td><td>主に <code>;</code>（<code>;.</code> …）。<code>z.</code> などは拡張入力（<code>z.</code> ぜい）</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>拡張キー</h2>
+      <h2>DvorakJP lite の拡張キー</h2>
       <p>拡張キーは、子音や拗音のすぐ後に打って、二重母音や「ん」までをまとめて入力するキーです。たとえば「ア段＋い」の <code>'</code> を <code>s</code> の後に打つと、<code>s'</code> で「さい」になります。</p>
       <div class="table-wrap">
         <table>
@@ -123,6 +130,7 @@
     <!-- 導入方法 -->
     <section id="page-install" class="page" hidden>
       <h1>導入方法</h1>
+      <p>お使いの OS とキーボード配列を選んで、下の導入手順に進んでください。</p>
 
       <div class="choices">
         <div class="choice">
@@ -294,7 +302,7 @@
       <h4>3. よく出る母音の組み合わせと「ん」を1打にする</h4>
       <p>「こう」「かい」「せん」のような二重母音や撥音（ん）は、日本語にとても多く出てきます。左手の母音のまわりにある、ローマ字では使わないキー（<code>'</code> <code>,</code> <code>.</code> <code>p</code> <code>;</code> <code>q</code> <code>j</code> <code>k</code> <code>x</code>）に割り当て、子音の後に1打で打てるようにします。例: <code>c,c'</code> こうかい（公開）、<code>t,cn,</code> とうきょう（東京）</p>
 
-      <h3>拡張キー</h3>
+      <h3>DvorakJP の拡張キー</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行</th><th>拗音の例</th></tr></thead>

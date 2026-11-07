@@ -247,6 +247,9 @@ ol li { margin-bottom: 6px; }
 .pg-help summary { cursor: pointer; width: fit-content; }
 .fold { margin: 8px 0 16px; }
 .fold summary { cursor: pointer; width: fit-content; color: var(--accent); font-weight: 700; }
+/* 短縮入力の一覧: 「打鍵・かな」の表を横に並べる（狭い画面では折り返す） */
+.abbr-tables { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: flex-start; }
+.abbr-tables table { width: auto; }
 .pg-help ul { margin: 8px 0 0; padding-left: 1.4em; }
 .pg-help li { margin-bottom: 4px; }
 

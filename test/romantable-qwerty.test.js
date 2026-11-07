@@ -90,6 +90,9 @@ const EXTRA_CASES = [
   ["-ta", "じゃ"], // zya
   ["--a", "っざ"], // zza（-- は っ）
   ["/a", "ざ"], // za（/ でも今までどおり打てる）
+  ["z.", "…"], // 普通のローマ字と同じ記号
+  ["z,", "‥"],
+  ["z/", "・"],
 ];
 
 describe("Dvorak 用の表を QWERTY 用に簡単にする", () => {
@@ -141,14 +144,16 @@ describe.each(QWERTY_LAYOUTS)("%s", (id, layout) => {
       expect(qwertyText).toBe(buildQwertyTable(sourceText, layout));
     });
 
-    // 足した - の行を除くと、簡単にした Dvorak 用の表と1行ずつ対応する
+    // 足した - の行と記号の行を除くと、簡単にした Dvorak 用の表と1行ずつ対応する
     const slash = layout.map.get("z");
     const lines = qwertyText.split("\n");
     const isExtra = (line, prev) =>
       prev !== undefined && prev.split("\t")[0].includes(slash) && line === prev.replaceAll(slash, "-");
-    const base = lines.filter((line, i) => !isExtra(line, lines[i - 1]));
+    const symbolLines = [...layout.symbols].map(([key, kana]) => `${key}\t${kana}`);
+    const extraLines = lines.filter((line, i) => isExtra(line, lines[i - 1]));
+    const base = lines.filter((line, i) => !isExtra(line, lines[i - 1]) && !symbolLines.includes(line));
 
-    test("- の行を除くと、行数・出力（2列目）が簡単にした表と同じで、入力を Dvorak に戻すと簡単にした表になる", () => {
+    test("- の行と記号の行を除くと、行数・出力（2列目）が簡単にした表と同じで、入力を Dvorak に戻すと簡単にした表になる", () => {
       const src = simplifiedText.split("\n");
       expect(base.length).toBe(src.length);
       for (const [i, line] of base.entries()) {
@@ -163,7 +168,18 @@ describe.each(QWERTY_LAYOUTS)("%s", (id, layout) => {
     test("- の行は、Dvorak の z を含む行ごとに1行ずつある", () => {
       const zRows = simplifiedText.split("\n").filter((l) => l.split("\t")[0].includes("z")).length;
       expect(zRows).toBeGreaterThan(30);
-      expect(lines.length - base.length).toBe(zRows);
+      expect(extraLines.length).toBe(zRows);
+    });
+
+    test("z. … などの記号の行は、同じ記号を ; の位置のキーで打つ行のすぐ後にある", () => {
+      const semicolon = layout.map.get(";");
+      for (const line of symbolLines) {
+        const i = lines.indexOf(line);
+        expect(i).toBeGreaterThan(0);
+        const [prevKey, prevKana] = lines[i - 1].split("\t");
+        expect(prevKey.startsWith(semicolon)).toBe(true);
+        expect(prevKana).toBe(line.split("\t")[1]);
+      }
     });
 
     test("重複したキーがない", () => {

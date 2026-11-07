@@ -24,8 +24,13 @@ function pairs(from, to) {
 // （QWERTY の文字 → Dvorak の文字）
 const EXTRA_KEYS = new Map([["-", "z"]]);
 
+// QWERTY 版だけに足す、普通のローマ字（Google 日本語入力の標準）と同じ「点」の記号
+// （QWERTY で打つキー → かな）。同じ記号を ; の位置のキーで打つ行のすぐ後に足す
+const QWERTY_SYMBOLS = new Map([["z.", "…"], ["z,", "‥"], ["z/", "・"]]);
+
 // map: Dvorak の文字 → そのキーで出る文字（Dvorak 用は null）
 // extra: map とは別に、同じ Dvorak の文字として使える QWERTY の文字
+// symbols: QWERTY 版だけに足す記号の行（QWERTY で打つキー → かな）
 export const LAYOUTS = {
   "qwerty-jis": {
     label: "QWERTY(JIS)",
@@ -33,12 +38,14 @@ export const LAYOUTS = {
     // Dvorak の } は JIS 配列では ~ の位置になり、そのまま使う ~（〜）と重なるので対応させない
     map: new Map([...pairs(DVORAK, JIS), ...pairs(DVORAK_SHIFT, JIS_SHIFT).filter(([d]) => d !== "}")]),
     extra: EXTRA_KEYS,
+    symbols: QWERTY_SYMBOLS,
   },
   "qwerty-us": {
     label: "QWERTY(US)",
     file: "romantable_dvorakjplite_qwerty_us.txt",
     map: new Map([...pairs(DVORAK, US), ...pairs(DVORAK_SHIFT, US_SHIFT)]),
     extra: EXTRA_KEYS,
+    symbols: QWERTY_SYMBOLS,
   },
   dvorak: {
     label: "Dvorak",
@@ -115,13 +122,24 @@ export function simplifyForQwerty(text) {
 //   1. simplifyForQwerty で簡単にする
 //   2. convertTable で、同じ位置のキーの文字に置き換える
 //   3. extra のキーでも打てる行を、元の行のすぐ後に足す（例: /a ざ の後に -a ざ）
+//   4. symbols の記号を、同じ記号を ; の位置のキーで打つ行のすぐ後に足す（例: ze … の後に z. …）
 export function buildQwertyTable(text, layout) {
   const converted = convertTable(simplifyForQwerty(text), layout.map);
   const extra = [...(layout.extra ?? [])].map(([q, d]) => [layout.map.get(d), q]);
+  const semicolon = layout.map.get(";");
+  const symbols = [...(layout.symbols ?? [])];
+  const keys = converted.split("\n").map((line) => line.split("\t")[0]);
+  for (const [key] of symbols) {
+    // 既にある打ち方と同じだったり、既にある打ち方の途中だったりしないこと
+    if (keys.some((k) => k.startsWith(key))) throw new Error(`${key} は既にある打ち方と重なります`);
+  }
   return mapRows(converted, (cols) => {
     const rows = [cols];
     for (const [from, to] of extra) {
       if (cols[0].includes(from)) rows.push(cols.map((c, i) => (i === 1 ? c : c.replaceAll(from, to))));
+    }
+    if (cols.length === 2 && cols[0].length === 2 && cols[0].startsWith(semicolon)) {
+      for (const [key, kana] of symbols) if (cols[1] === kana) rows.push([key, kana]);
     }
     return rows;
   });

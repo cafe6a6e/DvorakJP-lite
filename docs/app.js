@@ -4,6 +4,8 @@ import { LAYOUTS } from "./keymap.js";
 import { currentLayout, onLayoutChange } from "./layout-select.js";
 
 const PAGES = ["about", "install", "playground", "dvorakjp"];
+// トップ（DvorakJP lite とは）は、検索結果に出る HTML の <title> をそのまま使う
+const SITE_TITLE = document.title;
 const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習", dvorakjp: "DvorakJP の解説" };
 
 // Google Analytics にイベントを送る（gtag が無い環境では何もしない）
@@ -24,7 +26,7 @@ function showPage() {
   window.scrollTo(0, 0);
 
   // タブごとに1ページとして記録する
-  document.title = `${TITLES[page]} | DvorakJP lite`;
+  document.title = page === "about" ? SITE_TITLE : `${TITLES[page]} | DvorakJP lite`;
   track("page_view", {
     page_title: document.title,
     page_location: `${location.origin}${location.pathname}#${page}`,

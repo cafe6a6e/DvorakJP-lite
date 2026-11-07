@@ -82,7 +82,7 @@ function render(text) {
         if (!group || group.dataset.group !== String(seg.group)) {
           group = el("span", "ext");
           group.dataset.group = String(seg.group);
-          group.dataset.hint = `拡張入力: ${seg.extKeys.map((keys) => keys.join(" または ")).join("、")}`;
+          group.dataset.hint = seg.extKeys.map((keys) => keys.join(" / ")).join("、");
           romaji.append(group);
         }
         group.append(s);

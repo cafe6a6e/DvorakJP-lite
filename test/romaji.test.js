@@ -57,7 +57,7 @@ describe("入力の判定", () => {
 describe("拡張キーの判定", () => {
   const entry = (key) => t.table.get(key);
 
-  test.each(["k'", "k-", "ky,", "vj", "phu", "pha"])("%p は拡張キー", (key) => {
+  test.each(["k'", "k-", "ky,", "vj", "phu", "pha", "kt", "ct", "ds"])("%p は拡張キー", (key) => {
     expect(isExtensionKey(key, entry(key))).toBe(true);
   });
 

@@ -245,6 +245,14 @@ ol li { margin-bottom: 6px; }
 /* 練習のしかた（開くと説明が出る） */
 .pg-help { color: var(--muted); font-size: 14px; margin: -8px 0 16px; }
 .pg-help summary { cursor: pointer; width: fit-content; }
+.fold { margin: 8px 0 16px; }
+.fold summary { cursor: pointer; width: fit-content; color: var(--accent); font-weight: 700; }
+/* 短縮入力の一覧: 「AZIK 由来」と「lite 独自」のまとまりを横に並べ、それぞれ「打鍵・かな」の表を並べる（狭い画面では折り返す） */
+.abbr-tables { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: flex-start; }
+.abbr-row { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: flex-start; }
+.abbr-row table { width: auto; }
+.abbr-label { margin: 0 0 4px; font-size: 14px; font-weight: 700; }
+.abbr-lite { border-left: 3px solid var(--line); padding-left: 24px; }
 .pg-help ul { margin: 8px 0 0; padding-left: 1.4em; }
 .pg-help li { margin-bottom: 4px; }
 

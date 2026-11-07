@@ -44,7 +44,8 @@
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
       <p><a href="#dvorakjp">DvorakJP</a> の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、<strong>「ん」の後も余計な打鍵なしで打てる</strong>ようにしたローマ字テーブルです。</p>
-      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。DvorakJP の二重母音や「ん」の拡張の仕組みは引き継ぎ（な行の拡張は <code>v</code> に移しています）、QWERTY で身に付けたローマ字入力の規則もそのまま使えるので、今までの打ち方を覚え直す必要もありません。</p>
+      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。QWERTY で身に付けた短縮入力規則がそのまま使えるので、拡張入力が有効なままでも、今までの打ち方を変更する必要がありません。</p>
+      <p>また、実験的な試みとして、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> の特殊拡張を、競合しないものに限り採用し、打鍵数をさらに減らせるようにしています。</p>
 
       <figure>
         <img src="images/layout.webp" width="1200" height="455"
@@ -55,7 +56,7 @@
       <h2>設計思想</h2>
 
       <h3>1. 「ん」の後でも最小の打鍵数で打てるようにする</h3>
-      <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行の拡張」になります（<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）。また、<code>nh</code> は「にゃ行」の拗音です。そのため、「ん」の後にこれらのキーで始まる音が続くときは、<code>n</code> を 2 回打って「ん」を確定させる必要がありました。</p>
+      <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行の拡張」になります（<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）。また、<code>nh</code> は「にゃ行」の拗音です。そのため、母音の直後の「ん」に、これらのキーで始まる音が続くときは、<code>n</code> を 2 回打って「ん」を確定させる必要がありました。</p>
       <p>DvorakJP lite では、な行の拡張を <code>v</code> に移し、<code>n</code> の拗音の拡張も使わないことで、この衝突をなくしました。そのため、DvorakJP では余計な打鍵が必要だった「ん」の後の入力も、通常のローマ字入力と同じ打鍵数で入力できます。</p>
       <div class="table-wrap">
         <table>
@@ -63,8 +64,8 @@
           <tbody>
             <tr><td>鉛筆（えんぴつ）</td><td><code>ennpitu</code>（7 打。<code>enpitu</code> だと「えぬういつ」）</td><td><code>enpitu</code>（6 打）</td></tr>
             <tr><td>温情（おんじょう）</td><td><code>onnj,</code>（5 打。<code>onj,</code> だと「おねん、」）</td><td><code>onj,</code>（4 打）</td></tr>
-            <tr><td>うん。</td><td><code>unn.</code>（4 打。<code>un.</code> だと「うねい」）</td><td><code>un.</code>（3 打）</td></tr>
-            <tr><td>こんばんは</td><td><code>konbannha</code>（9 打。<code>konbanha</code> だと「こんばにゃ」）</td><td><code>konbanha</code>（8 打）</td></tr>
+            <tr><td>隠蔽（いんぺい）</td><td><code>innp.</code>（5 打。<code>inp.</code> だと「いぬう。」）</td><td><code>inp.</code>（4 打）</td></tr>
+            <tr><td>全員は（ぜんいんは）</td><td><code>zjinnha</code>（7 打。<code>zjinha</code> だと「ぜんいにゃ」）</td><td><code>zjinha</code>（6 打）</td></tr>
           </tbody>
         </table>
       </div>
@@ -89,6 +90,81 @@
 
       <h3>3. 記号キーの自由度を担保する</h3>
       <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
+
+      <h3>4. （実験的）競合しない範囲で AZIK の短縮入力を採用する</h3>
+      <p><a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> 特殊拡張のうち、普通のローマ字や DvorakJP の拡張入力とぶつからないものだけを、実験的に採用しています。「こと」を <code>kt</code> または <code>ct</code>、「です」を <code>ds</code> のように、よく出る 2 文字を子音 2 つで打てます（使わなくても、今までどおりの打ち方で入力できます）。あわせて、AZIK にはない DvorakJP lite 独自の短縮入力（「れば」を <code>rb</code>、「くだ（さい）」を <code>kd</code> または <code>cd</code> など 10 種類）も、コーパスで効果を確かめたうえで実験的に追加しています。</p>
+      <details class="fold">
+        <summary>短縮入力の一覧（AZIK 由来 21 種類、DvorakJP lite 独自 10 種類）</summary>
+        <div class="abbr-tables">
+          <div class="abbr-group">
+            <p class="abbr-label">AZIK 由来</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>kt</code> <code>ct</code></td><td>こと</td></tr>
+                  <tr><td><code>st</code></td><td>した</td></tr>
+                  <tr><td><code>sr</code></td><td>する</td></tr>
+                  <tr><td><code>kr</code> <code>cr</code></td><td>から</td></tr>
+                  <tr><td><code>mn</code></td><td>もの</td></tr>
+                  <tr><td><code>ms</code></td><td>ます</td></tr>
+                  <tr><td><code>tm</code></td><td>ため</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>ds</code></td><td>です</td></tr>
+                  <tr><td><code>ht</code></td><td>ひと</td></tr>
+                  <tr><td><code>wt</code></td><td>わた</td></tr>
+                  <tr><td><code>wr</code></td><td>われ</td></tr>
+                  <tr><td><code>tr</code></td><td>たら</td></tr>
+                  <tr><td><code>dm</code></td><td>でも</td></tr>
+                  <tr><td><code>mt</code></td><td>また</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>gt</code></td><td>ごと</td></tr>
+                  <tr><td><code>gr</code></td><td>がら</td></tr>
+                  <tr><td><code>yr</code></td><td>よる</td></tr>
+                  <tr><td><code>km</code> <code>cm</code></td><td>かも</td></tr>
+                  <tr><td><code>bt</code></td><td>びと</td></tr>
+                  <tr><td><code>tb</code></td><td>たび</td></tr>
+                  <tr><td><code>dt</code></td><td>だち</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="abbr-group abbr-lite">
+            <p class="abbr-label">DvorakJP lite 独自</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>rt</code></td><td>れて</td></tr>
+                  <tr><td><code>rb</code></td><td>れば</td></tr>
+                  <tr><td><code>kd</code> <code>cd</code></td><td>くだ</td></tr>
+                  <tr><td><code>sm</code></td><td>しま</td></tr>
+                  <tr><td><code>md</code></td><td>まで</td></tr>
+                  <tr><td><code>hd</code></td><td>ほど</td></tr>
+                  <tr><td><code>sb</code></td><td>すべ</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>mr</code></td><td>める</td></tr>
+                  <tr><td><code>rs</code></td><td>らし</td></tr>
+                  <tr><td><code>jt</code></td><td>じつ</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <p class="note">子音の連打は「っ」に使うので <code>tt</code>（たち）・<code>rr</code>（られ）は、「ん」とぶつかるので <code>nt</code>（にち）などは採用していません。</p>
+      </details>
 
       <h2>DvorakJP との主な違い</h2>
       <div class="table-wrap">

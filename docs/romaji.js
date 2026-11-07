@@ -121,6 +121,7 @@ const EXT_LAST = "'-;.,pkjqx";
 export function isExtensionKey(key, e) {
   if (e.pend || !KANA.test(e.out)) return false;
   if (key.startsWith("ph")) return true; // lite 独自の h 拗音（ぴゃ行）
+  if (/^[b-df-hj-np-tv-z]{2}$/.test(key) && e.out.length === 2) return true; // AZIK の短縮入力（kt こと など）
   return key.length >= 2 && EXT_LAST.includes(key.at(-1)) && e.out !== "ん";
 }
 

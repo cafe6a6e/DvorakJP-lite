@@ -62,6 +62,14 @@ const COMMON_CASES = [
   ["w", "、"], // ,
   ["zw", "‥"], // ;,
   ["~", "〜"], // ~
+  ["kjb", "てぃん"], // thx
+  ["hjb", "でぃん"], // dhx
+  ["kjw", "てょう"], // th,
+  ["vk", "こと"], // kt
+  ["ik", "こと"], // ct
+  ["h;", "です"], // ds
+  ["on", "れば"], // rb
+  ["ih", "くだ"], // cd
 ];
 
 // 記号の位置が US と JIS で違うもの
@@ -105,7 +113,7 @@ describe("Dvorak 用の表を QWERTY 用に簡単にする", () => {
     const dash = removed.filter((k) => k.endsWith("-"));
     const zSymbols = removed.filter((k) => k.startsWith("z") && !k.endsWith("-"));
     const inner = removed.filter((k) => k.slice(0, -1).includes("'"));
-    expect(dash.length).toBe(34);
+    expect(dash.length).toBe(36);
     expect(zSymbols.sort()).toEqual(["z/", "z[", "z]", "zh", "zl"]);
     expect(inner.sort()).toEqual(["d'i", "d'u", "d'y", "d'yu", "t'i", "t'u", "t'y", "t'yu"]);
     expect(removed.length).toBe(dash.length + zSymbols.length + inner.length);

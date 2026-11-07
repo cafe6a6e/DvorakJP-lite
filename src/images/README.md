@@ -4,11 +4,12 @@
 |---|---|
 | `layout.html` | `docs/images/layout.webp`（DvorakJP lite） |
 | `layout-dvorakjp.html` | `docs/images/layout-dvorakjp.webp`（DvorakJP） |
+| `layout-dvorak.html` | `docs/images/layout-dvorak.webp`（Dvorak 配列。解説ページの「Dvorak 配列について」） |
 
 HTML を編集したら、リポジトリのルートで次を実行して webp を作り直します（macOS、Google Chrome と `cwebp` が必要）。`NAME` は作り直す図の名前です。
 
 ```sh
-NAME=layout   # または layout-dvorakjp
+NAME=layout   # または layout-dvorakjp、layout-dvorak
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
   --force-device-scale-factor=2 --window-size=1200,455 \
   --screenshot=/tmp/$NAME.png "file://$PWD/src/images/$NAME.html"

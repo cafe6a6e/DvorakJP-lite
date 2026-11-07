@@ -227,8 +227,28 @@
       </div>
     </section>
 
-    <!-- DvorakJP とは（ナビゲーションには出さず、本文のリンクから開く） -->
+    <!-- 補足：DvorakJP の解説（Dvorak 配列について / DvorakJP とは） -->
     <section id="page-dvorakjp" class="page" hidden>
+      <h1>Dvorak 配列について</h1>
+      <p>Dvorak 配列は、アメリカのワシントン大学の教育学教授で教育心理学者の <strong>August Dvorak</strong> が考案したキー配列です（1932 年に完成し、1936 年に米国で特許を取得）。</p>
+      <p>QWERTY 配列は 1874 年に発売されたタイプライターが普及したことで、業界標準として定着した配列です。これに対して Dvorak は、英文の文字の出現頻度と手のしくみを調べて設計された配列であり、以下の特徴を持ちます。
+
+        <figure>
+        <img src="images/layout-dvorak.webp" width="1200" height="455"
+             alt="Dvorak 配列の英字キーの配置図。上段は ' , . p y f g c r l、ホーム段は a o e u i d h t n s、下段は ; q j k x b m w v z。">
+        <figcaption>Dvorak 配列の英字キー。左手のホーム段に母音、右手のホーム段によく使う子音が並びます。</figcaption>
+      </figure>
+
+      <ul class="points">
+        <li><strong>ホーム段によく使う文字を集める。</strong> 左手に母音（<code>a</code> <code>o</code> <code>e</code> <code>u</code> <code>i</code>）、右手によく使う子音（<code>d</code> <code>h</code> <code>t</code> <code>n</code> <code>s</code>）を置き、英文の文字の打鍵の約 70% をホーム段で打てます（QWERTY では 32%）。</li>
+        <li><strong>左右の手を交互に使う。</strong> 母音と子音を左右の手に分けることで、同じ手が続く打鍵を減らします。</li>
+        <li><strong>指の移動を減らす。</strong> 英文入力での指の動きは QWERTY の約 63% になるとされます。</li>
+        <li><strong>右手を多く使う。</strong> 右利きの人が多いため、右手で打つ割合を多くしています。</li>
+      </ul>
+      <p>1982 年には ANSI（米国規格協会）が代替の標準配列に指定し、現在は Windows・macOS・Linux・iOS・Android など主な OS に標準で入っています。</p>
+      <p>Dvorak 配列は QWERTY 配列を打ちやすさの面から見直した先駆けであり、その後の Colemak 配列など多くの新しい配列にも影響を与えました。</p>
+      <p>Dvorak 配列は英語のために設計された配列であるため、日本語のローマ字入力に使うと、打ちにくい点がいくつかあります。そこで、日本語のローマ字入力でも Dvorak 配列の利点を生かせるように拡張したのが、次に説明する DvorakJP です。</p>
+
       <h1>DvorakJP とは</h1>
       <p class="lead">
         Dvorak 配列で日本語を打ちやすくするために、ローマ字入力を拡張したローマ字テーブルです。キーの物理配置は Dvorak 配列のまま、<strong>打鍵の数と左右の手の偏りを減らします</strong>。
@@ -286,6 +306,7 @@
         
       <h2>参考資料</h2>
       <ul class="refs">
+        <li><a href="https://en.wikipedia.org/wiki/Dvorak_keyboard_layout">Dvorak keyboard layout</a>（英語版 Wikipedia）</li>
         <li><strong>本家サイト</strong>: <code>http://www7.plala.or.jp/dvorakjp/index.htm</code><br>
           2021 年ごろに閉鎖され、現在は見られません。</li>
         <li><a href="https://zenn.dev/shinespark/articles/c6c53453be6c31">AI全盛期の今だからこそ、改めてオススメしたいDvorak, DvorakJP配列</a>（Zenn, shinespark氏）</li>

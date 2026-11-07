@@ -89,6 +89,8 @@ h1 {
   padding-left: 14px;
   border-left: 6px solid var(--accent);
 }
+/* 1つのページに大見出しが2つあるとき（DvorakJP の解説）は、2つ目の前を空ける */
+* + h1 { margin-top: 56px; }
 
 h2 {
   font-size: 20px;

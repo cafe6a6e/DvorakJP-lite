@@ -55,6 +55,10 @@ function updateInstall() {
   for (const note of document.querySelectorAll(".layout-note")) {
     note.hidden = note.dataset.layout !== layout;
   }
+  // QWERTY 版だけの手順（Dvorak 版では , と . は句読点のままなので不要）
+  for (const step of document.querySelectorAll(".qwerty-only")) {
+    step.hidden = !LAYOUTS[layout].map;
+  }
   // キーボード配列に合わせて、ダウンロードするローマ字テーブルを切り替える
   const file = LAYOUTS[layout].file;
   document.getElementById("download-romantable").href = file;

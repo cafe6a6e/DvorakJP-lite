@@ -1,6 +1,6 @@
 // 練習ページ（#playground）: 長文タイピング練習
-import { loadTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
-import { LAYOUTS, convertKeys, invert } from "./keymap.js";
+import { loadTable, parseTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
+import { LAYOUTS, convertKeys, invert, simplifyForQwerty } from "./keymap.js";
 import { currentLayout, onLayoutChange } from "./layout-select.js";
 
 const $ = (id) => document.getElementById(id);
@@ -10,8 +10,11 @@ const textEl = $("pg-text");
 const statsEl = $("pg-stats");
 const genresEl = $("pg-genres");
 
-// 下段のローマ字とヒントは、どのキーボード配列でも Dvorak 配列の文字で表示する（Dvorak 用の表で作る）
+// 下段のローマ字とヒントは、どのキーボード配列でも Dvorak 配列の文字で表示する（Dvorak 用の表で作る）。
+// QWERTY 配列では、QWERTY 用の表と同じく簡単にした Dvorak 用の表で作る（QWERTY 用の表で打てない打ち方を出さないため）
 let displayTable = null;
+let dvorakText = null; // Dvorak 用の表のテキスト（読み込み中は Promise）
+const displayTables = new Map(); // 表示用の表（Dvorak 用 / QWERTY 用）
 // 入力の判定には、選んだキーボード配列のローマ字テーブルを使う
 let table = null;
 let toDvorak = null; // 押したキーの文字 → Dvorak 配列の文字（入力中の表示用）
@@ -242,12 +245,25 @@ async function getTable(file) {
   return tables.get(file);
 }
 
+async function getDisplayTable(layout) {
+  dvorakText ??= fetch(LAYOUTS.dvorak.file).then((res) => {
+    if (!res.ok) throw new Error(`変換表を読み込めませんでした (${res.status})`);
+    return res.text();
+  });
+  const kind = layout.map ? "qwerty" : "dvorak";
+  if (!displayTables.has(kind)) {
+    displayTables.set(kind, dvorakText.then((text) => parseTable(layout.map ? simplifyForQwerty(text) : text)));
+  }
+  return displayTables.get(kind);
+}
+
 // 選んだキーボード配列のローマ字テーブルに切り替える
 async function useLayout(id) {
   const layout = LAYOUTS[id];
-  const t = await getTable(layout.file);
+  const [t, d] = await Promise.all([getTable(layout.file), getDisplayTable(layout)]);
   if (id !== currentLayout()) return; // 読み込み中に別の配列が選ばれた
   table = t;
+  displayTable = d;
   toDvorak = invert(layout.map);
 }
 
@@ -266,15 +282,13 @@ onLayoutChange(async (id) => {
 
 async function init() {
   try {
-    const [t, list] = await Promise.all([
-      getTable(LAYOUTS.dvorak.file),
+    const [list] = await Promise.all([
       fetch("playground-texts.json").then((res) => {
         if (!res.ok) throw new Error(`問題文を読み込めませんでした (${res.status})`);
         return res.json();
       }),
       useLayout(currentLayout()),
     ]);
-    displayTable = t;
     texts = list;
   } catch (err) {
     setStatus(`読み込みに失敗しました: ${err.message}`, "warn");

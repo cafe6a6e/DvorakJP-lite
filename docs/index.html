@@ -44,7 +44,7 @@
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
       <p><a href="#dvorakjp">DvorakJP</a> の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、<strong>「ん」の後も余計な打鍵なしで打てる</strong>ようにしたローマ字テーブルです。</p>
-      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。DvorakJP の二重母音や「ん」の拡張はそのまま使え、QWERTY で身に付けたローマ字入力の規則もそのまま使えるので、今までの打ち方を覚え直す必要もありません。</p>
+      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。DvorakJP の二重母音や「ん」の拡張の仕組みは引き継ぎ（な行の拡張は <code>v</code> に移しています）、QWERTY で身に付けたローマ字入力の規則もそのまま使えるので、今までの打ち方を覚え直す必要もありません。</p>
 
       <figure>
         <img src="images/layout.webp" width="1200" height="455"
@@ -70,21 +70,21 @@
       </div>
       <p>そのうえで、拡張ルールを次の方針で見直しています。</p>
       <ul class="points">
-        <li><strong>入力効率への効果が大きい拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
+        <li><strong>打鍵数を減らす拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
           <ul>
             <li>な行の拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
             <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで、<code>h</code> を使う拗音拡張のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は普通のローマ字では使わない組み合わせなので、衝突しない</li>
           </ul>
         </li>
-        <li><strong>入力効率への効果が限定的な拡張は採用しない。</strong>
+        <li><strong>打鍵数を減らさない拡張は、原則として採用しない。</strong>
           <ul>
-            <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張は採用しない。<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）ため、主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
+            <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）が、拗音の子音と <code>h</code>・<code>n</code> を右手で続けて打てる（アルペジオ打鍵）という DvorakJP の工夫である。DvorakJP lite では、この利点よりも、普通のローマ字との互換性と覚えるルールの少なさを優先し、主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
           </ul>
         </li>
       </ul>
 
       <h3>2. QWERTY で身に付けたローマ字入力の規則をそのまま使える</h3>
-      <p>拡張ルールを普通のローマ字で使わない組み合わせに限ったので、DvorakJP の拡張と共存しながら、一般的なローマ字入力の打ち方はすべてそのまま使えます。</p>
+      <p>拡張ルールを普通のローマ字で使わない組み合わせに限ったので、DvorakJP の拡張と共存しながら、かなを打つ一般的なローマ字のつづりはすべてそのまま使えます（<code>z.</code> … などの一部の記号入力は、拡張入力に使うため除きます）。</p>
       <p>たとえば、「ん」を <code>n</code> 1 回で入力する（<code>kanji</code> → 漢字）といった、QWERTY で身に付けたローマ字入力の規則を覚え直す必要はありません。拡張入力を覚えなくても今までどおり入力でき、必要に応じて少しずつ拡張入力を取り入れられます。</p>
 
       <h3>3. 記号キーの自由度を担保する</h3>

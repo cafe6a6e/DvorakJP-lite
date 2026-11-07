@@ -240,13 +240,18 @@ function onKeyDown(e) {
 
 // ---- キーボード配列 ----
 
+// docs/ の直下にあるファイルの URL（練習ページは playground/ の下にあるので、このスクリプトの場所を基準にする）
+function asset(file) {
+  return new URL(file, import.meta.url).href;
+}
+
 async function getTable(file) {
-  if (!tables.has(file)) tables.set(file, loadTable(file));
+  if (!tables.has(file)) tables.set(file, loadTable(asset(file)));
   return tables.get(file);
 }
 
 async function getDisplayTable(layout) {
-  dvorakText ??= fetch(LAYOUTS.dvorak.file).then((res) => {
+  dvorakText ??= fetch(asset(LAYOUTS.dvorak.file)).then((res) => {
     if (!res.ok) throw new Error(`変換表を読み込めませんでした (${res.status})`);
     return res.text();
   });
@@ -283,7 +288,7 @@ onLayoutChange(async (id) => {
 async function init() {
   try {
     const [list] = await Promise.all([
-      fetch("playground-texts.json").then((res) => {
+      fetch(asset("playground-texts.json")).then((res) => {
         if (!res.ok) throw new Error(`問題文を読み込めませんでした (${res.status})`);
         return res.json();
       }),

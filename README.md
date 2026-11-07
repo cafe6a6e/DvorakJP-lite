@@ -1,6 +1,6 @@
 # DvorakJP lite
 
-[DvorakJP](https://cafe6a6e.github.io/DvorakJP-lite/#dvorakjp) の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、**「ん」の後も余計な打鍵なしで打てる**ようにしたローマ字テーブルです。
+[DvorakJP](https://cafe6a6e.github.io/DvorakJP-lite/dvorakjp/) の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、**「ん」の後も余計な打鍵なしで打てる**ようにしたローマ字テーブルです。
 
 たとえば「鉛筆（えんぴつ）」は、DvorakJP では `ennpitu` と `n` を 2 回打つ必要がありますが、DvorakJP lite では `enpitu` と 1 打少なく打てます。QWERTY で身に付けた n 省略規則がそのまま使えるので、拡張入力が有効なままでも、今までの打ち方を変更する必要がありません。
 
@@ -220,6 +220,8 @@ QWERTY 版の表は、Dvorak 版から `bun run build:qwerty` で作ります。
 | `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル（Dvorak 配列用） |
 | `docs/romantable_dvorakjplite_qwerty_jis.txt` | DvorakJP lite ローマ字テーブル（QWERTY・JIS 配列用。`bun run build:qwerty` で Dvorak 配列用から生成） |
 | `docs/romantable_dvorakjplite_qwerty_us.txt` | DvorakJP lite ローマ字テーブル（QWERTY・US 配列用。同上） |
+| `docs/index.html` ほか | 公式ページ（GitHub Pages）。`index.html`（DvorakJP lite とは）、`install/`（導入方法）、`playground/`（練習）、`dvorakjp/`（DvorakJP の解説）の 4 ページ。ヘッダーとフッターは 4 つの HTML に同じものを書いている（`test/site.test.js` で確認） |
+| `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため） |
 
 QWERTY 用のテーブルについては [QWERTY 版](#qwerty-版) を見てください。この README の打ち方は、特に書いていない限り Dvorak 配列の文字で書いています。
 

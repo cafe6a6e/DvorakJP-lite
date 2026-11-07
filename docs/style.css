@@ -103,6 +103,11 @@ h3 {
   margin: 24px 0 8px;
 }
 
+h4 {
+  font-size: 16px;
+  margin: 20px 0 6px;
+}
+
 .lead { color: var(--muted); margin-top: 0; }
 
 code, kbd, pre { font-family: var(--mono); font-size: .92em; }
@@ -199,7 +204,7 @@ ol li { margin-bottom: 6px; }
   cursor: pointer;
 }
 .segmented button + button { border-left: 2px solid var(--fg); }
-.segmented button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.segmented button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 
 .button {
   display: inline-block;

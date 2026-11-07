@@ -4,7 +4,7 @@ import { LAYOUTS } from "./keymap.js";
 import { currentLayout, onLayoutChange } from "./layout-select.js";
 
 const PAGES = ["about", "install", "playground", "dvorakjp"];
-const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習", dvorakjp: "DvorakJP とは" };
+const TITLES = { about: "DvorakJP lite とは", install: "導入方法", playground: "練習", dvorakjp: "DvorakJP の解説" };
 
 // Google Analytics にイベントを送る（gtag が無い環境では何もしない）
 function track(name, params) {
@@ -47,13 +47,17 @@ let os = guessOS();
 function updateInstall() {
   const layout = currentLayout();
   for (const b of document.querySelectorAll("#install-os button")) {
-    b.setAttribute("aria-selected", String(b.dataset.os === os));
+    b.setAttribute("aria-pressed", String(b.dataset.os === os));
   }
   for (const panel of document.querySelectorAll(".os-panel")) {
     panel.hidden = panel.dataset.os !== os;
   }
   for (const note of document.querySelectorAll(".layout-note")) {
     note.hidden = note.dataset.layout !== layout;
+  }
+  // QWERTY 版だけの手順（Dvorak 版では , と . は句読点のままなので不要）
+  for (const step of document.querySelectorAll(".qwerty-only")) {
+    step.hidden = !LAYOUTS[layout].map;
   }
   // キーボード配列に合わせて、ダウンロードするローマ字テーブルを切り替える
   const file = LAYOUTS[layout].file;

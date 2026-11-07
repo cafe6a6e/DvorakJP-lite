@@ -32,6 +32,7 @@
       <a href="#about" data-page="about">DvorakJP lite とは</a>
       <a href="#install" data-page="install">導入方法</a>
       <a href="#playground" data-page="playground">練習</a>
+      <a href="#dvorakjp" data-page="dvorakjp">補足：DvorakJP の解説</a>
     </nav>
     <a class="gh-link" href="https://github.com/cafe6a6e/DvorakJP-lite" aria-label="GitHub リポジトリ" title="GitHub リポジトリ">
       <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
@@ -42,9 +43,8 @@
     <!-- DvorakJP lite とは -->
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
-      <p class="lead">
-        <a href="#dvorakjp">DvorakJP</a> 拡張ローマ字入力のうち、<strong>QWERTY ローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。
-      </p>
+      <p><a href="#dvorakjp">DvorakJP</a> 拡張ローマ字入力のうち、<strong>QWERTY ローマ字入力と競合しないもの</strong>だけを集めたローマ字テーブルです。QWERTY の標準的なローマ字の打ち方はそのままで、日本語入力に DvorakJP の拡張入力を使えます。</p>
+      <p>Dvorak 配列で日本語を効率よく打ちたい方、DvorakJP を使いたいが QWERTY と同じローマ字の打ち方も残したい方を想定したものです。QWERTY 配列のキーボードのまま使うこともできます（<a href="#install">導入方法</a>）。</p>
 
       <figure>
         <img src="images/layout.webp" width="1200" height="455"
@@ -54,7 +54,7 @@
 
       <h2>設計思想</h2>
 
-      <h3>1. QWERTY と共存する</h3>
+      <h3>1. QWERTY ローマ字入力と共存する</h3>
       <p>オリジナルの <a href="#dvorakjp">DvorakJP</a> 拡張ルールの一部は、QWERTY ローマ字の「ん」の打ち方と衝突します。</p>
       <div class="table-wrap">
         <table>
@@ -68,13 +68,13 @@
       </div>
       <p>DvorakJP lite では、衝突する拡張ルールを次の方針で扱い、QWERTY ローマ字の打ち方を一切変えません。</p>
       <ul class="points">
-        <li><strong>効果の大きいものは、QWERTY ローマ字で打たない組み合わせを最小限使って採用する。</strong> 例:
+        <li><strong>入力効率への効果が大きい拡張は、QWERTY ローマ字で打たない組み合わせを最小限使って採用する。</strong>
           <ul>
             <li>な行の拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
-            <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> が同じ手で打ちにくいので、h による拗音のうち <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）</li>
+            <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで h による拗音のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は QWERTY の標準的なローマ字では使わない組み合わせなので、競合しない</li>
           </ul>
         </li>
-        <li><strong>効果が限定的なものは採用しない。</strong> 例:
+        <li><strong>入力効率への効果が限定的な拡張は採用しない。</strong>
           <ul>
             <li>ぴゃ行以外の<code>h</code>,<code>n</code>拗音拡張は採用しない。主要な拗音は、QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
           </ul>
@@ -84,20 +84,34 @@
       <h3>2. 記号キーの自由度を担保する</h3>
       <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code>→かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
-      <h2>拡張キー</h2>
+      <h2>DvorakJP との主な違い</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行の例</th><th>拗音の例（きゃ行・ぴゃ行）</th></tr></thead>
+          <thead><tr><th>項目</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
           <tbody>
-            <tr><td><code>'</code> <code>-</code></td><td>ア段＋い</td><td><code>s'</code> <code>s-</code> さい</td><td><code>v'</code> <code>v-</code> ない</td><td><code>cy'</code> <code>cy-</code> きゃい、<code>ph'</code> <code>ph-</code> ぴゃい</td></tr>
-            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td><td><code>v;</code> なん</td><td><code>cy;</code> きゃん、<code>ph;</code> ぴゃん</td></tr>
-            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td><td><code>v.</code> ねい</td><td><code>cy.</code> きぇい、<code>ph.</code> ぴぇい</td></tr>
-            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td><td><code>v,</code> のう</td><td><code>cy,</code> きょう、<code>ph,</code> ぴょう</td></tr>
-            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td><td><code>vp</code> ぬう</td><td><code>cyp</code> きゅう、<code>php</code> ぴゅう</td></tr>
-            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td><td><code>vk</code> ぬん</td><td><code>cyk</code> きゅん、<code>phk</code> ぴゅん</td></tr>
-            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td><td><code>vj</code> ねん</td><td><code>cyj</code> きぇん、<code>phj</code> ぴぇん</td></tr>
-            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td><td><code>vq</code> のん</td><td><code>cyq</code> きょん、<code>phq</code> ぴょん</td></tr>
-            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td><td><code>vx</code> にん</td><td><code>cyx</code> きぃん、<code>phx</code> ぴぃん</td></tr>
+            <tr><td>な行拡張</td><td><code>n</code>（<code>n'</code> ない、<code>nj</code> ねん）</td><td><code>v</code>（<code>v'</code> ない、<code>vj</code> ねん）</td></tr>
+            <tr><td>拗音</td><td><code>y</code> に加え、<code>h</code>, <code>n</code>（<code>rha</code> りゃ、<code>cna</code> きゃ）</td><td><code>y</code> で打つ（<code>cya</code> きゃ）。ぴゃ行だけ <code>h</code> も使える（<code>pha</code> ぴゃ）</td></tr>
+            <tr><td>ア段＋い</td><td><code>'</code></td><td><code>'</code> と <code>-</code>（Dvorak 版）</td></tr>
+            <tr><td>記号入力</td><td><code>z</code> で打つ（<code>z.</code> …、<code>zh</code> ←）</td><td><code>;</code> で打つ（<code>;.</code> …、<code>;d</code> ←）。<code>z.</code> などは拡張入力を優先する（<code>z.</code> ぜい）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>拡張キー</h2>
+      <p>拡張キーは、子音や拗音のすぐ後に打って、二重母音や「ん」までをまとめて入力するキーです。たとえば「ア段＋い」の <code>'</code> を <code>s</code> の後に打つと、<code>s'</code> で「さい」になります。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行</th><th>拗音の例（きゃ行・ぴゃ行）</th></tr></thead>
+          <tbody>
+            <tr><td><code>'</code> <code>-</code></td><td>ア段＋い（ai）</td><td><code>s'</code> <code>s-</code> さい</td><td><code>v'</code> <code>v-</code> ない</td><td><code>cy'</code> <code>cy-</code> きゃい、<code>ph'</code> <code>ph-</code> ぴゃい</td></tr>
+            <tr><td><code>,</code></td><td>オ段＋う（ou）</td><td><code>s,</code> そう</td><td><code>v,</code> のう</td><td><code>cy,</code> きょう、<code>ph,</code> ぴょう</td></tr>
+            <tr><td><code>.</code></td><td>エ段＋い（ei）</td><td><code>s.</code> せい</td><td><code>v.</code> ねい</td><td><code>cy.</code> きぇい、<code>ph.</code> ぴぇい</td></tr>
+            <tr><td><code>p</code></td><td>ウ段＋う（uu）</td><td><code>sp</code> すう</td><td><code>vp</code> ぬう</td><td><code>cyp</code> きゅう、<code>php</code> ぴゅう</td></tr>
+            <tr><td><code>;</code></td><td>ア段＋ん（ann）</td><td><code>s;</code> さん</td><td><code>v;</code> なん</td><td><code>cy;</code> きゃん、<code>ph;</code> ぴゃん</td></tr>
+            <tr><td><code>q</code></td><td>オ段＋ん（onn）</td><td><code>sq</code> そん</td><td><code>vq</code> のん</td><td><code>cyq</code> きょん、<code>phq</code> ぴょん</td></tr>
+            <tr><td><code>j</code></td><td>エ段＋ん（enn）</td><td><code>sj</code> せん</td><td><code>vj</code> ねん</td><td><code>cyj</code> きぇん、<code>phj</code> ぴぇん</td></tr>
+            <tr><td><code>k</code></td><td>ウ段＋ん（unn）</td><td><code>sk</code> すん</td><td><code>vk</code> ぬん</td><td><code>cyk</code> きゅん、<code>phk</code> ぴゅん</td></tr>
+            <tr><td><code>x</code></td><td>イ段＋ん（inn）</td><td><code>sx</code> しん</td><td><code>vx</code> にん</td><td><code>cyx</code> きぃん、<code>phx</code> ぴぃん</td></tr>
           </tbody>
         </table>
       </div>
@@ -113,18 +127,18 @@
       <div class="choices">
         <div class="choice">
           <span class="choice-label" id="install-os-label">OS</span>
-          <div class="segmented" id="install-os" role="tablist" aria-labelledby="install-os-label">
-            <button type="button" role="tab" data-os="mac">Mac</button>
-            <button type="button" role="tab" data-os="windows">Windows</button>
-            <button type="button" role="tab" data-os="linux">Linux</button>
+          <div class="segmented" id="install-os" role="group" aria-labelledby="install-os-label">
+            <button type="button" data-os="mac">Mac</button>
+            <button type="button" data-os="windows">Windows</button>
+            <button type="button" data-os="linux">Linux</button>
           </div>
         </div>
         <div class="choice">
           <span class="choice-label" id="install-layout-label">キーボード配列</span>
-          <div class="segmented layout-select" role="tablist" aria-labelledby="install-layout-label">
-            <button type="button" role="tab" data-layout="qwerty-jis">QWERTY(JIS)</button>
-            <button type="button" role="tab" data-layout="qwerty-us">QWERTY(US)</button>
-            <button type="button" role="tab" data-layout="dvorak">Dvorak</button>
+          <div class="segmented layout-select" role="group" aria-labelledby="install-layout-label">
+            <button type="button" data-layout="qwerty-jis">QWERTY(JIS)</button>
+            <button type="button" data-layout="qwerty-us">QWERTY(US)</button>
+            <button type="button" data-layout="dvorak">Dvorak</button>
           </div>
         </div>
       </div>
@@ -146,30 +160,34 @@
 
       <!-- Mac -->
       <div class="os-panel" data-os="mac">
-        <h2>Google日本語入力のローマ字テーブルを更新する</h2>
+        <h2>Google日本語入力のローマ字テーブルをインポートする</h2>
         <ol>
           <li>メニューバーの入力メニューから、Google日本語入力の「環境設定…」を開きます。</li>
           <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
           <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
           <li>「OK」→「適用」で保存します。</li>
+          <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
         </ol>
+        <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
       </div>
 
       <!-- Windows -->
       <div class="os-panel" data-os="windows" hidden>
-        <h2>Google日本語入力のローマ字テーブルを更新する</h2>
+        <h2>Google日本語入力のローマ字テーブルをインポートする</h2>
         <ol>
           <li>タスクバーの入力モードのアイコン（「あ」や「A」）を右クリックし、「プロパティ」を開きます。</li>
           <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
           <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
           <li>「OK」→「適用」で保存します。</li>
+          <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
         </ol>
+        <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
       </div>
 
       <!-- Linux -->
       <div class="os-panel" data-os="linux" hidden>
-        <p class="note">Linux 版の Google日本語入力はないので、オープンソース版の <strong>Mozc</strong>（<code>fcitx5-mozc</code> など）を使います。ローマ字テーブルの形式は同じです。</p>
-        <h2>Mozc のローマ字テーブルを更新する</h2>
+        <p class="note">Linux 版の Google日本語入力はないので、オープンソースの日本語入力システム <strong>Mozc</strong>（<code>fcitx5-mozc</code> など）を使います。ローマ字テーブルの形式は同じです。</p>
+        <h2>Mozc のローマ字テーブルをインポートする</h2>
         <ol>
           <li>Mozc の設定ツールを開きます。
             <pre><code>/usr/lib/mozc/mozc_tool --mode=config_dialog</code></pre>
@@ -177,7 +195,9 @@
           <li>「一般」タブの「ローマ字テーブル」で「編集…」を押します。</li>
           <li>左下の「編集」→「インポート…」で、ダウンロードした <code class="romantable-name">romantable_dvorakjplite_qwerty_jis.txt</code> を選びます。</li>
           <li>「OK」→「適用」で保存します。</li>
+          <li class="qwerty-only">同じ画面の「入力補助」タブの「自動変換」で、句読点（、。）での自動変換をオフにします（「読点」と「句点」のチェックを外すか、自動変換そのものをオフにします）。</li>
         </ol>
+        <p class="note qwerty-only">理由：QWERTY 版では <code>,</code> と <code>.</code> を子音のキー（Dvorak 配列の <code>w</code> と <code>v</code>）として使います。自動変換がオンのままだと、<code>,</code> や <code>.</code> を打った時点でそれまでの文字が変換されてしまい、たとえば <code>kqcr,s</code> が「体重を」ではなく「体重、お」になります。</p>
       </div>
     </section>
 
@@ -190,23 +210,25 @@
         <ul>
           <li>下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。</li>
           <li>かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。</li>
-          <li>キーボード配列は、導入方法で選んだものと同じにしてください。QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。下段のローマ字は Dvorak 配列の文字で表示します。</li>
+          <li>キーボード配列は、導入方法で選んだものと同じにしてください。</li>
+          <li>QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。</li>
+          <li>下段のローマ字は、どの配列でも Dvorak 配列の文字で表示します。</li>
         </ul>
       </details>
 
       <div class="choices">
         <div class="choice">
           <span class="choice-label" id="pg-layout-label">キーボード配列</span>
-          <div class="segmented layout-select" role="tablist" aria-labelledby="pg-layout-label">
-            <button type="button" role="tab" data-layout="qwerty-jis">QWERTY(JIS)</button>
-            <button type="button" role="tab" data-layout="qwerty-us">QWERTY(US)</button>
-            <button type="button" role="tab" data-layout="dvorak">Dvorak</button>
+          <div class="segmented layout-select" role="group" aria-labelledby="pg-layout-label">
+            <button type="button" data-layout="qwerty-jis">QWERTY(JIS)</button>
+            <button type="button" data-layout="qwerty-us">QWERTY(US)</button>
+            <button type="button" data-layout="dvorak">Dvorak</button>
           </div>
         </div>
         <div class="choice">
           <span class="choice-label" id="pg-genres-label">題材</span>
           <div class="pg-controls">
-            <div class="segmented" id="pg-genres" role="tablist" aria-labelledby="pg-genres-label"></div>
+            <div class="segmented" id="pg-genres" role="group" aria-labelledby="pg-genres-label"></div>
             <button type="button" class="button-outline" id="pg-restart">やり直す</button>
           </div>
         </div>
@@ -220,48 +242,72 @@
       </div>
     </section>
 
-    <!-- DvorakJP とは（ナビゲーションには出さず、本文のリンクから開く） -->
+    <!-- 補足：DvorakJP の解説 -->
     <section id="page-dvorakjp" class="page" hidden>
-      <h1>DvorakJP とは</h1>
-      <p class="lead">
+      <h1>DvorakJP の解説</h1>
+
+      <h2>Dvorak 配列について</h2>
+      <p>Dvorak 配列は、アメリカのワシントン大学の教育学教授で教育心理学者の <strong>August Dvorak</strong>（と義弟の William Dealey）が考案したキー配列です（1932 年に完成し、1936 年に米国で特許を取得）。</p>
+      <p>QWERTY 配列は 1874 年に発売されたタイプライターが普及したことで、業界標準として定着した配列です。これに対して Dvorak 配列は、英文の文字の出現頻度と手のしくみを調べて設計された配列であり、以下の特徴を持ちます。</p>
+
+        <figure>
+        <img src="images/layout-dvorak.webp" width="1200" height="455"
+             alt="Dvorak 配列の英字キーの配置図。上段は ' , . p y f g c r l、ホーム段は a o e u i d h t n s、下段は ; q j k x b m w v z。">
+        <figcaption>Dvorak 配列の英字キー。左手のホーム段に母音、右手のホーム段によく使う子音が並びます。</figcaption>
+      </figure>
+
+      <ul class="points">
+        <li><strong>ホーム段によく使う文字を集める。</strong> 左手に母音（<code>a</code> <code>o</code> <code>e</code> <code>u</code> <code>i</code>）、右手によく使う子音（<code>d</code> <code>h</code> <code>t</code> <code>n</code> <code>s</code>）を置き、英文の文字の打鍵の約 70% をホーム段で打てます（QWERTY では 32%）。</li>
+        <li><strong>左右の手を交互に使う。</strong> 母音と子音を左右の手に分けることで、同じ手が続く打鍵を減らします。</li>
+        <li><strong>指の移動を減らす。</strong> 英文入力での指の動きは QWERTY の約 63% になるとされます。</li>
+        <li><strong>右手を多く使う。</strong> 右利きの人が多いため、右手で打つ割合を多くしています。</li>
+      </ul>
+      <p>1982 年には ANSI（米国規格協会）が承認し、代替のキー配列の正式な規格（ANSI X4.22-1983）になりました。現在は Windows・macOS・Linux など主な OS に標準で入っています。</p>
+      <p>Dvorak 配列は QWERTY 配列を打ちやすさの面から見直した先駆けであり、その後の Colemak 配列など多くの新しい配列にも影響を与えました。</p>
+      <p>Dvorak 配列は英語のために設計された配列であるため、日本語のローマ字入力に使うと、打ちにくい点がいくつかあります。そこで、日本語のローマ字入力でも Dvorak 配列の利点を生かせるように拡張したのが、次に説明する DvorakJP です。</p>
+
+      <h2>DvorakJP とは</h2>
+      <p>
         Dvorak 配列で日本語を打ちやすくするために、ローマ字入力を拡張したローマ字テーブルです。キーの物理配置は Dvorak 配列のまま、<strong>打鍵の数と左右の手の偏りを減らします</strong>。
       </p>
+      <p>DvorakJP は Aki:z 氏が考案し、2002 年 3 月に β 版、2003 年 12 月に正式版 v1.0 が公開されました。か行を <code>c</code>、拗音を <code>h</code> と <code>n</code> で打てるようにしたほか、SKY と AZIK を参考に、二重母音と「ん」を 1 打で打つ拡張を取り入れています。</p>
 
       <figure>
         <img src="images/layout-dvorakjp.webp" width="1200" height="455"
              alt="DvorakJP のキー配置図。左手に母音と拡張キー、右手に子音と拗音キーが並ぶ。h で拗音を打つ子音は黄色、n で打つ子音は水色。">
         <figcaption>左手に母音と拡張キー、右手に子音。子音の後に赤いキーを打つと二重母音や「ん」を入力できます。拗音は、黄色の子音なら h、水色の子音なら n を続けて打ちます。</figcaption>
       </figure>
+      <p class="note">このページの図と表には、v0.2β にあった <code>p</code> の「uu」（ウ段＋う）も含めています。v1.0 では、<code>pp</code> で「っ」を打てるようにするために削除されました。</p>
 
-      <h2>設計思想</h2>
+      <h3>設計思想</h3>
 
-      <h3>1. 母音は左手、子音は右手で打つ</h3>
-      <p>Dvorak 配列は左手のホーム段に母音（<code>a</code> <code>o</code> <code>e</code> <code>u</code> <code>i</code>）が並び、子音の多くは右手にあります。ローマ字の「子音＋母音」が左右交互の打鍵になり、日本語でも打ちやすい配列です。</p>
+      <h4>1. 母音は左手、子音は右手で打つ</h4>
+      <p>Dvorak 配列は左手のホーム段に母音（<code>a</code> <code>o</code> <code>e</code> <code>u</code> <code>i</code>）が並び、子音の多くは右手にあります。そのため、ローマ字の「子音＋母音」のほとんどが左右交互の打鍵になり、Dvorak 配列はそのままでも日本語を打ちやすいという大きな利点を持っています。</p>
 
-      <h3>2. 左手に残った子音を右手で打てるようにする</h3>
+      <h4>2. 左手側に配置された子音を右手で打てるようにする</h4>
       <p>ただし、か行の <code>k</code> と拗音の <code>y</code> は左手にあり、左右交互が崩れます。DvorakJP では右手のキーで代わりに打てるようにします。</p>
       <ul class="points">
         <li><strong>か行は <code>c</code> でも打てる。</strong> 例: <code>ca</code> か、<code>ci</code> き、<code>co</code> こ</li>
         <li><strong>拗音は <code>y</code> の代わりに <code>h</code> か <code>n</code> で打てる。</strong> 例: <code>rha</code> りゃ、<code>cna</code> きゃ</li>
       </ul>
 
-      <h3>3. よく出る母音の組み合わせと「ん」を1打にする</h3>
+      <h4>3. よく出る母音の組み合わせと「ん」を1打にする</h4>
       <p>「こう」「かい」「せん」のような二重母音や撥音（ん）は、日本語にとても多く出てきます。左手の母音のまわりにある、ローマ字では使わないキー（<code>'</code> <code>,</code> <code>.</code> <code>p</code> <code>;</code> <code>q</code> <code>j</code> <code>k</code> <code>x</code>）に割り当て、子音の後に1打で打てるようにします。例: <code>c,c'</code> こうかい（公開）、<code>t,cn,</code> とうきょう（東京）</p>
 
-      <h2>拡張キー</h2>
+      <h3>拡張キー</h3>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行の例</th><th>拗音の例</th></tr></thead>
+          <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行</th><th>拗音の例</th></tr></thead>
           <tbody>
-            <tr><td><code>'</code></td><td>ア段＋い</td><td><code>s'</code> さい</td><td><code>n'</code> ない</td><td><code>rh'</code> りゃい</td></tr>
-            <tr><td><code>;</code></td><td>ア段＋ん</td><td><code>s;</code> さん</td><td><code>n;</code> なん</td><td><code>cn;</code> きゃん</td></tr>
-            <tr><td><code>.</code></td><td>エ段＋い</td><td><code>s.</code> せい</td><td><code>n.</code> ねい</td><td><code>hn.</code> ひぇい</td></tr>
-            <tr><td><code>,</code></td><td>オ段＋う</td><td><code>s,</code> そう</td><td><code>n,</code> のう</td><td><code>rh,</code> りょう</td></tr>
-            <tr><td><code>p</code></td><td>ウ段＋う</td><td><code>sp</code> すう</td><td><code>np</code> ぬう</td><td><code>rhp</code> りゅう</td></tr>
-            <tr><td><code>k</code></td><td>ウ段＋ん</td><td><code>sk</code> すん</td><td><code>nk</code> ぬん</td><td><code>cnk</code> きゅん</td></tr>
-            <tr><td><code>j</code></td><td>エ段＋ん</td><td><code>sj</code> せん</td><td><code>nj</code> ねん</td><td><code>mnj</code> みぇん</td></tr>
-            <tr><td><code>q</code></td><td>オ段＋ん</td><td><code>sq</code> そん</td><td><code>nq</code> のん</td><td><code>rhq</code> りょん</td></tr>
-            <tr><td><code>x</code></td><td>イ段＋ん</td><td><code>sx</code> しん</td><td><code>nx</code> にん</td><td><code>bnx</code> びぃん</td></tr>
+            <tr><td><code>'</code></td><td>ア段＋い（ai）</td><td><code>s'</code> さい</td><td><code>n'</code> ない</td><td><code>rh'</code> りゃい</td></tr>
+            <tr><td><code>,</code></td><td>オ段＋う（ou）</td><td><code>s,</code> そう</td><td><code>n,</code> のう</td><td><code>rh,</code> りょう</td></tr>
+            <tr><td><code>.</code></td><td>エ段＋い（ei）</td><td><code>s.</code> せい</td><td><code>n.</code> ねい</td><td><code>hn.</code> ひぇい</td></tr>
+            <tr><td><code>p</code></td><td>ウ段＋う（uu）</td><td><code>sp</code> すう</td><td><code>np</code> ぬう</td><td><code>rhp</code> りゅう</td></tr>
+            <tr><td><code>;</code></td><td>ア段＋ん（ann）</td><td><code>s;</code> さん</td><td><code>n;</code> なん</td><td><code>cn;</code> きゃん</td></tr>
+            <tr><td><code>q</code></td><td>オ段＋ん（onn）</td><td><code>sq</code> そん</td><td><code>nq</code> のん</td><td><code>rhq</code> りょん</td></tr>
+            <tr><td><code>j</code></td><td>エ段＋ん（enn）</td><td><code>sj</code> せん</td><td><code>nj</code> ねん</td><td><code>mnj</code> みぇん</td></tr>
+            <tr><td><code>k</code></td><td>ウ段＋ん（unn）</td><td><code>sk</code> すん</td><td><code>nk</code> ぬん</td><td><code>cnk</code> きゅん</td></tr>
+            <tr><td><code>x</code></td><td>イ段＋ん（inn）</td><td><code>sx</code> しん</td><td><code>nx</code> にん</td><td><code>bnx</code> びぃん</td></tr>
           </tbody>
         </table>
       </div>
@@ -271,16 +317,17 @@
         <table>
           <thead><tr><th>拗音キー</th><th>子音と例</th></tr></thead>
           <tbody>
-            <tr><td><code>h</code></td><td><code>kha</code> きゃ、<code>sha</code> しゃ、<code>jha</code> じゃ、<code>nha</code> にゃ、<code>rha</code> りゃ、<code>pha</code> ぴゃ、<code>tha</code> てゃ、<code>dha</code> でゃ</td></tr>
-            <tr><td><code>n</code></td><td><code>cna</code> きゃ、<code>gna</code> ぎゃ、<code>tna</code> ちゃ、<code>dna</code> ぢゃ、<code>hna</code> ひゃ、<code>bna</code> びゃ、<code>mna</code> みゃ</td></tr>
+            <tr><td><code>h</code></td><td><code>sha</code> しゃ、<code>jha</code> じゃ、<code>zha</code> じゃ、<code>nha</code> にゃ、<code>rha</code> りゃ、<code>pha</code> ぴゃ</td></tr>
+            <tr><td><code>n</code></td><td><code>cna</code> きゃ、<code>gna</code> ぎゃ、<code>tna</code> ちゃ、<code>dna</code> ぢゃ、<code>hna</code> ひゃ、<code>fna</code> ふゃ、<code>bna</code> びゃ、<code>mna</code> みゃ</td></tr>
           </tbody>
         </table>
       </div>
         
       <h2>参考資料</h2>
       <ul class="refs">
-        <li><strong>本家サイト</strong>: <code>http://www7.plala.or.jp/dvorakjp/index.htm</code><br>
-          2021 年ごろに閉鎖され、現在は見られません。</li>
+        <li><a href="https://en.wikipedia.org/wiki/Dvorak_keyboard_layout">Dvorak keyboard layout</a>（英語版 Wikipedia）</li>
+        <li><strong>本家サイト</strong>: <code>http://www7.plala.or.jp/dvorakjp/index.htm</code>（Aki:z氏）<br>
+          2021 年 11 月〜2023 年 2 月の間に閉鎖。<a href="https://web.archive.org/web/20040215135206/http://www7.plala.or.jp:80/dvorakjp/dvorakjp.htm">Internet Archive</a> で閲覧可能（2026 年 11 月現在）</li>
         <li><a href="https://zenn.dev/shinespark/articles/c6c53453be6c31">AI全盛期の今だからこそ、改めてオススメしたいDvorak, DvorakJP配列</a>（Zenn, shinespark氏）</li>
         <li><a href="https://github.com/shinespark/dvorakjp-roman-table">dvorakjp-roman-table（DvorakJP Prime）</a>（GitHub, shinespark氏）</li>
       </ul>

@@ -89,8 +89,6 @@ h1 {
   padding-left: 14px;
   border-left: 6px solid var(--accent);
 }
-/* 1つのページに大見出しが2つあるとき（DvorakJP の解説）は、2つ目の前を空ける */
-* + h1 { margin-top: 56px; }
 
 h2 {
   font-size: 20px;
@@ -103,6 +101,11 @@ h2 {
 h3 {
   font-size: 17px;
   margin: 24px 0 8px;
+}
+
+h4 {
+  font-size: 16px;
+  margin: 20px 0 6px;
 }
 
 .lead { color: var(--muted); margin-top: 0; }
@@ -201,7 +204,7 @@ ol li { margin-bottom: 6px; }
   cursor: pointer;
 }
 .segmented button + button { border-left: 2px solid var(--fg); }
-.segmented button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.segmented button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 
 .button {
   display: inline-block;

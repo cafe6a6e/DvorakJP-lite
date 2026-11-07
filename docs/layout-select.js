@@ -15,7 +15,7 @@ export function onLayoutChange(callback) {
 
 function updateButtons() {
   for (const b of document.querySelectorAll(".layout-select button")) {
-    b.setAttribute("aria-selected", String(b.dataset.layout === current));
+    b.setAttribute("aria-pressed", String(b.dataset.layout === current));
   }
 }
 

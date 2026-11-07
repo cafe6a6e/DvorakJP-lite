@@ -145,7 +145,7 @@ function stopTimer() {
 function start(text) {
   stopTimer();
   for (const b of genresEl.querySelectorAll("button")) {
-    b.setAttribute("aria-selected", String(b.dataset.id === text.id));
+    b.setAttribute("aria-pressed", String(b.dataset.id === text.id));
   }
   const { target, spans } = render(text);
   state = { text, target, spans, typed: "", committed: "", pending: "", correct: 0, miss: 0, startedAt: 0, finishedAt: 0 };
@@ -298,7 +298,7 @@ async function init() {
   for (const text of texts) {
     const b = el("button", "", text.genre);
     b.type = "button";
-    b.setAttribute("role", "tab");
+    b.setAttribute("aria-pressed", "false");
     b.dataset.id = text.id;
     b.title = text.title;
     b.addEventListener("click", () => {

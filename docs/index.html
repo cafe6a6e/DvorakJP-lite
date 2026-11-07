@@ -44,7 +44,8 @@
     <section id="page-about" class="page">
       <h1>DvorakJP lite とは</h1>
       <p><a href="#dvorakjp">DvorakJP</a> の拡張ローマ字入力を、普通のローマ字入力を妨げないように見直し、<strong>「ん」の後も余計な打鍵なしで打てる</strong>ようにしたローマ字テーブルです。</p>
-      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。DvorakJP の二重母音や「ん」の拡張の仕組みは引き継ぎ（な行の拡張は <code>v</code> に移しています）、QWERTY で身に付けたローマ字入力の規則もそのまま使えるので、今までの打ち方を覚え直す必要もありません。</p>
+      <p>たとえば「鉛筆（えんぴつ）」は、DvorakJP では <code>ennpitu</code> と <code>n</code> を 2 回打つ必要がありますが、DvorakJP lite では <code>enpitu</code> と 1 打少なく打てます。QWERTY で身に付けた短縮入力規則がそのまま使えるので、今までの打ち方を変更する必要がありません。</p>
+      <p>また、実験的な試みとして、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> の特殊拡張を、競合しないものに限り採用し、打鍵数をさらに減らせるようにしています。</p>
 
       <figure>
         <img src="images/layout.webp" width="1200" height="455"
@@ -90,8 +91,8 @@
       <h3>3. 記号キーの自由度を担保する</h3>
       <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
-      <h3>4. （実験的）共存できる範囲で AZIK の短縮入力を採用する</h3>
-      <p><a href="http://www1.vecceed.ne.jp/~bemu/azik/azikindx.htm">AZIK</a> の短縮入力のうち、普通のローマ字や DvorakJP lite の拡張入力とぶつからないものだけを、実験的に採用しています。「こと」を <code>kt</code>、「です」を <code>ds</code> のように、よく出る 2 文字を子音 2 つで打てます。<code>k</code> で始まるものは、か行と同じく <code>c</code> でも打てます。使わなくても、今までどおりの打ち方で入力できます。</p>
+      <h3>4. （実験的）競合しない範囲で AZIK の短縮入力を採用する</h3>
+      <p><a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> 特殊拡張のうち、普通のローマ字や DvorakJP の拡張入力とぶつからないものだけを、実験的に採用しています。「こと」を <code>kt</code> または <code>ct</code>、「です」を <code>ds</code> のように、よく出る 2 文字を子音 2 つで打てます（使わなくても、今までどおりの打ち方で入力できます）。</p>
       <details class="fold">
         <summary>短縮入力の一覧（21 種類）</summary>
         <div class="abbr-tables">

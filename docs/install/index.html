@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DvorakJP lite の導入方法（Google 日本語入力・Mozc）｜DvorakJP lite</title>
-  <meta name="description" content="DvorakJP lite のローマ字テーブルを、Google 日本語入力（Mac・Windows）と Mozc（Linux）に導入する手順。Dvorak 配列用と、QWERTY 配列（JIS・US）のまま使う版をダウンロードできます。">
+  <meta name="description" content="DvorakJP lite のローマ字テーブルを、Google 日本語入力（Mac・Windows）と Mozc（Linux）に導入する手順。Dvorak 配列用と QWERTY 配列（JIS・US）用を、短縮拡張（実験中）の有無を選んでダウンロードできます。">
   <link rel="canonical" href="https://cafe6a6e.github.io/DvorakJP-lite/install/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
@@ -14,7 +14,7 @@
   <meta property="og:site_name" content="DvorakJP lite">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:title" content="DvorakJP lite の導入方法（Google 日本語入力・Mozc）｜DvorakJP lite">
-  <meta property="og:description" content="DvorakJP lite のローマ字テーブルを、Google 日本語入力（Mac・Windows）と Mozc（Linux）に導入する手順。Dvorak 配列用と、QWERTY 配列（JIS・US）のまま使う版をダウンロードできます。">
+  <meta property="og:description" content="DvorakJP lite のローマ字テーブルを、Google 日本語入力（Mac・Windows）と Mozc（Linux）に導入する手順。Dvorak 配列用と QWERTY 配列（JIS・US）用を、短縮拡張（実験中）の有無を選んでダウンロードできます。">
   <meta property="og:url" content="https://cafe6a6e.github.io/DvorakJP-lite/install/">
   <meta property="og:image" content="https://cafe6a6e.github.io/DvorakJP-lite/images/og.png">
   <meta property="og:image:width" content="1200">
@@ -26,10 +26,19 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
   <script>
-    // 手元のサーバーからのアクセスは計測しない
-    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
-      window["ga-disable-G-JJE1TE4DDM"] = true;
-    }
+    // 手元のサーバーからのアクセスと、計測を止めたブラウザ（URL に ?ga=off を付けて開くと止まり、?ga=on で戻る）は計測しない
+    (function () {
+      var off = false;
+      try {
+        var ga = new URLSearchParams(location.search).get("ga");
+        if (ga === "off") localStorage.setItem("dvorakjplite.ga", "off");
+        if (ga === "on") localStorage.removeItem("dvorakjplite.ga");
+        off = localStorage.getItem("dvorakjplite.ga") === "off";
+      } catch (e) {}
+      if (off || ["localhost", "127.0.0.1"].includes(location.hostname)) {
+        window["ga-disable-G-JJE1TE4DDM"] = true;
+      }
+    })();
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -54,7 +63,7 @@
 
   <main>
     <h1>導入方法</h1>
-    <p>お使いの OS とキーボード配列を選んで、下の導入手順に進んでください。</p>
+    <p>お使いの OS とキーボード配列、短縮拡張の有無を選んで、下の導入手順に進んでください。</p>
 
     <div class="choices">
       <div class="choice">
@@ -84,6 +93,19 @@
     <p class="note layout-note" data-layout="dvorak" hidden>
       キー配列が Dvorak 配列の方向け。
     </p>
+
+    <div class="choices">
+      <div class="choice">
+        <span class="choice-label" id="install-edition-label">短縮拡張</span>
+        <div class="segmented edition-select" role="group" aria-labelledby="install-edition-label">
+          <button type="button" data-edition="standard">無 (v1.0)</button>
+          <button type="button" data-edition="abbr">有 (v1.0 ＋ 短縮拡張)<!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <p class="note edition-note" data-edition="standard">DvorakJP lite の拡張入力だけを採用します。</p>
+    <p class="note edition-note" data-edition="abbr" hidden>DvorakJP lite に AZIK・gACT10 由来の<a href="../#abbreviations">短縮入力</a>を実験的に追加。仕様は変更される可能性があります。</p>
 
     <p class="download">
       <a class="button" id="download-romantable" href="../romantable_dvorakjplite_qwerty_jis.txt" download>ローマ字テーブルをダウンロード</a>

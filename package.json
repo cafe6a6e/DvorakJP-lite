@@ -10,7 +10,7 @@
     "test": "bun test",
     "test:watch": "bun test --watch",
     "serve": "bun tools/serve.js",
-    "build:qwerty": "bun tools/dvorak-to-qwerty.js"
+    "build": "bun tools/build-tables.js"
   },
   "devDependencies": {
     "@types/bun": "^1.2.16"

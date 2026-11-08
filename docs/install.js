@@ -1,12 +1,8 @@
-// 導入方法のページ（install/）: OS・キーボード配列の切り替えと、ローマ字テーブルのダウンロード
+// 導入方法のページ（install/）: OS・キーボード配列・版の切り替えと、ローマ字テーブルのダウンロード
 
-import { LAYOUTS } from "./keymap.js";
-import { currentLayout, onLayoutChange } from "./layout-select.js";
-
-// Google Analytics にイベントを送る（gtag が無い環境では何もしない）
-function track(name, params) {
-  if (typeof gtag === "function") gtag("event", name, params);
-}
+import { LAYOUTS, tableFile } from "./keymap.js";
+import { currentEdition, currentLayout, onEditionChange, onLayoutChange } from "./layout-select.js";
+import { track } from "./analytics.js";
 
 // 利用者の OS を推測する（分からなければ Windows）
 function guessOS() {
@@ -17,12 +13,14 @@ function guessOS() {
   return "windows";
 }
 
-// 導入方法の選択（OS とキーボード配列）
+// 導入方法の選択（OS・キーボード配列・版）
 // QWERTY は JIS配列と US配列で記号キーの位置が違うので、ローマ字テーブルを分けている
+// 版（標準版と短縮拡張版）でも、ローマ字テーブルを分けている
 let os = guessOS();
 
 function updateInstall() {
   const layout = currentLayout();
+  const edition = currentEdition();
   for (const b of document.querySelectorAll("#install-os button")) {
     b.setAttribute("aria-pressed", String(b.dataset.os === os));
   }
@@ -32,13 +30,16 @@ function updateInstall() {
   for (const note of document.querySelectorAll(".layout-note")) {
     note.hidden = note.dataset.layout !== layout;
   }
+  for (const note of document.querySelectorAll(".edition-note")) {
+    note.hidden = note.dataset.edition !== edition;
+  }
   // QWERTY 版だけの手順（Dvorak 版では , と . は句読点のままなので不要）
   for (const step of document.querySelectorAll(".qwerty-only")) {
     step.hidden = !LAYOUTS[layout].map;
   }
-  // キーボード配列に合わせて、ダウンロードするローマ字テーブルを切り替える
+  // キーボード配列と版に合わせて、ダウンロードするローマ字テーブルを切り替える
   // ローマ字テーブルは docs/ の直下にあるので、このスクリプトの場所を基準にする
-  const file = LAYOUTS[layout].file;
+  const file = tableFile(edition, layout);
   document.getElementById("download-romantable").href = new URL(file, import.meta.url).href;
   for (const code of document.querySelectorAll(".romantable-name")) code.textContent = file;
 }
@@ -47,9 +48,10 @@ for (const b of document.querySelectorAll("#install-os button")) {
   b.addEventListener("click", () => { os = b.dataset.os; updateInstall(); });
 }
 onLayoutChange(updateInstall);
+onEditionChange(updateInstall);
 updateInstall();
 
-// ローマ字テーブルのダウンロード数を、選んでいた OS とキーボード配列付きで記録する
+// ローマ字テーブルのダウンロード数を、選んでいた OS・キーボード配列・版付きで記録する
 document.getElementById("download-romantable").addEventListener("click", () => {
-  track("download_romantable", { os, layout: currentLayout() });
+  track("download_romantable", { os, layout: currentLayout(), edition: currentEdition() });
 });

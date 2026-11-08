@@ -3,8 +3,10 @@ import { parseTable } from "../docs/romaji.js";
 
 const root = new URL("../", import.meta.url);
 
-// 検査する変換表。環境変数 ROMANTABLE で別のファイルを指定できる（候補の表を試すとき用）
-export const TABLE_PATH = process.env.ROMANTABLE ?? new URL("docs/romantable_dvorakjplite.txt", root).pathname;
+// 検査する Dvorak 用の変換表（標準版・短縮拡張版）
+// 環境変数 ROMANTABLE で、標準版の代わりに別のファイルを指定できる（候補の表を試すとき用）
+export const STANDARD_PATH = process.env.ROMANTABLE ?? new URL("docs/romantable_dvorakjplite.txt", root).pathname;
+export const ABBR_PATH = new URL("docs/romantable_dvorakjplite_abbr.txt", root).pathname;
 
 // QWERTY 回帰の基準: 拡張を入れる前の lite 変換表（コミット fcf1ce2 の版）
 export const BASE_PATH = new URL("test/fixtures/qwerty-base.txt", root).pathname;
@@ -13,7 +15,8 @@ export async function readText(path) {
   return Bun.file(path).text();
 }
 
-export async function loadTableFile(path = TABLE_PATH) {
+// 既定は、短縮入力も含む短縮拡張版（練習ページの表示や、サイトの例をすべて確かめられる）
+export async function loadTableFile(path = ABBR_PATH) {
   return parseTable(await readText(path));
 }
 

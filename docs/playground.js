@@ -1,7 +1,8 @@
-// 練習ページ（#playground）: 長文タイピング練習
+// 練習ページ（playground/）: 長文タイピング練習
 import { loadTable, parseTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
-import { LAYOUTS, convertKeys, invert, simplifyForQwerty } from "./keymap.js";
-import { currentLayout, onLayoutChange } from "./layout-select.js";
+import { LAYOUTS, convertKeys, invert, simplifyForQwerty, tableFile } from "./keymap.js";
+import { currentEdition, currentLayout, onEditionChange, onLayoutChange } from "./layout-select.js";
+import { track } from "./analytics.js";
 
 const $ = (id) => document.getElementById(id);
 const area = $("pg-area");
@@ -13,9 +14,9 @@ const genresEl = $("pg-genres");
 // 下段のローマ字とヒントは、どのキーボード配列でも Dvorak 配列の文字で表示する（Dvorak 用の表で作る）。
 // QWERTY 配列では、QWERTY 用の表と同じく簡単にした Dvorak 用の表で作る（QWERTY 用の表で打てない打ち方を出さないため）
 let displayTable = null;
-let dvorakText = null; // Dvorak 用の表のテキスト（読み込み中は Promise）
-const displayTables = new Map(); // 表示用の表（Dvorak 用 / QWERTY 用）
-// 入力の判定には、選んだキーボード配列のローマ字テーブルを使う
+const dvorakTexts = new Map(); // 版ごとの Dvorak 用の表のテキスト（読み込み中は Promise）
+const displayTables = new Map(); // 表示用の表（版と Dvorak 用 / QWERTY 用の組ごと）
+// 入力の判定には、選んだキーボード配列と版のローマ字テーブルを使う
 let table = null;
 let toDvorak = null; // 押したキーの文字 → Dvorak 配列の文字（入力中の表示用）
 const tables = new Map(); // 読み込んだローマ字テーブル（ファイル名ごと）
@@ -209,6 +210,8 @@ function onKeyDown(e) {
   if (!state.startedAt) {
     state.startedAt = performance.now();
     timer = setInterval(updateStats, 100);
+    // 打ち始めた数（playground_complete と比べて、最後まで打った割合を見る）
+    track("playground_start", { genre: state.text.id, layout: currentLayout(), edition: currentEdition() });
   }
 
   const r = judge(table, state.typed, key, state.target);
@@ -231,9 +234,7 @@ function onKeyDown(e) {
     stopTimer();
     const { ms, accuracy, kps } = updateStats();
     setStatus(`完了しました。${Math.floor(ms / 1000)}秒、正確率 ${accuracy}%、${kps} 打鍵/秒。`, "done");
-    if (typeof gtag === "function") {
-      gtag("event", "playground_complete", { genre: state.text.id, layout: currentLayout(), kps: Number(kps), accuracy });
-    }
+    track("playground_complete", { genre: state.text.id, layout: currentLayout(), edition: currentEdition(), kps: Number(kps), accuracy });
   }
   updateProgress();
 }
@@ -250,38 +251,46 @@ async function getTable(file) {
   return tables.get(file);
 }
 
-async function getDisplayTable(layout) {
-  dvorakText ??= fetch(asset(LAYOUTS.dvorak.file)).then((res) => {
-    if (!res.ok) throw new Error(`変換表を読み込めませんでした (${res.status})`);
-    return res.text();
-  });
-  const kind = layout.map ? "qwerty" : "dvorak";
+async function getDisplayTable(edition, layout) {
+  if (!dvorakTexts.has(edition)) {
+    dvorakTexts.set(edition, fetch(asset(tableFile(edition, "dvorak"))).then((res) => {
+      if (!res.ok) throw new Error(`変換表を読み込めませんでした (${res.status})`);
+      return res.text();
+    }));
+  }
+  const kind = `${edition}:${layout.map ? "qwerty" : "dvorak"}`;
   if (!displayTables.has(kind)) {
-    displayTables.set(kind, dvorakText.then((text) => parseTable(layout.map ? simplifyForQwerty(text) : text)));
+    displayTables.set(kind, dvorakTexts.get(edition).then((text) => parseTable(layout.map ? simplifyForQwerty(text) : text)));
   }
   return displayTables.get(kind);
 }
 
-// 選んだキーボード配列のローマ字テーブルに切り替える
-async function useLayout(id) {
+// 選んだキーボード配列と版のローマ字テーブルに切り替える
+async function useTables() {
+  const id = currentLayout();
+  const edition = currentEdition();
   const layout = LAYOUTS[id];
-  const [t, d] = await Promise.all([getTable(layout.file), getDisplayTable(layout)]);
-  if (id !== currentLayout()) return; // 読み込み中に別の配列が選ばれた
+  const [t, d] = await Promise.all([getTable(tableFile(edition, id)), getDisplayTable(edition, layout)]);
+  if (id !== currentLayout() || edition !== currentEdition()) return false; // 読み込み中に別のものが選ばれた
   table = t;
   displayTable = d;
   toDvorak = invert(layout.map);
+  return true;
 }
 
 // 練習中に切り替えたら、同じ問題文を最初からやり直す
-onLayoutChange(async (id) => {
+async function onTablesChange() {
+  let ok;
   try {
-    await useLayout(id);
+    ok = await useTables();
   } catch (err) {
     setStatus(`読み込みに失敗しました: ${err.message}`, "warn");
     return;
   }
-  if (state && id === currentLayout()) start(state.text);
-});
+  if (ok && state) start(state.text);
+}
+onLayoutChange(onTablesChange);
+onEditionChange(onTablesChange);
 
 // ---- 初期化 ----
 
@@ -292,7 +301,7 @@ async function init() {
         if (!res.ok) throw new Error(`問題文を読み込めませんでした (${res.status})`);
         return res.json();
       }),
-      useLayout(currentLayout()),
+      useTables(),
     ]);
     texts = list;
   } catch (err) {

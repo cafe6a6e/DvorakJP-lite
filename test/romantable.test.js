@@ -1,10 +1,14 @@
-// 変換表（docs/romantable_dvorakjplite.txt）の検査
+// Dvorak 用の変換表（標準版 docs/romantable_dvorakjplite.txt と、短縮拡張版 _abbr.txt）の検査
 import { describe, expect, test } from "bun:test";
 import { flush, parseTable } from "../docs/romaji.js";
-import { BASE_PATH, TABLE_PATH, findDuplicateKeys, readText } from "./helpers.js";
+import { buildAbbrTable } from "../docs/keymap.js";
+import { ABBREVIATIONS_PATH } from "../tools/build-tables.js";
+import { ABBR_PATH, BASE_PATH, STANDARD_PATH, findDuplicateKeys, readText } from "./helpers.js";
 
-const tableText = await readText(TABLE_PATH);
-const table = parseTable(tableText);
+const standardText = await readText(STANDARD_PATH);
+const abbrText = await readText(ABBR_PATH);
+const abbreviationsText = await readText(ABBREVIATIONS_PATH);
+const abbreviations = parseTable(abbreviationsText).entries;
 
 // 基準から、意図して削除した QWERTY 記号入力を除く（DvorakJP の ぜい/ぞう/ぜん/ずん/ざい と衝突するため）
 const REMOVED_KEYS = ["z.", "z,", "zj", "zk", "z-"];
@@ -23,6 +27,7 @@ const QWERTY_WORDS = [
 ];
 
 // DvorakJP の拡張入力の期待値
+// DvorakJP lite の拡張入力の期待値（両方の版）
 const DVORAK_CASES = [
   ["c'", "かい"], ["c-", "かい"], ["k;", "かん"], ["c.", "けい"], ["c,", "こう"],
   ["cp", "くう"], ["ck", "くん"], ["cj", "けん"], ["cq", "こん"], ["cx", "きん"],
@@ -44,6 +49,10 @@ const DVORAK_CASES = [
   // てぃ・でぃ（th・dh）の拡張: 「〜ティング」の てぃん など
   ["thx", "てぃん"], ["dhx", "でぃん"], ["th'", "てゃい"], ["th-", "てゃい"], ["th,", "てょう"], ["dhp", "でゅう"],
   ["mi-thxgu", "みーてぃんぐ"], ["endhxgu", "えんでぃんぐ"],
+];
+
+// 短縮拡張版だけの短縮入力の期待値
+const ABBR_CASES = [
   // （実験的）AZIK の短縮入力。k の代わりに c も使える
   ["kt", "こと"], ["ct", "こと"], ["st", "した"], ["sr", "する"], ["cr", "から"], ["ms", "ます"], ["ds", "です"],
   ["cm", "かも"], ["dt", "だち"], ["kkt", "っこと"], ["ccr", "っから"],
@@ -70,48 +79,81 @@ function danglingPrefixes(t) {
   return res;
 }
 
-describe("変換表の形式", () => {
-  test("重複したキーがない", () => {
-    expect(findDuplicateKeys(tableText)).toEqual([]);
+const EDITIONS = [
+  ["標準版", parseTable(standardText), standardText],
+  ["短縮拡張版", parseTable(abbrText), abbrText],
+];
+
+describe.each(EDITIONS)("%s", (_name, table, tableText) => {
+  describe("変換表の形式", () => {
+    test("重複したキーがない", () => {
+      expect(findDuplicateKeys(tableText)).toEqual([]);
+    });
+
+    test("促音: XX は「っ」を出し、X を次の入力に残す", () => {
+      const bad = [...table.table]
+        .filter(([k, e]) => e.out === "っ" && k.length === 2 && k[0] === k[1] && e.pend !== k[0])
+        .map(([k]) => k);
+      expect(bad).toEqual([]);
+      expect(table.table.get("tch")).toEqual({ out: "っ", pend: "ch" });
+    });
+
+    test("基準になかった未完成の接頭辞ができていない", () => {
+      const before = danglingPrefixes(base);
+      const added = [...danglingPrefixes(table)].filter((p) => !before.has(p));
+      expect(added).toEqual([]);
+    });
   });
 
-  test("促音: XX は「っ」を出し、X を次の入力に残す", () => {
-    const bad = [...table.table]
-      .filter(([k, e]) => e.out === "っ" && k.length === 2 && k[0] === k[1] && e.pend !== k[0])
-      .map(([k]) => k);
-    expect(bad).toEqual([]);
-    expect(table.table.get("tch")).toEqual({ out: "っ", pend: "ch" });
+  describe("QWERTY 回帰", () => {
+    test("QWERTY の打鍵列が、拡張を入れる前と同じかなになる", () => {
+      const keys = [...base.table.keys()];
+      const inputs = new Set(QWERTY_WORDS);
+      for (const a of ["", ...keys]) {
+        for (const b of keys) inputs.add(a + b);
+      }
+      const diffs = [];
+      for (const s of inputs) {
+        const x = flush(base, s);
+        const y = flush(table, s);
+        if (x === y) continue;
+        // 基準でもアルファベットが残る列は QWERTY の打ち間違いなので対象外
+        if (/[a-z]/.test(x) && x !== "w" && x !== "ww") continue;
+        diffs.push(`${s}: 基準=${x} 対象=${y}`);
+      }
+      expect(diffs.slice(0, 40)).toEqual([]);
+    });
   });
 
-  test("基準になかった未完成の接頭辞ができていない", () => {
-    const before = danglingPrefixes(base);
-    const added = [...danglingPrefixes(table)].filter((p) => !before.has(p));
-    expect(added).toEqual([]);
+  describe("DvorakJP の拡張入力", () => {
+    test.each(DVORAK_CASES)("%p → %p", (input, expected) => {
+      expect(flush(table, input)).toBe(expected);
+    });
   });
 });
 
-describe("QWERTY 回帰", () => {
-  test("QWERTY の打鍵列が、拡張を入れる前と同じかなになる", () => {
-    const keys = [...base.table.keys()];
-    const inputs = new Set(QWERTY_WORDS);
-    for (const a of ["", ...keys]) {
-      for (const b of keys) inputs.add(a + b);
-    }
-    const diffs = [];
-    for (const s of inputs) {
-      const x = flush(base, s);
-      const y = flush(table, s);
-      if (x === y) continue;
-      // 基準でもアルファベットが残る列は QWERTY の打ち間違いなので対象外
-      if (/[a-z]/.test(x) && x !== "w" && x !== "ww") continue;
-      diffs.push(`${s}: 基準=${x} 対象=${y}`);
-    }
-    expect(diffs.slice(0, 40)).toEqual([]);
-  });
-});
+describe("版の違い", () => {
+  const standard = parseTable(standardText);
+  const abbr = parseTable(abbrText);
 
-describe("DvorakJP の拡張入力", () => {
-  test.each(DVORAK_CASES)("%p → %p", (input, expected) => {
-    expect(flush(table, input)).toBe(expected);
+  test("短縮拡張版は、標準版の後ろに短縮入力を足したもの（bun run build で作り直す）", () => {
+    expect(abbrText).toBe(buildAbbrTable(standardText, abbreviationsText));
+  });
+
+  test("短縮入力は、標準版にないキーで、標準版では同じかなにならない", () => {
+    expect(abbreviations.length).toBeGreaterThan(60);
+    for (const [key, e] of abbreviations) {
+      expect(standard.table.has(key)).toBe(false);
+      expect(flush(standard, key)).not.toBe(e.out);
+    }
+  });
+
+  test.each(ABBR_CASES)("短縮拡張版: %p → %p", (input, expected) => {
+    expect(flush(abbr, input)).toBe(expected);
+  });
+
+  test("短縮入力の例は、どれも短縮入力の行を使う", () => {
+    const keys = new Set(abbreviations.map(([key]) => key));
+    for (const [input] of ABBR_CASES) expect([...keys].some((k) => input.includes(k))).toBe(true);
   });
 });

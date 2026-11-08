@@ -26,10 +26,19 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
   <script>
-    // 手元のサーバーからのアクセスは計測しない
-    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
-      window["ga-disable-G-JJE1TE4DDM"] = true;
-    }
+    // 手元のサーバーからのアクセスと、計測を止めたブラウザ（URL に ?ga=off を付けて開くと止まり、?ga=on で戻る）は計測しない
+    (function () {
+      var off = false;
+      try {
+        var ga = new URLSearchParams(location.search).get("ga");
+        if (ga === "off") localStorage.setItem("dvorakjplite.ga", "off");
+        if (ga === "on") localStorage.removeItem("dvorakjplite.ga");
+        off = localStorage.getItem("dvorakjplite.ga") === "off";
+      } catch (e) {}
+      if (off || ["localhost", "127.0.0.1"].includes(location.hostname)) {
+        window["ga-disable-G-JJE1TE4DDM"] = true;
+      }
+    })();
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -60,7 +69,7 @@
       <ul>
         <li>下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。</li>
         <li>かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。</li>
-        <li>キーボード配列は、導入方法で選んだものと同じにしてください。</li>
+        <li>キーボード配列と短縮拡張の有無は、導入方法で選んだものと同じにしてください。</li>
         <li>QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。</li>
         <li>下段のローマ字は、どの配列でも Dvorak 配列の文字で表示します。</li>
       </ul>
@@ -73,6 +82,13 @@
           <button type="button" data-layout="qwerty-jis">QWERTY(JIS)</button>
           <button type="button" data-layout="qwerty-us">QWERTY(US)</button>
           <button type="button" data-layout="dvorak">Dvorak</button>
+        </div>
+      </div>
+      <div class="choice">
+        <span class="choice-label" id="pg-edition-label">短縮拡張</span>
+        <div class="segmented edition-select" role="group" aria-labelledby="pg-edition-label">
+          <button type="button" data-edition="standard">無 (v1.0)</button>
+          <button type="button" data-edition="abbr">有 (v1.0 ＋ 短縮拡張)<!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></button>
         </div>
       </div>
       <div class="choice">

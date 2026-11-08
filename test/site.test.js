@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { readText } from "./helpers.js";
+import { EDITIONS, VERSION } from "../docs/keymap.js";
 
 const docs = new URL("../docs/", import.meta.url).pathname;
 const BASE = "https://cafe6a6e.github.io/DvorakJP-lite/";
@@ -80,4 +81,26 @@ test("サイトマップの URL が 4 つのページと一致する", async () 
   const xml = await readText(join(docs, "sitemap.xml"));
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   expect(locs).toEqual(PAGES.map((path) => BASE + path));
+});
+
+describe("短縮拡張の有無の選択（導入方法・練習）", () => {
+  const withChoice = pages.filter((p) => p.path === "install/" || p.path === "playground/");
+
+  test.each(withChoice.map((p) => [p.path, p]))("%s: 版ごとにボタンがある", (_, p) => {
+    const buttons = [...p.html.matchAll(/data-edition="([^"]+)">/g)].map((m) => m[1]);
+    for (const id of Object.keys(EDITIONS)) expect(buttons).toContain(id);
+  });
+
+  test("導入方法に書いてあるバージョンが VERSION と同じ（上げたら HTML も直す）", () => {
+    const html = pages.find((p) => p.path === "install/").html;
+    const versions = [...html.matchAll(/\bv(\d+(?:\.\d+)+)/g)].map((m) => m[1]);
+    expect(versions.length).toBeGreaterThan(0);
+    expect(new Set(versions)).toEqual(new Set([VERSION]));
+  });
+
+  test.each(withChoice.map((p) => [p.path, p]))("%s: 「有」のボタンにフラスコのアイコン（Experimental）が付いている", (_, p) => {
+    const abbr = p.html.match(/data-edition="abbr">(.*?)<\/button>/s)[1];
+    expect(abbr).toContain('class="exp-icon"');
+    expect(abbr).toContain('aria-label="Experimental"');
+  });
 });

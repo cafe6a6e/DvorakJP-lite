@@ -1,48 +1,27 @@
-// 「キーボード配列」の選択。導入方法と練習のページで共有し、選んだ配列はブラウザに覚えておく
-import { DEFAULT_LAYOUT, LAYOUTS } from "./keymap.js";
+// 「キーボード配列」と「版」の選択。導入方法と練習のページで共有し、選んだものはブラウザに覚えておく
+import { createChoice } from "./choice.js";
+import { DEFAULT_EDITION, DEFAULT_LAYOUT, EDITIONS, LAYOUTS } from "./keymap.js";
 
-const STORAGE_KEY = "dvorakjplite.layout";
+const layout = createChoice({
+  storageKey: "dvorakjplite.layout",
+  values: LAYOUTS,
+  fallback: DEFAULT_LAYOUT,
+  attr: "layout",
+  selector: ".layout-select button",
+});
 
-// 前に選んだ配列（覚えていなければ既定値）。ブラウザの保存が使えなくても動くようにする
-function loadLayout() {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY);
-    if (v in LAYOUTS) return v;
-  } catch {}
-  return DEFAULT_LAYOUT;
-}
+const edition = createChoice({
+  storageKey: "dvorakjplite.edition",
+  values: EDITIONS,
+  fallback: DEFAULT_EDITION,
+  attr: "edition",
+  selector: ".edition-select button",
+});
 
-function saveLayout(v) {
-  try {
-    localStorage.setItem(STORAGE_KEY, v);
-  } catch {}
-}
-
-let current = loadLayout();
-const listeners = [];
-
-export function currentLayout() {
-  return current;
-}
-
+export const currentLayout = layout.current;
 // 選択が変わったら callback(layout) を呼ぶ
-export function onLayoutChange(callback) {
-  listeners.push(callback);
-}
+export const onLayoutChange = layout.onChange;
 
-function updateButtons() {
-  for (const b of document.querySelectorAll(".layout-select button")) {
-    b.setAttribute("aria-pressed", String(b.dataset.layout === current));
-  }
-}
-
-for (const b of document.querySelectorAll(".layout-select button")) {
-  b.addEventListener("click", () => {
-    if (!(b.dataset.layout in LAYOUTS) || b.dataset.layout === current) return;
-    current = b.dataset.layout;
-    saveLayout(current);
-    updateButtons();
-    for (const callback of listeners) callback(current);
-  });
-}
-updateButtons();
+export const currentEdition = edition.current;
+// 選択が変わったら callback(edition) を呼ぶ
+export const onEditionChange = edition.onChange;

@@ -169,7 +169,8 @@ ol li { margin-bottom: 6px; }
 /* 選択欄（導入方法・練習）: ラベルとボタンを2列に並べ、各行のボタンの左端を揃える */
 .choices {
   display: grid;
-  grid-template-columns: auto auto;
+  /* ラベルの列の幅をそろえ、別の .choices と並べてもボタンの左端がそろうようにする */
+  grid-template-columns: minmax(7.5em, auto) auto;
   justify-content: start;
   align-items: center;
   gap: 12px 16px;
@@ -216,6 +217,8 @@ ol li { margin-bottom: 6px; }
   border-radius: 6px;
 }
 .button:hover { filter: brightness(.92); }
+/* 実験中の印（フラスコのアイコン） */
+.exp-icon { width: 1em; height: 1em; color: var(--accent); vertical-align: -0.15em; margin-left: 2px; }
 /* ダウンロードボタンと、その右に出すファイル名 */
 .download { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 
@@ -246,7 +249,7 @@ ol li { margin-bottom: 6px; }
 .pg-help { color: var(--muted); font-size: 14px; margin: -8px 0 16px; }
 .pg-help summary { cursor: pointer; width: fit-content; }
 .fold { margin: 8px 0 16px; }
-.fold summary { cursor: pointer; width: fit-content; color: var(--accent); font-weight: 700; }
+.fold summary { cursor: pointer; width: fit-content; color: var(--muted); font-size: 14px; }
 /* 短縮入力の一覧: 「AZIK 由来」「ACT 由来」「DvorakJP lite 独自」のまとまりを縦に並べ、それぞれ「打鍵・かな」の表を横に並べる（狭い画面では折り返す） */
 .abbr-tables { display: flex; flex-direction: column; gap: 16px; }
 .abbr-row { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: flex-start; }

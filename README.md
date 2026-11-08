@@ -4,11 +4,22 @@
 
 たとえば「鉛筆（えんぴつ）」は、DvorakJP では `ennpitu` と `n` を 2 回打つ必要がありますが、DvorakJP lite では `enpitu` と 1 打少なく打てます。QWERTY で身に付けた n 省略規則がそのまま使えるので、拡張入力が有効なままでも、今までの打ち方を変更する必要がありません。
 
-また実験的に [AZIK](https://note.com/actbemu/n/n74f1c04c9a2e) と [gACT10](https://note.com/actbemu/n/nf57180ad8316) の拡張ルールを、競合しないものに限り採用し、さらに打鍵数を削減可能とします（[設計思想の 4](#4-実験的競合しない範囲で-azikgact10-の短縮入力を採用する)）。
+また実験的に [AZIK](https://note.com/actbemu/n/n74f1c04c9a2e) と [gACT10](https://note.com/actbemu/n/nf57180ad8316) の拡張ルールを、競合しないものに限り採用し、さらに打鍵数を削減可能とします。実験中で仕様が不安定であることから、この拡張を採用したローマ字テーブルは別ファイルで公開します。
 
 **公式ページ: https://cafe6a6e.github.io/DvorakJP-lite/** （導入方法・タイピング練習）
 
 ![DvorakJP lite のキー配置と拡張キー](docs/images/layout.webp)
+
+## 短縮拡張の有無
+
+ローマ字テーブルは、短縮拡張の有無で 2 種類を配布します。公式ページの導入方法で選べます。
+
+| 短縮拡張 | 内容 |
+|---|---|
+| **無 (v1.0)** | DvorakJP lite の拡張入力だけを採用します（設計思想 1.〜3.） |
+| **有 (v1.0 ＋ 短縮拡張)**（Experimental） | 「DvorakJP lite ＋ 短縮拡張」版。DvorakJP lite に AZIK・gACT10 由来の短縮入力（設計思想 4.）を実験的に追加。仕様は変更される可能性があります |
+
+DvorakJP lite 本体は今後バージョンアップすることがあります。バージョン番号は `docs/keymap.js` の `VERSION` にあり、公式ページの導入方法の「短縮拡張」のボタンにも書いています。
 
 ## 設計思想
 
@@ -47,7 +58,9 @@ QWERTY 版では、キーの位置が決まっているので `'` の位置の�
 
 ### 4. （実験的）競合しない範囲で AZIK・gACT10 の短縮入力を採用する
 
-[AZIK](https://note.com/actbemu/n/n74f1c04c9a2e) 特殊拡張と、[gACT10](https://note.com/actbemu/n/nf57180ad8316) 拡張のうち、普通のローマ字や DvorakJP の拡張入力と競合しないものだけを、実験的に採用しています。
+実験的に、[AZIK](https://note.com/actbemu/n/n74f1c04c9a2e) と [gACT10](https://note.com/actbemu/n/nf57180ad8316) から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用しています。
+
+この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります（[短縮拡張の有無](#短縮拡張の有無)）。
 
 <details>
 <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>
@@ -108,7 +121,7 @@ QWERTY 版では、キーの位置が決まっているので `'` の位置の�
 | **ア段＋い** | `'` のみ | `'` と `-` | 記号キーの自由度を担保する |
 | **z 記号** | `z.` `z,` `zj` `zk` が記号と拡張で重複 | 拡張（ぜい・ぞう・ぜん・ずん）を採用 | 衝突する記号は削除し、記号は `;` で打つ |
 | **てぃ行** | `th*` `dh*`（`thx` てぃん など） | 採用 | 「ミーティング」「エンディング」などの てぃん・でぃん を 1 打少なく打てる。`th` `dh` は普通のローマ字でも てゃ行・でゃ行なので、衝突しない |
-| **短縮入力（実験的）** | なし | AZIK 由来 21 種類（`kt` こと、`ds` です など）、gACT10 由来 36 種類（`tg` として、`rd` られ、`shn` しょく など）。`k` で始まるものは `c` も可 | 普通のローマ字や lite の拡張とぶつからないものだけを採用する |
+| **短縮入力（実験的）** | なし | 「DvorakJP lite ＋ 短縮拡張」版のみ。AZIK 由来 21 種類（`kt` こと、`ds` です など）、gACT10 由来 36 種類（`tg` として、`rd` られ、`shn` しょく など）。`k` で始まるものは `c` も可 | 普通のローマ字や lite の拡張とぶつからないものだけを採用する |
 | **その他の拡張** | 小書き・くぁ行・すぁ行・つぁ行・とぁ行・うぁ行・ふゃ行・ゔ行などの拡張 | 不採用 | 使用頻度が低いため採用しない |
 | **`qu`** | くぅ | く | Google 標準に合わせる |
 
@@ -206,7 +219,7 @@ Dvorak 版を同じ位置のキーに置き換えたうえで、次の点を変�
 
 ### 作り方
 
-QWERTY 版の表は、Dvorak 版から `bun run build:qwerty` で作ります。手で編集しないでください。手順は `docs/keymap.js` の `buildQwertyTable` にあります。
+QWERTY 版の表は、Dvorak 版から `bun run build` で作ります（「DvorakJP lite ＋ 短縮拡張」版の Dvorak 版も同時に作ります）。手で編集しないでください。手順は `docs/keymap.js` の `buildQwertyTable` にあります。
 
 1. Dvorak 版を簡単にする（`simplifyForQwerty`。上の「Dvorak 版との違い」のうち、ア段＋い・記号・てぃ など・ー）。
 2. 入力の文字を、同じ位置にある QWERTY の文字に置き換える（`convertTable`）。
@@ -217,9 +230,11 @@ QWERTY 版の表は、Dvorak 版から `bun run build:qwerty` で作ります。
 
 | パス | 内容 |
 |---|---|
-| `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル（Dvorak 配列用） |
-| `docs/romantable_dvorakjplite_qwerty_jis.txt` | DvorakJP lite ローマ字テーブル（QWERTY・JIS 配列用。`bun run build:qwerty` で Dvorak 配列用から生成） |
-| `docs/romantable_dvorakjplite_qwerty_us.txt` | DvorakJP lite ローマ字テーブル（QWERTY・US 配列用。同上） |
+| `docs/romantable_dvorakjplite.txt` | DvorakJP lite ローマ字テーブル（短縮拡張なし。Dvorak 配列用）。手で編集する |
+| `src/romantable/abbreviations.txt` | 「DvorakJP lite ＋ 短縮拡張」版で足す短縮入力。手で編集する |
+| `docs/romantable_dvorakjplite_abbr.txt` | 「DvorakJP lite ＋ 短縮拡張」版のローマ字テーブル（Dvorak 配列用。`bun run build` で、上の 2 つをつないで生成） |
+| `docs/romantable_dvorakjplite[_abbr]_qwerty_jis.txt` | 各版のローマ字テーブル（QWERTY・JIS 配列用。`bun run build` で Dvorak 配列用から生成） |
+| `docs/romantable_dvorakjplite[_abbr]_qwerty_us.txt` | 各版のローマ字テーブル（QWERTY・US 配列用。同上） |
 | `docs/index.html` ほか | 公式ページ（GitHub Pages）。`index.html`（DvorakJP lite とは）、`install/`（導入方法）、`playground/`（練習）、`dvorakjp/`（DvorakJP の解説）の 4 ページ。ヘッダーとフッターは 4 つの HTML に同じものを書いている（`test/site.test.js` で確認） |
 | `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため） |
 

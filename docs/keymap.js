@@ -28,13 +28,14 @@ const EXTRA_KEYS = new Map([["-", "z"]]);
 // （QWERTY で打つキー → かな）。同じ記号を ; の位置のキーで打つ行のすぐ後に足す
 const QWERTY_SYMBOLS = new Map([["z.", "…"], ["z,", "‥"], ["z/", "・"]]);
 
+// suffix: ローマ字テーブルのファイル名で、版の後ろに付ける文字（tableFile を参照）
 // map: Dvorak の文字 → そのキーで出る文字（Dvorak 用は null）
 // extra: map とは別に、同じ Dvorak の文字として使える QWERTY の文字
 // symbols: QWERTY 版だけに足す記号の行（QWERTY で打つキー → かな）
 export const LAYOUTS = {
   "qwerty-jis": {
     label: "QWERTY(JIS)",
-    file: "romantable_dvorakjplite_qwerty_jis.txt",
+    suffix: "_qwerty_jis",
     // Dvorak の } は JIS 配列では ~ の位置になり、そのまま使う ~（〜）と重なるので対応させない
     map: new Map([...pairs(DVORAK, JIS), ...pairs(DVORAK_SHIFT, JIS_SHIFT).filter(([d]) => d !== "}")]),
     extra: EXTRA_KEYS,
@@ -42,19 +43,53 @@ export const LAYOUTS = {
   },
   "qwerty-us": {
     label: "QWERTY(US)",
-    file: "romantable_dvorakjplite_qwerty_us.txt",
+    suffix: "_qwerty_us",
     map: new Map([...pairs(DVORAK, US), ...pairs(DVORAK_SHIFT, US_SHIFT)]),
     extra: EXTRA_KEYS,
     symbols: QWERTY_SYMBOLS,
   },
   dvorak: {
     label: "Dvorak",
-    file: "romantable_dvorakjplite.txt",
+    suffix: "",
     map: null,
   },
 };
 
 export const DEFAULT_LAYOUT = "qwerty-jis";
+
+// DvorakJP lite のバージョン。版の名前に付ける
+export const VERSION = "1.0";
+
+// ローマ字テーブルの版（導入方法と練習のページで選ぶ）
+//   standard: DvorakJP lite の拡張入力だけ（docs/romantable_dvorakjplite.txt を手で編集する）
+//   abbr: standard に、AZIK・gACT10 由来の短縮入力（src/romantable/abbreviations.txt）を足したもの。
+//         実験中で、予告なく変更することがある
+// suffix: ローマ字テーブルのファイル名で、romantable_dvorakjplite の後ろに付ける文字
+export const EDITIONS = {
+  standard: {
+    label: `DvorakJP lite v${VERSION}`,
+    suffix: "",
+    experimental: false,
+  },
+  abbr: {
+    label: `DvorakJP lite v${VERSION} ＋ 短縮拡張`, // 公式ページでは「DvorakJP lite ＋ 短縮拡張」版
+    suffix: "_abbr",
+    experimental: true,
+  },
+};
+
+export const DEFAULT_EDITION = "standard";
+
+// 版とキーボード配列に合うローマ字テーブルのファイル名（docs/ の直下）
+//   例: tableFile("abbr", "qwerty-jis") → romantable_dvorakjplite_abbr_qwerty_jis.txt
+export function tableFile(edition, layout) {
+  return `romantable_dvorakjplite${EDITIONS[edition].suffix}${LAYOUTS[layout].suffix}.txt`;
+}
+
+// 短縮拡張版の Dvorak 用の表: 標準版の表の後ろに短縮入力の行を足す
+export function buildAbbrTable(standard, abbreviations) {
+  return standard.replace(/\n*$/, "\n") + abbreviations.replace(/^\n+/, "");
+}
 
 // 対応表にない文字（数字や ~ など）はそのまま
 export function convertKeys(keys, map) {

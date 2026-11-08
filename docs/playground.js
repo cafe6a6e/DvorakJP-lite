@@ -1,7 +1,8 @@
-// 練習ページ（#playground）: 長文タイピング練習
+// 練習ページ（playground/）: 長文タイピング練習
 import { loadTable, parseTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
 import { LAYOUTS, convertKeys, invert, simplifyForQwerty, tableFile } from "./keymap.js";
 import { currentEdition, currentLayout, onEditionChange, onLayoutChange } from "./layout-select.js";
+import { track } from "./analytics.js";
 
 const $ = (id) => document.getElementById(id);
 const area = $("pg-area");
@@ -209,6 +210,8 @@ function onKeyDown(e) {
   if (!state.startedAt) {
     state.startedAt = performance.now();
     timer = setInterval(updateStats, 100);
+    // 打ち始めた数（playground_complete と比べて、最後まで打った割合を見る）
+    track("playground_start", { genre: state.text.id, layout: currentLayout(), edition: currentEdition() });
   }
 
   const r = judge(table, state.typed, key, state.target);
@@ -231,9 +234,7 @@ function onKeyDown(e) {
     stopTimer();
     const { ms, accuracy, kps } = updateStats();
     setStatus(`完了しました。${Math.floor(ms / 1000)}秒、正確率 ${accuracy}%、${kps} 打鍵/秒。`, "done");
-    if (typeof gtag === "function") {
-      gtag("event", "playground_complete", { genre: state.text.id, layout: currentLayout(), edition: currentEdition(), kps: Number(kps), accuracy });
-    }
+    track("playground_complete", { genre: state.text.id, layout: currentLayout(), edition: currentEdition(), kps: Number(kps), accuracy });
   }
   updateProgress();
 }

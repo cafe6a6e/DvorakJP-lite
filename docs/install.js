@@ -2,11 +2,7 @@
 
 import { LAYOUTS, tableFile } from "./keymap.js";
 import { currentEdition, currentLayout, onEditionChange, onLayoutChange } from "./layout-select.js";
-
-// Google Analytics にイベントを送る（gtag が無い環境では何もしない）
-function track(name, params) {
-  if (typeof gtag === "function") gtag("event", name, params);
-}
+import { track } from "./analytics.js";
 
 // 利用者の OS を推測する（分からなければ Windows）
 function guessOS() {

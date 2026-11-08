@@ -52,6 +52,17 @@ describe("4 つのページ", () => {
   });
 });
 
+test("Google Analytics のタグが 4 つのページで同じ", () => {
+  // コメントから、gtag('config', …) の後の </script> まで
+  const tags = pages.map(({ html }) => {
+    const start = html.indexOf("<!-- Google tag (gtag.js) -->");
+    return html.slice(start, html.indexOf("</script>", html.indexOf("gtag('config'", start)));
+  });
+  expect(tags[0]).toContain("gtag('config', 'G-JJE1TE4DDM')");
+  expect(tags[0]).toContain('window["ga-disable-G-JJE1TE4DDM"] = true');
+  for (const t of tags) expect(t).toBe(tags[0]);
+});
+
 describe("共有用の表示（OGP）とアイコン", () => {
   const get = (html, re) => html.match(re)?.[1];
   test.each(pages.map((p) => [p.path || "（トップ）", p]))("%s: OGP がタイトル・説明文・正規 URL と一致する", (_, p) => {

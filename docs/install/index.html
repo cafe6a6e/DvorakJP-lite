@@ -26,10 +26,19 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
   <script>
-    // 手元のサーバーからのアクセスは計測しない
-    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
-      window["ga-disable-G-JJE1TE4DDM"] = true;
-    }
+    // 手元のサーバーからのアクセスと、計測を止めたブラウザ（URL に ?ga=off を付けて開くと止まり、?ga=on で戻る）は計測しない
+    (function () {
+      var off = false;
+      try {
+        var ga = new URLSearchParams(location.search).get("ga");
+        if (ga === "off") localStorage.setItem("dvorakjplite.ga", "off");
+        if (ga === "on") localStorage.removeItem("dvorakjplite.ga");
+        off = localStorage.getItem("dvorakjplite.ga") === "off";
+      } catch (e) {}
+      if (off || ["localhost", "127.0.0.1"].includes(location.hostname)) {
+        window["ga-disable-G-JJE1TE4DDM"] = true;
+      }
+    })();
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());

@@ -11,6 +11,9 @@ export const ABBR_PATH = new URL("docs/romantable_dvorakjplite_abbr.txt", root).
 // QWERTY 回帰の基準: 拡張を入れる前の lite 変換表（コミット fcf1ce2 の版）
 export const BASE_PATH = new URL("test/fixtures/qwerty-base.txt", root).pathname;
 
+// 元祖 DvorakJP の変換表（「DvorakJP の解説」ページの例を確かめる用。コミット 6e717f8 で消した google-japanese-input/ の版）
+export const ORIGINAL_PATH = new URL("test/fixtures/dvorakjp-original.txt", root).pathname;
+
 export async function readText(path) {
   return Bun.file(path).text();
 }

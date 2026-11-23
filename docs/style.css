@@ -352,9 +352,10 @@ ol li { margin-bottom: 6px; }
 .kc-chart { display: block; width: 100%; height: auto; overflow: visible; }
 .kc-chart text { fill: var(--fg); font-size: 13px; }
 .kc-chart .kc-tick { fill: var(--muted); font-size: 12px; }
-.kc-chart .kc-sub { fill: var(--muted); font-size: 13px; }
 .kc-chart .kc-value { font-size: 14px; font-variant-numeric: tabular-nums; }
 .kc-chart .kc-strong { font-weight: 700; }
+.kc-chart.kc-narrow .kc-label { font-size: 12px; }
+.kc-chart .kc-seg { fill: #1a1a1a; font-size: 12px; font-variant-numeric: tabular-nums; stroke: rgba(255, 255, 255, .85); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; }
 .kc-chart .kc-bar:hover path { opacity: .8; }
 .kc-details summary { cursor: pointer; }
 .kc-table td { text-align: right; font-variant-numeric: tabular-nums; }

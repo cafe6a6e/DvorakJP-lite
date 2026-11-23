@@ -171,7 +171,9 @@ function typingKeys(t, allowExt) {
 // 「ん」の後に何が打てるかは次のキーの1文字目で決まる。位置ごとに最良を1つだけ覚えると、
 // 同じ打鍵数の別の打ち方（hu と fu など）で直前の「ん」の扱いが変わる場合に最短を見落とすので、
 // 位置ごとに「最初のキーの1文字目」ごとの最良を覚える
-export function plan(t, kana, allowExt) {
+// cost を渡すと、打ち方の良し悪しをそれで決める。cost(key, ext, first) は key を打つコストで、
+// first は次のキーの1文字目（最後なら null）。計測（tools/keystrokes.js）で同指の連続を数えるのに使う
+export function plan(t, kana, allowExt, cost) {
   const byFirst = typingKeys(t, allowExt);
   const keysAt = (i) => byFirst.get(kana[i]) ?? [];
   const n = kana.length;
@@ -188,9 +190,9 @@ export function plan(t, kana, allowExt) {
       const own = key.length + penalty(key) - (allowExt && ext ? 0.05 : 0);
       for (const [first, v] of nexts) {
         if (!isSafe(t, key, first)) continue;
-        const cost = own + v.cost;
+        const c = (cost ? cost(key, ext, first) : own) + v.cost;
         const cur = m.get(key[0]);
-        if (!cur || cost < cur.cost) m.set(key[0], { cost, seg: { start: i, end, key, ext }, next: first });
+        if (!cur || c < cur.cost) m.set(key[0], { cost: c, seg: { start: i, end, key, ext }, next: first });
       }
     };
     for (const [key, e] of keysAt(i)) {

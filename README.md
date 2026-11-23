@@ -21,20 +21,6 @@
 
 DvorakJP lite 本体は今後バージョンアップすることがあります。バージョン番号は `docs/keymap.js` の `VERSION` にあり、公式ページの導入方法の「短縮拡張」のボタンにも書いています。
 
-## 打鍵効率比較
-
-打鍵効率は、日本語文の文字数 ÷ ローマ字テーブルで最短で打つときの打鍵数です。値が大きいほど、少ない打鍵数で日本語を入力できることを示します。JSUT・ITA コーパス・Tatoeba・livedoor ニュースコーパス・京都大学 Wikipedia 注釈コーパスの合計で計測しました（グラフとコーパス別の値は[公式ページ](https://cafe6a6e.github.io/DvorakJP-lite/#efficiency)、計測方法は `tools/keystrokes.js`）。
-
-<!-- keystroke-chart:start（tools/keystroke-chart.js が生成） -->
-| ローマ字テーブル | 打鍵効率 |
-|---|--:|
-| QWERTY | 0.4727 |
-| DvorakJP | 0.5091 |
-| DvorakJP lite | 0.5093 |
-| AZIK | 0.5388 |
-| DvorakJP lite ＋ 短縮拡張（Experimental） | 0.5418 |
-<!-- keystroke-chart:end -->
-
 ## 設計思想
 
 ### 1. 「ん」の後でも最小の打鍵数で打てるようにする
@@ -180,6 +166,39 @@ QWERTY 版では、キーの位置が決まっているので `'` の位置の�
 - か行は `k` でも打てます。ただし `kk` は促音になるので、くん は `ck` で打ちます。
 - —（打てない組み合わせ）: `pp` は促音（ぷう は `puu` で打ちます）、`w,` `wq` `yx` は拡張なしです。じぇん は `jj` が促音になるので `jyj` で打ちます。
 
+## 主要なローマ字配列との定量比較
+
+計測は `bun run keystrokes`（`tools/keystrokes.js`）で再現できます。コーパスは初回に `.cache/corpus/` へダウンロードし、GitHub のものはコミットを固定して取得します。使ったファイルの URL と SHA-256 は `docs/data/keystrokes.json` の `files` に記録しています（Tatoeba は毎週更新される最新版しか配布されていないため、SHA-256 で同じデータかを確かめられます）。
+
+### 比較1: 打鍵効率
+
+打鍵効率は、日本語文の文字数 ÷ ローマ字テーブルで最短で打つときの打鍵数です。値が大きいほど、少ない打鍵数で日本語を入力できることを示します。通常ローマ字は Google 日本語入力の標準に近いローマ字テーブルで、打鍵効率は QWERTY・Dvorak・大西配列のどのキーボード配列でも同じです。JSUT・ITA コーパス・Tatoeba・livedoor ニュースコーパス・京都大学 Wikipedia 注釈コーパスの合計で計測しました（グラフとコーパス別の値は[公式ページ](https://cafe6a6e.github.io/DvorakJP-lite/#efficiency)、計測方法は `tools/keystrokes.js`）。
+
+<!-- keystroke-chart:start（tools/keystroke-chart.js が生成） -->
+| ローマ字テーブル | 打鍵効率 |
+|---|--:|
+| 通常ローマ字 | 0.4727 |
+| DvorakJP | 0.5091 |
+| DvorakJP lite | 0.5093 |
+| AZIK | 0.5388 |
+| DvorakJP lite ＋ 短縮拡張（Experimental） | 0.5418 |
+<!-- keystroke-chart:end -->
+
+### 比較2: 同指連続打鍵率
+
+同指連続打鍵率は、直前と同じ指で打つ打鍵数 ÷ ローマ字テーブルで最短で打つときの打鍵数です。値が小さいほど、同じ指で続けて打つことが少ないことを示します。最短の打ち方が複数あるときは、同じ指が続くのが最も少ない打ち方で数えます。同指異キーは別のキーを、同指同キーは同じキーを続けて打つ場合です。コーパスは比較1と同じです（グラフは[公式ページ](https://cafe6a6e.github.io/DvorakJP-lite/#same-finger)）。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、[大西配列](https://o24.works/layout/)は大西配列（ローマ字テーブルは通常ローマ字）、そのほかは QWERTY 配列で打つものとして数えました。
+
+<!-- same-finger-chart:start（tools/keystroke-chart.js が生成） -->
+| 配列 | 同指連続打鍵率 | うち同指異キー | うち同指同キー |
+|---|--:|--:|--:|
+| QWERTY | 7.75% | 5.37% | 2.38% |
+| AZIK | 6.22% | 4.86% | 1.36% |
+| DvorakJP lite ＋ 短縮拡張（Experimental） | 4.83% | 2.43% | 2.40% |
+| DvorakJP lite | 3.82% | 1.69% | 2.13% |
+| DvorakJP | 3.77% | 1.60% | 2.17% |
+| 大西配列 | 3.29% | 0.91% | 2.38% |
+<!-- same-finger-chart:end -->
+
 ## 記号仕様
 
 記号は `;` で打ちます。Google 標準の z 記号のうち、拡張と衝突するもの（`z-` `z,` `z.` `zk` `zj`）は削除しました。
@@ -253,6 +272,7 @@ QWERTY 版の表は、Dvorak 版から `bun run build` で作ります（「Dvor
 | `docs/analytics.js` | Google Analytics のイベント送信（`download_romantable`・`playground_start`・`playground_complete`）。本番サイトで自分のアクセスを計測しないときは、そのブラウザで URL に `?ga=off` を付けて一度開く（`?ga=on` で戻す） |
 | `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため） |
 | `tools/keystrokes.js` | 打鍵効率の計測（`bun run keystrokes`）。コーパスを `.cache/corpus/` にダウンロードし、結果を `docs/data/keystrokes.json`・`.csv` に書く。最後に `tools/keystroke-chart.js` で、公式ページのグラフとこの README の表を作り直す |
+| `tools/fingers.js` | 同指連続打鍵率の計測で使う、キーボード配列（QWERTY・Dvorak・大西配列）ごとの指の割り当て |
 | `test/fixtures/` | 比較用のローマ字テーブル（`qwerty-base.txt` 標準ローマ字、`dvorakjp-original.txt` 元祖 DvorakJP、`azik.txt` AZIK） |
 
 QWERTY 用のテーブルについては [QWERTY 版](#qwerty-版) を見てください。この README の打ち方は、特に書いていない限り Dvorak 配列の文字で書いています。

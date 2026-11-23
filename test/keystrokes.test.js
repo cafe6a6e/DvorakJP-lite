@@ -2,7 +2,7 @@
 import { describe, expect, test } from "bun:test";
 import { parseText, plan } from "../docs/romaji.js";
 import { countSameFinger, fingerOf } from "../tools/fingers.js";
-import { analyze, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
+import { analyze, analyzeEnglish, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
 import { readText } from "./helpers.js";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -88,6 +88,26 @@ describe("同じ指の連続", () => {
 
   test("打鍵数が同じ打ち方が複数あれば、同じ指の連続が少ないほうを選ぶ（QWERTY の ふ は hu より fu）", () => {
     expect(analyze(byName.QWERTY, "ふ")).toMatchObject({ strokes: 2, sameFinger: 0 });
+  });
+});
+
+describe("英文", () => {
+  test("英字と Shift なしの記号を数え、空白・数字などで区切る。大文字は小文字として数える", () => {
+    expect(analyzeEnglish("qwerty", "Hello, 2 worlds!")).toEqual({ strokes: 12, sameFinger: 2, sameKey: 1 }); // ll（連打）と lo（右手の薬指）
+  });
+
+  test("区切りをはさんだ 2 打は数えない", () => {
+    expect(analyzeEnglish("qwerty", "ki").sameFinger).toBe(1);
+    expect(analyzeEnglish("qwerty", "k i").sameFinger).toBe(0);
+  });
+
+  test("同じ文でも、キーボード配列で同じ指の連続が変わる", () => {
+    expect(analyzeEnglish("dvorak", "hello").sameFinger).toBe(1); // ll の連打だけ
+    expect(analyzeEnglish("onishi", "hello").sameFinger).toBe(1);
+  });
+
+  test("大西配列の Shift の記号は、Shift を外した記号のキーで打つ", () => {
+    expect(fingerOf("onishi", "?")).toBe(fingerOf("onishi", "/"));
   });
 });
 

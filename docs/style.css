@@ -349,6 +349,13 @@ ol li { margin-bottom: 6px; }
 
 /* 打鍵効率比較のグラフ（tools/keystroke-chart.js が生成） */
 .kc-figure { margin: 16px auto; max-width: 640px; }
+.kc-figure figcaption { text-align: center; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+/* 横に並べるグラフ。flex-grow を viewBox の幅にして同じ縮尺にする。狭い画面では縦に並ぶ */
+.kc-figures { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 16px; margin: 16px 0 0; }
+.kc-figures .kc-figure { flex-basis: 0; max-width: none; margin: 0; }
+.kc-legend { text-align: center; font-size: 13px; color: var(--muted); margin: 4px 0 12px; }
+.kc-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin: 0 4px 0 12px; }
+.kc-table-title { font-weight: 700; margin: 12px 0 4px; }
 .kc-chart { display: block; width: 100%; height: auto; overflow: visible; }
 .kc-chart text { fill: var(--fg); font-size: 13px; }
 .kc-chart .kc-tick { fill: var(--muted); font-size: 12px; }

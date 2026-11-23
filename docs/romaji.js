@@ -149,30 +149,56 @@ function isSafe(t, key, first) {
   return !t.prefixes.has(k) && !t.table.has(k);
 }
 
+// plan() で使うキーを、出力の1文字目ごとにまとめる（変換表の順を保つ）。表ごとに覚えておく
+const keyIndex = new WeakMap();
+function typingKeys(t, allowExt) {
+  if (!keyIndex.has(t)) keyIndex.set(t, new Map());
+  const cache = keyIndex.get(t);
+  if (!cache.has(allowExt)) {
+    const m = new Map();
+    for (const [key, e] of t.entries) {
+      if (!e.out || e.pend || (!allowExt && isExtensionKey(key, e))) continue;
+      if (!m.has(e.out[0])) m.set(e.out[0], []);
+      m.get(e.out[0]).push([key, e]);
+    }
+    cache.set(allowExt, m);
+  }
+  return cache.get(allowExt);
+}
+
 // かな列 kana を打つ、打鍵数が最小の打ち方を求める（後ろからの動的計画法）
 // 戻り値: [{ start, end, key, ext }]（start/end はかなの位置）。打てない場合は null
+// 「ん」の後に何が打てるかは次のキーの1文字目で決まる。位置ごとに最良を1つだけ覚えると、
+// 同じ打鍵数の別の打ち方（hu と fu など）で直前の「ん」の扱いが変わる場合に最短を見落とすので、
+// 位置ごとに「最初のキーの1文字目」ごとの最良を覚える
 export function plan(t, kana, allowExt) {
-  const keys = t.entries.filter(([key, e]) =>
-    e.out && !e.pend && (allowExt || !isExtensionKey(key, e)));
+  const byFirst = typingKeys(t, allowExt);
+  const keysAt = (i) => byFirst.get(kana[i]) ?? [];
   const n = kana.length;
+  // best[i]: Map<最初のキーの1文字目, { cost, seg, next }>。next は best[seg.end] の中のどれにつながるか
   const best = new Array(n + 1).fill(null);
-  best[n] = { cost: 0, first: null };
+  best[n] = new Map([[null, { cost: 0, seg: null, next: null }]]);
 
   for (let i = n - 1; i >= 0; i--) {
-    let b = null;
+    const m = new Map();
     const consider = (key, end, ext) => {
-      const next = best[end];
-      if (!next || !isSafe(t, key, next.first)) return;
+      const nexts = best[end];
+      if (!nexts) return;
       // 拡張込みのときは、打鍵数が同じなら拡張の打ち方を選ぶ（例: pyu より phu）
-      const cost = key.length + penalty(key) - (allowExt && ext ? 0.05 : 0) + next.cost;
-      if (!b || cost < b.cost) b = { cost, first: key[0], seg: { start: i, end, key, ext } };
+      const own = key.length + penalty(key) - (allowExt && ext ? 0.05 : 0);
+      for (const [first, v] of nexts) {
+        if (!isSafe(t, key, first)) continue;
+        const cost = own + v.cost;
+        const cur = m.get(key[0]);
+        if (!cur || cost < cur.cost) m.set(key[0], { cost, seg: { start: i, end, key, ext }, next: first });
+      }
     };
-    for (const [key, e] of keys) {
+    for (const [key, e] of keysAt(i)) {
       if (kana.startsWith(e.out, i)) consider(key, i + e.out.length, isExtensionKey(key, e));
     }
     // 促音「っ」: 変換表の XX → っ（次の入力 X）を使い、次のキーの子音を重ねる
     if (kana[i] === "っ") {
-      for (const [key, e] of keys) {
+      for (const [key, e] of keysAt(i + 1)) {
         const c = key[0];
         const dbl = t.table.get(c + c);
         if (!/[b-df-hj-np-tv-z]/.test(c) || !dbl || dbl.out !== "っ" || dbl.pend !== c) continue;
@@ -181,12 +207,17 @@ export function plan(t, kana, allowExt) {
         }
       }
     }
-    best[i] = b;
+    best[i] = m.size ? m : null;
   }
 
   if (!best[0]) return null;
+  let cur = null;
+  for (const v of best[0].values()) if (!cur || v.cost < cur.cost) cur = v;
   const segs = [];
-  for (let i = 0; i < n; i = best[i].seg.end) segs.push(best[i].seg);
+  while (cur.seg) {
+    segs.push(cur.seg);
+    cur = best[cur.seg.end].get(cur.next);
+  }
   return segs;
 }
 

@@ -82,6 +82,12 @@ describe("表示用のローマ字", () => {
   test("こんにちは は konnnitiha（n の後に n が続くので nn）", () => {
     expect(romajiLayout(t, "こんにちは").map((s) => s.key).join("")).toBe("konnnitiha");
   });
+
+  // 同じ打鍵数の「の」でも、n で始まる no の前では「ん」が nn になり、v で始まる v, の前では n で済む。
+  // 位置ごとに最良を1つだけ覚える方式だと、この違いを見落として nn no we（6打）を選んでいた
+  test("んのうぇ は直前の「ん」まで見て最短の n v, le（5打）", () => {
+    expect(plan(t, "んのうぇ", true).map((s) => s.key)).toEqual(["n", "v,", "le"]);
+  });
 });
 
 describe("問題文の書式", () => {

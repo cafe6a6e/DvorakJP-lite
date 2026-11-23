@@ -8,7 +8,8 @@
 // コーパス（JSUT、ITA、Tatoeba、livedoor ニュース、京大 Wikipedia 注釈コーパス）は初回に .cache/corpus/ へダウンロードし、
 // 表記どおりの読み（助詞の「は」もそのまま）に変換する。Wikipedia は付属の読みを、ほかは kuromoji を使う。
 // 同指連続打鍵率（直前と同じ指で打つ打鍵数 ÷ 打鍵数）の打ち方は、最短の打ち方のうち同じ指の連続が最も少ないもの。
-// 結果は docs/data/keystrokes.json と docs/data/keystrokes.csv に書く。
+// 英語のコーパス（ENGLISH_CORPORA、参考）では、英文をそのまま打つときの同指連続打鍵率を、キーボード配列（ENGLISH_SERIES）ごとに求める。
+// 結果は docs/data/keystrokes.json（英語は english）と docs/data/keystrokes.csv、docs/data/keystrokes_en.csv に書く。
 // 再現できるように、GitHub のコーパスはコミットを固定して取得し、使ったファイルの SHA-256 を JSON の files に記録する
 // （Tatoeba は毎週更新される最新版しか配布されていないので、SHA-256 で同じデータかを確かめる）。
 import { parseTable, plan } from "../docs/romaji.js";
@@ -89,6 +90,91 @@ export const CORPORA = {
     },
   },
 };
+
+// 英文を打つキーボード配列（英文はローマ字テーブルを使わず、そのまま打つ）
+export const ENGLISH_SERIES = [
+  { name: "QWERTY", keyboard: "qwerty" },
+  { name: "Dvorak", keyboard: "dvorak" },
+  { name: "大西配列", keyboard: "onishi" },
+];
+
+// Leipzig Corpora Collection の文（「番号<TAB>文」の行）。ファイル名に年と文の数が入っていて、版が固定されている
+const leipzig = (id) => async ({ archive }) => {
+  const dir = await archive(`https://downloads.wortschatz-leipzig.de/corpora/${id}.tar.gz`, id);
+  const text = await Bun.file(`${dir}/${id}/${id}-sentences.txt`).text();
+  return text.split("\n").filter(Boolean).map((l) => l.slice(l.indexOf("\t") + 1));
+};
+
+// 英語のコーパス。load は文の配列を返す
+export const ENGLISH_CORPORA = {
+  // 日常の短文・会話
+  Tatoeba: {
+    source: "https://tatoeba.org/ja/downloads",
+    license: "CC BY 2.0 FR",
+    load: async ({ file }) => {
+      const path = await file("https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2");
+      const tsv = Bun.spawnSync(["bunzip2", "-c", path]).stdout.toString();
+      return tsv.split("\n").filter(Boolean).map((l) => l.split("\t")[2]);
+    },
+  },
+  // ニュース記事（2023 年、10 万文）
+  "Leipzig News": {
+    source: "https://wortschatz.uni-leipzig.de/en/download/English",
+    license: "CC BY",
+    load: leipzig("eng_news_2023_100K"),
+  },
+  // Wikipedia（2016 年、10 万文）
+  "Leipzig Wikipedia": {
+    source: "https://wortschatz.uni-leipzig.de/en/download/English",
+    license: "CC BY",
+    load: leipzig("eng_wikipedia_2016_100K"),
+  },
+};
+
+// 英文で数える文字: 英字（大文字は小文字にそろえ、Shift は数えない）と、Shift なしで打つ記号 , . ; ' / - [ ]。
+// 空白（親指）・数字・そのほかの記号で区切る
+const ENGLISH_RUN = /[a-z,.;'\/\-\[\]]+/g;
+
+// 英文を打つときの打鍵数と同じ指の連続。区切りをはさんだ 2 打は数えない
+// 戻り値: { strokes, sameFinger, sameKey }
+export function analyzeEnglish(keyboard, sentence) {
+  const out = { strokes: 0, sameFinger: 0, sameKey: 0 };
+  for (const [run] of sentence.toLowerCase().matchAll(ENGLISH_RUN)) {
+    const r = countSameFinger(keyboard, run);
+    out.strokes += run.length;
+    out.sameFinger += r.sameFinger;
+    out.sameKey += r.sameKey;
+  }
+  return out;
+}
+
+// 英文を全系列で数える。sentences は文の配列。series は { name, keyboard } の配列
+export function measureEnglish(series, sentences) {
+  const acc = series.map(() => ({ strokes: 0, sameFinger: 0, sameKey: 0 }));
+  for (const text of sentences) {
+    series.forEach((s, i) => {
+      const r = analyzeEnglish(s.keyboard, text);
+      acc[i].strokes += r.strokes;
+      acc[i].sameFinger += r.sameFinger;
+      acc[i].sameKey += r.sameKey;
+    });
+  }
+  return { sentences: sentences.length, series: englishSeries(series, acc) };
+}
+
+const englishSeries = (series, acc) => series.map((s, i) => ({
+  name: s.name, keyboard: s.keyboard, ...acc[i], sameFingerRate: round(acc[i].sameFinger / acc[i].strokes, 4),
+}));
+
+// 英語の全コーパスの合計
+export function totalEnglish(corpora) {
+  const sum = (f) => corpora.reduce((n, c) => n + f(c), 0);
+  const series = corpora[0].series;
+  const acc = series.map((s, i) => ({
+    strokes: sum((c) => c.series[i].strokes), sameFinger: sum((c) => c.series[i].sameFinger), sameKey: sum((c) => c.series[i].sameKey),
+  }));
+  return { sentences: sum((c) => c.sentences), series: englishSeries(series, acc) };
+}
 
 // 「名前=パス[:noext][@キーボード]」を読む
 export function parseSeries(spec) {
@@ -329,6 +415,14 @@ function toCsv(result) {
   return rows.map((r) => r.map((v) => (/[",]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v)).join(",")).join("\n") + "\n";
 }
 
+function toEnglishCsv(english) {
+  const rows = [["corpus", "series", "keyboard", "strokes", "same_finger", "same_key", "same_finger_rate"]];
+  for (const c of english.corpora) {
+    for (const s of c.series) rows.push([c.name, s.name, s.keyboard, s.strokes, s.sameFinger, s.sameKey, s.sameFingerRate]);
+  }
+  return rows.map((r) => r.join(",")).join("\n") + "\n";
+}
+
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const diffArg = args.find((x) => x.startsWith("--diff="));
@@ -368,9 +462,26 @@ if (import.meta.main) {
     }
   }
 
-  const result = { generated: new Date().toISOString().slice(0, 10), corpora, total: total(corpora) };
+  // 英語（参考）
+  const english = [];
+  for (const [name, c] of Object.entries(ENGLISH_CORPORA)) {
+    if (only && !only.includes(name)) continue;
+    usedFiles.length = 0;
+    const sentences = await c.load(ctx);
+    const files = [...usedFiles];
+    const r = measureEnglish(ENGLISH_SERIES, sentences);
+    english.push({ name, source: c.source, license: c.license, files, ...r });
+    console.log(`\n### 英語 ${name}: ${r.sentences} 文、${r.series[0].strokes} 字`);
+    for (const s of r.series) console.log(`${s.name.padEnd(10)} 同指 ${(s.sameFingerRate * 100).toFixed(2)}%（うち連打 ${(s.sameKey / s.strokes * 100).toFixed(2)}%）`);
+  }
+
+  const result = {
+    generated: new Date().toISOString().slice(0, 10), corpora, total: total(corpora),
+    english: { corpora: english, total: totalEnglish(english) },
+  };
   await Bun.write(root + "docs/data/keystrokes.json", JSON.stringify(result, null, 2) + "\n");
   await Bun.write(root + "docs/data/keystrokes.csv", toCsv(result));
+  await Bun.write(root + "docs/data/keystrokes_en.csv", toEnglishCsv(result.english));
   await writeChart(result);
-  console.log("\n書き出し: docs/data/keystrokes.json、docs/data/keystrokes.csv、docs/index.html のグラフ、README.md の表");
+  console.log("\n書き出し: docs/data/keystrokes.json、keystrokes.csv、keystrokes_en.csv、docs/index.html のグラフ、README.md の表");
 }

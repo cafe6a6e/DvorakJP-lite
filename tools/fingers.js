@@ -29,7 +29,8 @@ function pairsOf(a, b) {
 export const KEYBOARDS = {
   qwerty: { label: "QWERTY", position: (c) => c },
   dvorak: { label: "Dvorak", position: (c) => LAYOUTS["qwerty-us"].map.get(c) ?? c },
-  onishi: { label: "大西配列", position: (c) => ONISHI.get(c) ?? c },
+  // Shift の文字は、Shift を外した文字のキー（例: ? は / のキー）
+  onishi: { label: "大西配列", position: (c) => { const u = SHIFT.get(c) ?? c; return ONISHI.get(u) ?? u; } },
 };
 
 // 打つ文字 → 指（0〜9）。キーボードにない文字は null

@@ -18,6 +18,8 @@ const STYLE = {
   "DvorakJP": { fill: "#8c8c8c", light: "#c9c9c9" },
   "DvorakJP lite": { fill: "#d7263d", light: "#f2a9b2", strong: true },
   "DvorakJP lite ＋ 短縮拡張": { hatch: true, exp: true },
+  // 英語（キーボード配列）。DvorakJP lite を打つ Dvorak を強調色にする
+  "Dvorak": { fill: "#d7263d", light: "#f2a9b2", strong: true },
 };
 // 打鍵効率での表示名。QWERTY の変換表は、QWERTY・Dvorak・大西配列のどのキーボードでも打鍵数が同じなので「通常ローマ字」と呼ぶ
 const EFFICIENCY_LABEL = { QWERTY: "通常ローマ字" };
@@ -195,22 +197,40 @@ const parts = (s) => ({ other: (s.sameFinger - s.sameKey) / s.strokes, same: s.s
 // 合計の同指連続打鍵率が高い順（左ほど悪く、右ほど良い。打鍵効率のグラフと向きをそろえる）
 const sfOrder = (total) => [...total.series].sort((a, b) => b.sameFingerRate - a.sameFingerRate).map((s) => s.name);
 
-// 積み上げ棒グラフ。下が同指異キー（濃い色）、上が同指同キー（淡い色）
-export function renderSameFingerSvg(total) {
+// 1 系列あたりの横幅。日本語と英語のグラフで同じにして、横に並べたときに同じ縮尺にする
+const SF_BAND = 84;
+const SF_LEFT = 44;
+const sfWidth = (n) => SF_LEFT + SF_BAND * n + 8;
+// 目盛りの最大（最大値の上に合計の値を書く余白を残し、1% 単位で切り上げる）。日本語と英語で同じ目盛りにする
+const sfMax = (...totals) => Math.ceil(Math.max(...totals.flatMap((t) => t.series.map((s) => parts(s).total))) * 100 + 0.5) / 100;
+
+// 系列名を短い行に分ける（「DvorakJP lite ＋ 短縮拡張」→ DvorakJP / lite / ＋ 短縮拡張 とフラスコ）
+function nameLines(name, cx, y, st) {
+  const [head, ext] = name.split(" ＋ ");
+  const lines = head.startsWith("DvorakJP ") ? ["DvorakJP", head.slice("DvorakJP ".length)] : [head];
+  const out = lines.map((l, i) => `<text x="${cx}" y="${y + i * 15}" text-anchor="middle" class="kc-label${st.strong ? " kc-strong" : ""}">${esc(l)}</text>`);
+  if (ext) {
+    const yy = y + lines.length * 15;
+    out.push(`<text x="${cx - 8}" y="${yy}" text-anchor="middle" class="kc-label">＋ ${esc(ext)}</text>`);
+    out.push(`<svg x="${cx + 30}" y="${yy - 12}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d7263d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Experimental（実験中）</title>${FLASK_PATHS}</svg>`);
+  }
+  return out;
+}
+
+// 積み上げ棒グラフ。下が同指異キー（濃い色）、上が同指同キー（淡い色）。凡例は HTML 側に置く
+// prefix は SVG の id の頭（日本語と英語のグラフで重ならないようにする）。max は目盛りの最大
+export function renderSameFingerSvg(total, { prefix = "sf", title = "配列ごとの同指連続打鍵率", max = sfMax(total) } = {}) {
   const series = sorted(total.series, sfOrder(total));
-  const W = 640, H = 350;
-  const L = 44, R = 636, T = 28, B = 300; // 系列が 6 つあるので、打鍵効率のグラフより横に広く使う
-  // 最大値の上に合計の値を書く余白を残し、1% 単位で切り上げる
-  const max = Math.ceil(Math.max(...series.map((s) => parts(s).total)) * 100 + 0.5) / 100;
+  const W = sfWidth(series.length), H = 360;
+  const L = SF_LEFT, R = W - 8, T = 28, B = 300;
   const y = (v) => B - (v / max) * (B - T);
-  const band = (R - L) / series.length;
-  const bw = 64, gap = 2;
+  const bw = 56, gap = 2;
   const out = [];
 
-  out.push(`<svg class="kc-chart kc-narrow" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="sf-title sf-desc">`);
-  out.push(`<title id="sf-title">配列ごとの同指連続打鍵率</title>`);
-  out.push(`<desc id="sf-desc">${esc(series.map((s) => { const p = parts(s); return `${s.name} ${pct(p.total)}%（同指異キー ${pct(p.other)}%、同指同キー ${pct(p.same)}%）`; }).join("、"))}</desc>`);
-  out.push(hatchDefs("sf", true));
+  out.push(`<svg class="kc-chart kc-narrow" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${prefix}-title ${prefix}-desc">`);
+  out.push(`<title id="${prefix}-title">${esc(title)}</title>`);
+  out.push(`<desc id="${prefix}-desc">${esc(series.map((s) => { const p = parts(s); return `${s.name} ${pct(p.total)}%（同指異キー ${pct(p.other)}%、同指同キー ${pct(p.same)}%）`; }).join("、"))}</desc>`);
+  out.push(hatchDefs(prefix, true));
 
   for (let v = 0; v <= max + 1e-9; v += 0.01) {
     const yy = y(v).toFixed(1);
@@ -218,26 +238,22 @@ export function renderSameFingerSvg(total) {
     out.push(`<text x="${L - 8}" y="${yy}" dy="0.35em" text-anchor="end" class="kc-tick">${Math.round(v * 100)}%</text>`);
   }
   out.push(`<text x="${L - 36}" y="${T - 12}" class="kc-tick">同指連続打鍵率</text>`);
-  // 凡例（濃い・淡いの見本）
-  const lx = 404;
-  out.push(`<rect x="${lx}" y="${T - 23}" width="14" height="14" rx="2" fill="#8c8c8c"/><text x="${lx + 20}" y="${T - 12}" class="kc-tick">同指異キー</text>`);
-  out.push(`<rect x="${lx + 108}" y="${T - 23}" width="14" height="14" rx="2" fill="#c9c9c9"/><text x="${lx + 128}" y="${T - 12}" class="kc-tick">同指同キー</text>`);
 
   series.forEach((s, i) => {
     const st = STYLE[s.name] ?? { fill: "#8c8c8c", light: "#c9c9c9" };
     const p = parts(s);
-    const cx = L + band * (i + 0.5), x = cx - bw / 2;
+    const cx = L + SF_BAND * (i + 0.5), x = cx - bw / 2;
     const mid = y(p.other), top = y(p.total);
     const edge = st.exp ? ' stroke="#d7263d" stroke-width="1.5"' : "";
     out.push(`<g class="kc-bar"><title>${esc(s.name)}: 同指連続打鍵率 ${pct(p.total)}%（同指異キー ${pct(p.other)}%、同指同キー ${pct(p.same)}%）</title>`);
-    out.push(`<rect x="${(cx - band / 2 + 2).toFixed(1)}" y="${T}" width="${(band - 4).toFixed(1)}" height="${B - T}" fill="transparent"/>`);
-    out.push(`<rect x="${x}" y="${mid.toFixed(1)}" width="${bw}" height="${(B - mid).toFixed(1)}" fill="${fillOf(st, "sf")}"${edge}/>`);
-    out.push(`<path d="${bar(x, top, bw, mid - gap - top)}" fill="${fillOf(st, "sf", true)}"${edge}/>`);
+    out.push(`<rect x="${(cx - SF_BAND / 2 + 2).toFixed(1)}" y="${T}" width="${SF_BAND - 4}" height="${B - T}" fill="transparent"/>`);
+    out.push(`<rect x="${x}" y="${mid.toFixed(1)}" width="${bw}" height="${(B - mid).toFixed(1)}" fill="${fillOf(st, prefix)}"${edge}/>`);
+    out.push(`<path d="${bar(x, top, bw, mid - gap - top)}" fill="${fillOf(st, prefix, true)}"${edge}/>`);
     // 内訳の値（棒の中）と合計（棒の上）
     out.push(`<text x="${cx}" y="${((mid + B) / 2).toFixed(1)}" dy="0.35em" text-anchor="middle" class="kc-seg">${pct(p.other)}</text>`);
     out.push(`<text x="${cx}" y="${((top + mid - gap) / 2).toFixed(1)}" dy="0.35em" text-anchor="middle" class="kc-seg">${pct(p.same)}</text>`);
     out.push(`<text x="${cx}" y="${(top - 8).toFixed(1)}" text-anchor="middle" class="kc-value${st.strong ? " kc-strong" : ""}">${pct(p.total)}%</text>`);
-    out.push(...nameLabel(s.name, cx, B + 20, st));
+    out.push(...nameLines(s.name, cx, B + 18, st));
     out.push(`</g>`);
   });
 
@@ -246,10 +262,12 @@ export function renderSameFingerSvg(total) {
 }
 
 // コーパス別の同指連続打鍵率（%）。合計の下に内訳の行を足す
-export function renderSameFingerTable(result) {
+// data は { corpora, total }（日本語は result、英語は result.english）
+export function renderSameFingerTable(data) {
+  const result = data;
   const names = sfOrder(result.total);
   const cells = (series, f) => sorted(series, names).map((s) => `<td>${f(s)}</td>`).join("");
-  const row = (label, c) => `<tr><th>${label}</th><td>${fmt(c.used)}</td>${cells(c.series, (s) => pct(parts(s).total))}</tr>`;
+  const row = (label, c) => `<tr><th>${label}</th><td>${fmt(c.used ?? c.sentences)}</td>${cells(c.series, (s) => pct(parts(s).total))}</tr>`;
   return [
     `<div class="table-wrap">`,
     `<table class="kc-table">`,
@@ -265,31 +283,48 @@ export function renderSameFingerTable(result) {
   ].join("\n");
 }
 
+// 日本語と英語（参考）のグラフを横に並べる。棒の幅と目盛りは同じ。
+// 文字が小さくなりすぎないよう、元の幅の 7 割より狭くなる画面では縦に並ぶ
 export function renderSameFingerSection(result) {
+  const ja = result.total, en = result.english.total;
+  const max = sfMax(ja, en);
+  const figure = (caption, total, opts) =>
+    [`<figure class="kc-figure" style="flex-grow: ${sfWidth(total.series.length)}; min-width: ${Math.round(sfWidth(total.series.length) * 0.7)}px">`, `<figcaption>${caption}</figcaption>`, renderSameFingerSvg(total, { ...opts, max }), `</figure>`];
   return [
-    `<figure class="kc-figure">`,
-    renderSameFingerSvg(result.total),
-    `</figure>`,
+    `<div class="kc-figures">`,
+    ...figure("日本語（ローマ字入力）", ja, { title: "配列ごとの同指連続打鍵率（日本語）" }),
+    ...figure("英語（参考）", en, { prefix: "sfe", title: "キーボード配列ごとの同指連続打鍵率（英語）" }),
+    `</div>`,
+    `<p class="kc-legend"><span class="kc-swatch" style="background: #8c8c8c"></span>同指異キー（濃い色） <span class="kc-swatch" style="background: #c9c9c9"></span>同指同キー（淡い色）</p>`,
     `<details class="kc-details">`,
     `<summary>コーパス別の同指連続打鍵率</summary>`,
+    `<p class="kc-table-title">日本語</p>`,
     renderSameFingerTable(result),
-    `    <p class="note">コーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>`,
+    `<p class="kc-table-title">英語（参考）</p>`,
+    renderSameFingerTable(result.english),
+    englishNote(result.english),
+    `    <p class="note">日本語のコーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>`,
     `</details>`,
   ].join("\n");
 }
 
-// README の同指連続打鍵率の表（合計、高い順）
+// README の同指連続打鍵率の表（合計、高い順）。日本語と英語（参考）
 export function renderSameFingerReadme(result) {
-  const t = result.total;
-  const rows = sorted(t.series, sfOrder(t)).map((s) => {
-    const p = parts(s);
-    return `| ${s.name}${STYLE[s.name]?.exp ? "（Experimental）" : ""} | ${pct(p.total)}% | ${pct(p.other)}% | ${pct(p.same)}% |`;
-  });
-  return [
+  const table = (t) => [
     "| 配列 | 同指連続打鍵率 | うち同指異キー | うち同指同キー |",
     "|---|--:|--:|--:|",
-    ...rows,
-  ].join("\n");
+    ...sorted(t.series, sfOrder(t)).map((s) => {
+      const p = parts(s);
+      return `| ${s.name}${STYLE[s.name]?.exp ? "（Experimental）" : ""} | ${pct(p.total)}% | ${pct(p.other)}% | ${pct(p.same)}% |`;
+    }),
+  ];
+  return ["**日本語（ローマ字入力）**", "", ...table(result.total), "", "**英語（参考）**", "", ...table(result.english.total)].join("\n");
+}
+
+// 英語のコーパスの出典と数え方
+function englishNote(english) {
+  const list = english.corpora.map((c) => `<a href="${c.source}">${esc(c.name)}</a>（${esc(c.license)}）`).join("、");
+  return `    <p class="note">英語は ${list} の英文を、そのまま打つものとして数えた。英字（大文字は小文字として数え、Shift は数えない）と Shift なしで打つ記号（<code>, . ; ' / - [ ]</code>）を数え、空白（親指）・数字・そのほかの記号で区切る。Dvorak は DvorakJP 系を打つキーボード配列。</p>`;
 }
 
 if (import.meta.main) {

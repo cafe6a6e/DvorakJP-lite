@@ -598,5 +598,152 @@
       "more": 270,
       "moreStrokes": 301
     }
+  },
+  "english": {
+    "corpora": [
+      {
+        "name": "Tatoeba",
+        "source": "https://tatoeba.org/ja/downloads",
+        "license": "CC BY 2.0 FR",
+        "files": [
+          {
+            "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2",
+            "sha256": "0c4d3b18152bd6507bbf77ab690532b25de1e60da950f68705b3c88935c01fb4"
+          }
+        ],
+        "sentences": 2041577,
+        "series": [
+          {
+            "name": "QWERTY",
+            "keyboard": "qwerty",
+            "strokes": 67864187,
+            "sameFinger": 4461296,
+            "sameKey": 1395945,
+            "sameFingerRate": 0.0657
+          },
+          {
+            "name": "Dvorak",
+            "keyboard": "dvorak",
+            "strokes": 67864187,
+            "sameFinger": 2787294,
+            "sameKey": 1395945,
+            "sameFingerRate": 0.0411
+          },
+          {
+            "name": "大西配列",
+            "keyboard": "onishi",
+            "strokes": 67864187,
+            "sameFinger": 2984167,
+            "sameKey": 1395945,
+            "sameFingerRate": 0.044
+          }
+        ]
+      },
+      {
+        "name": "Leipzig News",
+        "source": "https://wortschatz.uni-leipzig.de/en/download/English",
+        "license": "CC BY",
+        "files": [
+          {
+            "url": "https://downloads.wortschatz-leipzig.de/corpora/eng_news_2023_100K.tar.gz",
+            "sha256": "8e65ed5b9c96687d293374335c14dfb9db4c150877bcc208a21bcb2f86b43484"
+          }
+        ],
+        "sentences": 100000,
+        "series": [
+          {
+            "name": "QWERTY",
+            "keyboard": "qwerty",
+            "strokes": 9575053,
+            "sameFinger": 727403,
+            "sameKey": 200589,
+            "sameFingerRate": 0.076
+          },
+          {
+            "name": "Dvorak",
+            "keyboard": "dvorak",
+            "strokes": 9575053,
+            "sameFinger": 412978,
+            "sameKey": 200589,
+            "sameFingerRate": 0.0431
+          },
+          {
+            "name": "大西配列",
+            "keyboard": "onishi",
+            "strokes": 9575053,
+            "sameFinger": 502980,
+            "sameKey": 200589,
+            "sameFingerRate": 0.0525
+          }
+        ]
+      },
+      {
+        "name": "Leipzig Wikipedia",
+        "source": "https://wortschatz.uni-leipzig.de/en/download/English",
+        "license": "CC BY",
+        "files": [
+          {
+            "url": "https://downloads.wortschatz-leipzig.de/corpora/eng_wikipedia_2016_100K.tar.gz",
+            "sha256": "04aa301072a612e0368f1a0abe5f6b011ab03df84961c29b80bd126883a5a6f0"
+          }
+        ],
+        "sentences": 100000,
+        "series": [
+          {
+            "name": "QWERTY",
+            "keyboard": "qwerty",
+            "strokes": 10495307,
+            "sameFinger": 803101,
+            "sameKey": 193487,
+            "sameFingerRate": 0.0765
+          },
+          {
+            "name": "Dvorak",
+            "keyboard": "dvorak",
+            "strokes": 10495307,
+            "sameFinger": 434395,
+            "sameKey": 193487,
+            "sameFingerRate": 0.0414
+          },
+          {
+            "name": "大西配列",
+            "keyboard": "onishi",
+            "strokes": 10495307,
+            "sameFinger": 545834,
+            "sameKey": 193487,
+            "sameFingerRate": 0.052
+          }
+        ]
+      }
+    ],
+    "total": {
+      "sentences": 2241577,
+      "series": [
+        {
+          "name": "QWERTY",
+          "keyboard": "qwerty",
+          "strokes": 87934547,
+          "sameFinger": 5991800,
+          "sameKey": 1790021,
+          "sameFingerRate": 0.0681
+        },
+        {
+          "name": "Dvorak",
+          "keyboard": "dvorak",
+          "strokes": 87934547,
+          "sameFinger": 3634667,
+          "sameKey": 1790021,
+          "sameFingerRate": 0.0413
+        },
+        {
+          "name": "大西配列",
+          "keyboard": "onishi",
+          "strokes": 87934547,
+          "sameFinger": 4032981,
+          "sameKey": 1790021,
+          "sameFingerRate": 0.0459
+        }
+      ]
+    }
   }
 }

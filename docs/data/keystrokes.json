@@ -5,6 +5,12 @@
       "name": "JSUT",
       "source": "https://github.com/sarulab-speech/jsut-label",
       "license": "CC BY-SA 4.0",
+      "files": [
+        {
+          "url": "https://raw.githubusercontent.com/sarulab-speech/jsut-label/1978271ca6212e1ea742da8f149160f5679e8971/text_kana/basic5000.yaml",
+          "sha256": "9879f4157f057630e095d6397a10ecbd7b459231b5eb009b7f64a4e7c8caef70"
+        }
+      ],
       "sentences": 5000,
       "noReading": 92,
       "used": 4907,
@@ -16,46 +22,80 @@
           "name": "QWERTY",
           "table": "test/fixtures/qwerty-base.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 312029,
           "efficiency": 0.4595,
           "perKana": 1.7006,
-          "ratio": 1
+          "ratio": 1,
+          "sameFinger": 24631,
+          "sameKey": 6846,
+          "sameFingerRate": 0.0789
+        },
+        {
+          "name": "大西配列",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "onishi",
+          "strokes": 312029,
+          "efficiency": 0.4595,
+          "perKana": 1.7006,
+          "ratio": 1,
+          "sameFinger": 9730,
+          "sameKey": 6846,
+          "sameFingerRate": 0.0312,
+          "sameTableAs": "QWERTY"
         },
         {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 273503,
           "efficiency": 0.5243,
           "perKana": 1.4906,
-          "ratio": 0.8765
+          "ratio": 0.8765,
+          "sameFinger": 18873,
+          "sameKey": 3639,
+          "sameFingerRate": 0.069
         },
         {
           "name": "DvorakJP",
           "table": "test/fixtures/dvorakjp-original.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 288649,
           "efficiency": 0.4968,
           "perKana": 1.5731,
-          "ratio": 0.9251
+          "ratio": 0.9251,
+          "sameFinger": 10086,
+          "sameKey": 5496,
+          "sameFingerRate": 0.0349
         },
         {
           "name": "DvorakJP lite",
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 288578,
           "efficiency": 0.4969,
           "perKana": 1.5728,
-          "ratio": 0.9248
+          "ratio": 0.9248,
+          "sameFinger": 10328,
+          "sameKey": 5373,
+          "sameFingerRate": 0.0358
         },
         {
           "name": "DvorakJP lite ＋ 短縮拡張",
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 271059,
           "efficiency": 0.529,
           "perKana": 1.4773,
-          "ratio": 0.8687
+          "ratio": 0.8687,
+          "sameFinger": 12294,
+          "sameKey": 5766,
+          "sameFingerRate": 0.0454
         }
       ],
       "diff": {
@@ -71,6 +111,16 @@
       "name": "ITA",
       "source": "https://github.com/mmorise/ita-corpus",
       "license": "CC0",
+      "files": [
+        {
+          "url": "https://raw.githubusercontent.com/mmorise/ita-corpus/994844bcac6925c900fd4ab45beab11b0b9ea7bd/emotion_transcript_utf8.txt",
+          "sha256": "4d03d760b1a5cb49deee519b357f758a63cd75cab00d5cf441694414e859a3b6"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/mmorise/ita-corpus/994844bcac6925c900fd4ab45beab11b0b9ea7bd/recitation_transcript_utf8.txt",
+          "sha256": "385fe5ed754ce0363510526a0ca09ebd657682e3a5097fcbaa757f6b239ffbd9"
+        }
+      ],
       "sentences": 424,
       "noReading": 12,
       "used": 412,
@@ -82,46 +132,80 @@
           "name": "QWERTY",
           "table": "test/fixtures/qwerty-base.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 18493,
           "efficiency": 0.4867,
           "perKana": 1.671,
-          "ratio": 1
+          "ratio": 1,
+          "sameFinger": 1684,
+          "sameKey": 494,
+          "sameFingerRate": 0.0911
+        },
+        {
+          "name": "大西配列",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "onishi",
+          "strokes": 18493,
+          "efficiency": 0.4867,
+          "perKana": 1.671,
+          "ratio": 1,
+          "sameFinger": 661,
+          "sameKey": 494,
+          "sameFingerRate": 0.0357,
+          "sameTableAs": "QWERTY"
         },
         {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 16331,
           "efficiency": 0.5512,
           "perKana": 1.4756,
-          "ratio": 0.8831
+          "ratio": 0.8831,
+          "sameFinger": 1058,
+          "sameKey": 202,
+          "sameFingerRate": 0.0648
         },
         {
           "name": "DvorakJP",
           "table": "test/fixtures/dvorakjp-original.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 17232,
           "efficiency": 0.5223,
           "perKana": 1.5571,
-          "ratio": 0.9318
+          "ratio": 0.9318,
+          "sameFinger": 696,
+          "sameKey": 383,
+          "sameFingerRate": 0.0404
         },
         {
           "name": "DvorakJP lite",
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 17227,
           "efficiency": 0.5225,
           "perKana": 1.5566,
-          "ratio": 0.9315
+          "ratio": 0.9315,
+          "sameFinger": 749,
+          "sameKey": 374,
+          "sameFingerRate": 0.0435
         },
         {
           "name": "DvorakJP lite ＋ 短縮拡張",
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 16223,
           "efficiency": 0.5548,
           "perKana": 1.4659,
-          "ratio": 0.8773
+          "ratio": 0.8773,
+          "sameFinger": 852,
+          "sameKey": 398,
+          "sameFingerRate": 0.0525
         }
       ],
       "diff": {
@@ -137,6 +221,12 @@
       "name": "Tatoeba",
       "source": "https://tatoeba.org/ja/downloads",
       "license": "CC BY 2.0 FR",
+      "files": [
+        {
+          "url": "https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences.tsv.bz2",
+          "sha256": "1fbe53db3663dbb0bd80ff45ec8b1f633e6d4df92d93e57c1e208f251eea6b79"
+        }
+      ],
       "sentences": 249006,
       "noReading": 4027,
       "used": 244964,
@@ -148,46 +238,80 @@
           "name": "QWERTY",
           "table": "test/fixtures/qwerty-base.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 9247793,
           "efficiency": 0.4719,
           "perKana": 1.7256,
-          "ratio": 1
+          "ratio": 1,
+          "sameFinger": 691649,
+          "sameKey": 226211,
+          "sameFingerRate": 0.0748
+        },
+        {
+          "name": "大西配列",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "onishi",
+          "strokes": 9247793,
+          "efficiency": 0.4719,
+          "perKana": 1.7256,
+          "ratio": 1,
+          "sameFinger": 296759,
+          "sameKey": 226211,
+          "sameFingerRate": 0.0321,
+          "sameTableAs": "QWERTY"
         },
         {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 8146716,
           "efficiency": 0.5357,
           "perKana": 1.5201,
-          "ratio": 0.8809
+          "ratio": 0.8809,
+          "sameFinger": 475389,
+          "sameKey": 112435,
+          "sameFingerRate": 0.0584
         },
         {
           "name": "DvorakJP",
           "table": "test/fixtures/dvorakjp-original.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 8651950,
           "efficiency": 0.5044,
           "perKana": 1.6144,
-          "ratio": 0.9356
+          "ratio": 0.9356,
+          "sameFinger": 302798,
+          "sameKey": 194784,
+          "sameFingerRate": 0.035
         },
         {
           "name": "DvorakJP lite",
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 8650040,
           "efficiency": 0.5045,
           "perKana": 1.614,
-          "ratio": 0.9354
+          "ratio": 0.9354,
+          "sameFinger": 306488,
+          "sameKey": 191927,
+          "sameFingerRate": 0.0354
         },
         {
           "name": "DvorakJP lite ＋ 短縮拡張",
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 8119558,
           "efficiency": 0.5375,
           "perKana": 1.515,
-          "ratio": 0.878
+          "ratio": 0.878,
+          "sameFinger": 387698,
+          "sameKey": 204373,
+          "sameFingerRate": 0.0477
         }
       ],
       "diff": {
@@ -203,6 +327,12 @@
       "name": "livedoor",
       "source": "https://www.rondhuit.com/download.html#ldcc",
       "license": "CC BY-ND 2.1 JP",
+      "files": [
+        {
+          "url": "https://www.rondhuit.com/download/ldcc-20140209.tar.gz",
+          "sha256": "c81c27f1aa9403ad61541fa85b6de4bc9d87a94b8046033e85038feeeac86823"
+        }
+      ],
       "sentences": 212597,
       "noReading": 99771,
       "used": 112818,
@@ -214,46 +344,80 @@
           "name": "QWERTY",
           "table": "test/fixtures/qwerty-base.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 8049536,
           "efficiency": 0.477,
           "perKana": 1.6958,
-          "ratio": 1
+          "ratio": 1,
+          "sameFinger": 640275,
+          "sameKey": 186497,
+          "sameFingerRate": 0.0795
+        },
+        {
+          "name": "大西配列",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "onishi",
+          "strokes": 8049536,
+          "efficiency": 0.477,
+          "perKana": 1.6958,
+          "ratio": 1,
+          "sameFinger": 273881,
+          "sameKey": 186497,
+          "sameFingerRate": 0.034,
+          "sameTableAs": "QWERTY"
         },
         {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 7044418,
           "efficiency": 0.545,
           "perKana": 1.484,
-          "ratio": 0.8751
+          "ratio": 0.8751,
+          "sameFinger": 460861,
+          "sameKey": 94229,
+          "sameFingerRate": 0.0654
         },
         {
           "name": "DvorakJP",
           "table": "test/fixtures/dvorakjp-original.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 7432151,
           "efficiency": 0.5166,
           "perKana": 1.5657,
-          "ratio": 0.9233
+          "ratio": 0.9233,
+          "sameFinger": 308118,
+          "sameKey": 159222,
+          "sameFingerRate": 0.0415
         },
         {
           "name": "DvorakJP lite",
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 7430729,
           "efficiency": 0.5167,
           "perKana": 1.5654,
-          "ratio": 0.9231
+          "ratio": 0.9231,
+          "sameFinger": 310100,
+          "sameKey": 154797,
+          "sameFingerRate": 0.0417
         },
         {
           "name": "DvorakJP lite ＋ 短縮拡張",
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 6990561,
           "efficiency": 0.5492,
           "perKana": 1.4727,
-          "ratio": 0.8684
+          "ratio": 0.8684,
+          "sameFinger": 346803,
+          "sameKey": 162983,
+          "sameFingerRate": 0.0496
         }
       ],
       "diff": {
@@ -269,6 +433,12 @@
       "name": "Wikipedia",
       "source": "https://github.com/ku-nlp/WikipediaAnnotatedCorpus",
       "license": "CC BY-SA 4.0",
+      "files": [
+        {
+          "url": "https://codeload.github.com/ku-nlp/WikipediaAnnotatedCorpus/tar.gz/3e1d28b2120fed7e8f6c30b9ad6e18906fc3a1e7",
+          "sha256": "82633a5e6872d26fae0393ff6b8e08db0c5a1bee9052c8c43ac9bd8554fbf3f9"
+        }
+      ],
       "sentences": 15902,
       "noReading": 2990,
       "used": 12912,
@@ -280,46 +450,80 @@
           "name": "QWERTY",
           "table": "test/fixtures/qwerty-base.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 724739,
           "efficiency": 0.4409,
           "perKana": 1.649,
-          "ratio": 1
+          "ratio": 1,
+          "sameFinger": 64912,
+          "sameKey": 16803,
+          "sameFingerRate": 0.0896
+        },
+        {
+          "name": "大西配列",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "onishi",
+          "strokes": 724739,
+          "efficiency": 0.4409,
+          "perKana": 1.649,
+          "ratio": 1,
+          "sameFinger": 23096,
+          "sameKey": 16803,
+          "sameFingerRate": 0.0319,
+          "sameTableAs": "QWERTY"
         },
         {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
+          "keyboard": "qwerty",
           "strokes": 618745,
           "efficiency": 0.5165,
           "perKana": 1.4078,
-          "ratio": 0.8537
+          "ratio": 0.8537,
+          "sameFinger": 45487,
+          "sameKey": 8467,
+          "sameFingerRate": 0.0735
         },
         {
           "name": "DvorakJP",
           "table": "test/fixtures/dvorakjp-original.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 648935,
           "efficiency": 0.4924,
           "perKana": 1.4765,
-          "ratio": 0.8954
+          "ratio": 0.8954,
+          "sameFinger": 21236,
+          "sameKey": 10224,
+          "sameFingerRate": 0.0327
         },
         {
           "name": "DvorakJP lite",
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 648767,
           "efficiency": 0.4926,
           "perKana": 1.4761,
-          "ratio": 0.8952
+          "ratio": 0.8952,
+          "sameFinger": 22666,
+          "sameKey": 10048,
+          "sameFingerRate": 0.0349
         },
         {
           "name": "DvorakJP lite ＋ 短縮拡張",
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
+          "keyboard": "dvorak",
           "strokes": 613946,
           "efficiency": 0.5205,
           "perKana": 1.3969,
-          "ratio": 0.8471
+          "ratio": 0.8471,
+          "sameFinger": 25780,
+          "sameKey": 11299,
+          "sameFingerRate": 0.042
         }
       ],
       "diff": {
@@ -339,27 +543,51 @@
       {
         "name": "QWERTY",
         "strokes": 18352590,
-        "efficiency": 0.4727
+        "efficiency": 0.4727,
+        "sameFinger": 1423151,
+        "sameKey": 436851,
+        "sameFingerRate": 0.0775
+      },
+      {
+        "name": "大西配列",
+        "strokes": 18352590,
+        "efficiency": 0.4727,
+        "sameFinger": 604127,
+        "sameKey": 436851,
+        "sameFingerRate": 0.0329,
+        "sameTableAs": "QWERTY"
       },
       {
         "name": "AZIK",
         "strokes": 16099713,
-        "efficiency": 0.5388
+        "efficiency": 0.5388,
+        "sameFinger": 1001668,
+        "sameKey": 218972,
+        "sameFingerRate": 0.0622
       },
       {
         "name": "DvorakJP",
         "strokes": 17038917,
-        "efficiency": 0.5091
+        "efficiency": 0.5091,
+        "sameFinger": 642934,
+        "sameKey": 370109,
+        "sameFingerRate": 0.0377
       },
       {
         "name": "DvorakJP lite",
         "strokes": 17035341,
-        "efficiency": 0.5093
+        "efficiency": 0.5093,
+        "sameFinger": 650331,
+        "sameKey": 362519,
+        "sameFingerRate": 0.0382
       },
       {
         "name": "DvorakJP lite ＋ 短縮拡張",
         "strokes": 16011347,
-        "efficiency": 0.5418
+        "efficiency": 0.5418,
+        "sameFinger": 773427,
+        "sameKey": 384819,
+        "sameFingerRate": 0.0483
       }
     ],
     "diff": {

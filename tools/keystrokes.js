@@ -1,13 +1,18 @@
 // 公開コーパスで、ローマ字変換表ごとの最短打鍵数を比べる
 //   bun tools/keystrokes.js                      既定の4系列で計測する
-//   bun tools/keystrokes.js 名前=表のパス[:noext] ...   系列を指定する（:noext は拡張キーを使わない）
+//   bun tools/keystrokes.js 名前=表のパス[:noext][@キーボード] ...   系列を指定する
+//     :noext は拡張キーを使わない。@qwerty（既定）・@dvorak・@onishi は、同指連続打鍵を数えるときのキーボード配列
 //   bun tools/keystrokes.js --diff=DvorakJP,DvorakJP lite   2つの系列で打鍵数が違う文を書き出す
 // 打ち方は練習ページと同じ docs/romaji.js の plan() で求める。
 //   bun tools/keystrokes.js --corpus=JSUT,ITA   計測するコーパスを絞る
 // コーパス（JSUT、ITA、Tatoeba、livedoor ニュース、京大 Wikipedia 注釈コーパス）は初回に .cache/corpus/ へダウンロードし、
 // 表記どおりの読み（助詞の「は」もそのまま）に変換する。Wikipedia は付属の読みを、ほかは kuromoji を使う。
+// 同指連続打鍵頻度（同じ指が続く回数 ÷ 打鍵数）も数える。打ち方は、最短の打ち方のうち同じ指の連続が最も少ないもの。
 // 結果は docs/data/keystrokes.json と docs/data/keystrokes.csv に書く。
+// 再現できるように、GitHub のコーパスはコミットを固定して取得し、使ったファイルの SHA-256 を JSON の files に記録する
+// （Tatoeba は毎週更新される最新版しか配布されていないので、SHA-256 で同じデータかを確かめる）。
 import { parseTable, plan } from "../docs/romaji.js";
+import { countSameFinger, KEYBOARDS, sameFinger } from "./fingers.js";
 import { writeChart } from "./keystroke-chart.js";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -17,11 +22,13 @@ const COMPARE = ["DvorakJP", "DvorakJP lite"];
 
 export const DEFAULT_SERIES = [
   "QWERTY=test/fixtures/qwerty-base.txt",
+  // 大西配列（https://o24.works/layout/）。ローマ字の規則は変えない入れ替え配列なので、ローマ字テーブルは QWERTY と同じ
+  "大西配列=test/fixtures/qwerty-base.txt@onishi",
   // AZIK（QWERTY 用）。typepedia.jp の src/romantables/azik.txt（AZIK総合解説書の仕様から作成、Unlicense）をコピーしたもの
   "AZIK=test/fixtures/azik.txt",
-  "DvorakJP=test/fixtures/dvorakjp-original.txt",
-  "DvorakJP lite=docs/romantable_dvorakjplite.txt",
-  "DvorakJP lite ＋ 短縮拡張=docs/romantable_dvorakjplite_abbr.txt",
+  "DvorakJP=test/fixtures/dvorakjp-original.txt@dvorak",
+  "DvorakJP lite=docs/romantable_dvorakjplite.txt@dvorak",
+  "DvorakJP lite ＋ 短縮拡張=docs/romantable_dvorakjplite_abbr.txt@dvorak",
 ];
 
 // コーパス。load は { text, kana, typed } の配列を返す（読めない語があれば kana は null）
@@ -30,7 +37,7 @@ export const CORPORA = {
     source: "https://github.com/sarulab-speech/jsut-label",
     license: "CC BY-SA 4.0",
     load: async ({ text, kuromoji }) =>
-      kuromoji([...(await text("https://raw.githubusercontent.com/sarulab-speech/jsut-label/master/text_kana/basic5000.yaml"))
+      kuromoji([...(await text("https://raw.githubusercontent.com/sarulab-speech/jsut-label/1978271ca6212e1ea742da8f149160f5679e8971/text_kana/basic5000.yaml"))
         .matchAll(/^  text_level0: (.+)$/gm)].map((m) => m[1])),
   },
   ITA: {
@@ -39,7 +46,7 @@ export const CORPORA = {
     // 「EMOTION100_001:えっ嘘でしょ。,エッウソデショ。」の、: と , の間
     load: async ({ text, kuromoji }) => {
       const files = await Promise.all(["emotion", "recitation"].map(
-        (f) => text(`https://raw.githubusercontent.com/mmorise/ita-corpus/main/${f}_transcript_utf8.txt`)));
+        (f) => text(`https://raw.githubusercontent.com/mmorise/ita-corpus/994844bcac6925c900fd4ab45beab11b0b9ea7bd/${f}_transcript_utf8.txt`)));
       return kuromoji(files.join("\n").split("\n").filter((l) => l.includes(":"))
         .map((l) => l.slice(l.indexOf(":") + 1).split(",")[0]));
     },
@@ -74,7 +81,7 @@ export const CORPORA = {
     source: "https://github.com/ku-nlp/WikipediaAnnotatedCorpus",
     license: "CC BY-SA 4.0",
     load: async ({ archive }) => {
-      const dir = await archive("https://codeload.github.com/ku-nlp/WikipediaAnnotatedCorpus/tar.gz/refs/heads/main", "wac");
+      const dir = await archive("https://codeload.github.com/ku-nlp/WikipediaAnnotatedCorpus/tar.gz/3e1d28b2120fed7e8f6c30b9ad6e18906fc3a1e7", "wac");
       const items = [];
       const paths = [...new Bun.Glob("*/knp/*/*.knp").scanSync(dir)].sort();
       for (const p of paths) items.push(...parseKnp(await Bun.file(`${dir}/${p}`).text()));
@@ -83,14 +90,21 @@ export const CORPORA = {
   },
 };
 
-// 「名前=パス[:noext]」を読む
+// 「名前=パス[:noext][@キーボード]」を読む
 export function parseSeries(spec) {
   const eq = spec.indexOf("=");
-  if (eq < 1) throw new Error(`系列の指定は 名前=表のパス[:noext]: ${spec}`);
+  if (eq < 1) throw new Error(`系列の指定は 名前=表のパス[:noext][@キーボード]: ${spec}`);
   let path = spec.slice(eq + 1);
+  let keyboard = "qwerty";
+  const at = path.lastIndexOf("@");
+  if (at >= 0) {
+    keyboard = path.slice(at + 1);
+    path = path.slice(0, at);
+    if (!KEYBOARDS[keyboard]) throw new Error(`キーボードは ${Object.keys(KEYBOARDS).join("・")} のどれか: ${spec}`);
+  }
   const ext = !path.endsWith(":noext");
   if (!ext) path = path.slice(0, -":noext".length);
-  return { name: spec.slice(0, eq), path, ext };
+  return { name: spec.slice(0, eq), path, ext, keyboard };
 }
 
 // 系列を読み込む。読み（ひらがな）と比べるので、変換表の出力のカタカナ（AZIK の「ヴ」など）はひらがなにそろえる
@@ -105,21 +119,41 @@ export function countStrokes(t, kana, allowExt) {
   return segs ? segs.reduce((n, s) => n + s.key.length, 0) : null;
 }
 
+// かな列を、最短の打鍵数で、そのうち同じ指の連続が最も少なく打つ。打てなければ null
+// 戻り値: { strokes, sameFinger, sameKey }（sameFinger は同じ指が続く回数で、同じキーの連打 sameKey を含む）
+export function analyze(s, kana) {
+  const sf = (a, b) => (sameFinger(s.keyboard, a, b) ? 1 : 0);
+  // 打鍵数を優先し、同じ打鍵数なら同じ指の連続が少ない打ち方を選ぶ
+  const cost = (key, ext, first) => {
+    let n = first === null ? 0 : sf(key.at(-1), first);
+    for (let i = 1; i < key.length; i++) n += sf(key[i - 1], key[i]);
+    return key.length * 1000 + n;
+  };
+  const segs = plan(s.table, kana, s.ext, cost);
+  if (!segs) return null;
+  const keys = segs.map((x) => x.key).join("");
+  return { strokes: keys.length, ...countSameFinger(s.keyboard, keys) };
+}
+
 // 文ごとに全系列で数える。items は { kana, typed }（typed は変換後の日本語のうち打つ部分）。
 // どれかの表で打てない文は全系列から除く。
 // efficiency（打鍵効率）は 変換後の日本語の文字数 ÷ 打鍵数。cmp に2つの系列名を渡すと、打鍵数が違う文の数も数える
+// sameFingerRate（同指連続打鍵頻度）は 同じ指が続く回数 ÷ 打鍵数。
+// 前の系列と同じ変換表（キーボードだけが違う）の系列には sameTableAs を付ける（打鍵数と打鍵効率は同じになる）
 export function measure(series, items, cmp) {
   const strokes = series.map(() => 0);
+  const same = series.map(() => 0), sameKey = series.map(() => 0);
   let used = 0, untypable = 0, kana = 0, chars = 0;
   const [ia, ib] = (cmp ?? []).map((n) => series.findIndex((s) => s.name === n));
   const diff = cmp && ia >= 0 && ib >= 0 ? { a: cmp[0], b: cmp[1], fewer: 0, fewerStrokes: 0, more: 0, moreStrokes: 0 } : null;
   for (const x of items) {
-    const r = series.map((s) => countStrokes(s.table, x.kana, s.ext));
-    if (r.includes(null)) { untypable++; continue; }
+    const a = series.map((s) => analyze(s, x.kana));
+    if (a.includes(null)) { untypable++; continue; }
+    const r = a.map((v) => v.strokes);
     used++;
     kana += x.kana.length;
     chars += [...x.typed].length;
-    r.forEach((n, i) => { strokes[i] += n; });
+    a.forEach((v, i) => { strokes[i] += v.strokes; same[i] += v.sameFinger; sameKey[i] += v.sameKey; });
     if (diff) {
       const d = r[ib] - r[ia];
       if (d < 0) { diff.fewer++; diff.fewerStrokes -= d; }
@@ -129,10 +163,15 @@ export function measure(series, items, cmp) {
   const base = strokes[0];
   return {
     used, untypable, kana, chars,
-    series: series.map((s, i) => ({
-      name: s.name, table: s.path, ext: s.ext, strokes: strokes[i],
-      efficiency: round(chars / strokes[i], 4), perKana: round(strokes[i] / kana, 4), ratio: round(strokes[i] / base, 4),
-    })),
+    series: series.map((s, i) => {
+      const dup = series.find((o) => o.path === s.path && o.ext === s.ext);
+      return {
+        name: s.name, table: s.path, ext: s.ext, keyboard: s.keyboard, strokes: strokes[i],
+        efficiency: round(chars / strokes[i], 4), perKana: round(strokes[i] / kana, 4), ratio: round(strokes[i] / base, 4),
+        sameFinger: same[i], sameKey: sameKey[i], sameFingerRate: round(same[i] / strokes[i], 4),
+        ...(dup !== s ? { sameTableAs: dup.name } : {}),
+      };
+    }),
     ...(diff ? { diff } : {}),
   };
 }
@@ -156,7 +195,12 @@ export function total(corpora) {
   const chars = sum((c) => c.chars);
   const series = corpora[0].series.map((s, i) => {
     const strokes = sum((c) => c.series[i].strokes);
-    return { name: s.name, strokes, efficiency: round(chars / strokes, 4) };
+    const sameFinger = sum((c) => c.series[i].sameFinger), sameKey = sum((c) => c.series[i].sameKey);
+    return {
+      name: s.name, strokes, efficiency: round(chars / strokes, 4),
+      sameFinger, sameKey, sameFingerRate: round(sameFinger / strokes, 4),
+      ...(s.sameTableAs ? { sameTableAs: s.sameTableAs } : {}),
+    };
   });
   const out = { used: sum((c) => c.used), chars, series };
   if (corpora.every((c) => c.diff)) {
@@ -210,25 +254,37 @@ export function parseKnp(src) {
 // ダウンロード先（.cache/corpus/）。取得済みなら使い回す
 const cacheDir = `${root}.cache/corpus`;
 
+// 使ったファイルの URL と SHA-256（コーパスごとに JSON の files に書く）
+const usedFiles = [];
+
+// 取得済みのファイルは使い回す。URL（固定したコミット）が変わったら取り直す。取得元の URL は <ファイル>.url に書いておく
 async function download(url, name = url.split("/").at(-1)) {
   const path = `${cacheDir}/${name}`;
-  if (await Bun.file(path).exists()) return path;
-  console.error(`ダウンロード: ${url}`);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: ${res.status}`);
-  await Bun.write(path, res);
+  const urlFile = Bun.file(`${path}.url`);
+  if (!(await Bun.file(path).exists()) || !(await urlFile.exists()) || (await urlFile.text()) !== url) {
+    console.error(`ダウンロード: ${url}`);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url}: ${res.status}`);
+    await Bun.write(path, res);
+    await Bun.write(urlFile, url);
+  }
+  const sha256 = new Bun.CryptoHasher("sha256").update(await Bun.file(path).arrayBuffer()).digest("hex");
+  usedFiles.push({ url, sha256 });
   return path;
 }
 
 // tar.gz を .cache/corpus/<name>/ に展開して、そのディレクトリを返す
+// 展開済みの印 .done には、展開した tar.gz の SHA-256 を書く
 async function extract(url, name) {
   const dir = `${cacheDir}/${name}`;
-  if (await Bun.file(`${dir}/.done`).exists()) return dir;
   const path = await download(url, `${name}.tar.gz`);
+  const done = Bun.file(`${dir}/.done`);
+  if ((await done.exists()) && (await done.text()) === usedFiles.at(-1).sha256) return dir;
+  Bun.spawnSync(["rm", "-rf", dir]);
   Bun.spawnSync(["mkdir", "-p", dir]);
   const r = Bun.spawnSync(["tar", "xzf", path, "-C", dir]);
   if (r.exitCode !== 0) throw new Error(`展開できない: ${path}\n${r.stderr}`);
-  await Bun.write(`${dir}/.done`, "");
+  await Bun.write(`${dir}/.done`, usedFiles.at(-1).sha256);
   return dir;
 }
 
@@ -265,9 +321,9 @@ export function corpusContext() {
 const width = (s) => [...s].reduce((n, c) => n + (c.charCodeAt(0) > 0xff ? 2 : 1), 0);
 
 function toCsv(result) {
-  const rows = [["corpus", "series", "table", "ext", "strokes", "chars", "kana", "efficiency", "per_kana", "ratio_vs_qwerty"]];
+  const rows = [["corpus", "series", "table", "ext", "keyboard", "strokes", "chars", "kana", "efficiency", "per_kana", "ratio_vs_qwerty", "same_finger", "same_key", "same_finger_rate"]];
   for (const c of result.corpora) {
-    for (const s of c.series) rows.push([c.name, s.name, s.table, s.ext, s.strokes, c.chars, c.kana, s.efficiency, s.perKana, s.ratio]);
+    for (const s of c.series) rows.push([c.name, s.name, s.table, s.ext, s.keyboard, s.strokes, c.chars, c.kana, s.efficiency, s.perKana, s.ratio, s.sameFinger, s.sameKey, s.sameFingerRate]);
   }
   return rows.map((r) => r.map((v) => (/[",]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v)).join(",")).join("\n") + "\n";
 }
@@ -288,16 +344,18 @@ if (import.meta.main) {
   const corpora = [];
   for (const [name, c] of Object.entries(CORPORA)) {
     if (only && !only.includes(name)) continue;
+    usedFiles.length = 0;
     const all = await c.load(ctx);
+    const files = [...usedFiles];
     const items = all.filter((x) => x.kana);
     const r = measure(series, items, COMPARE);
     const noReading = all.length - items.length;
-    corpora.push({ name, source: c.source, license: c.license, sentences: all.length, noReading, ...r });
+    corpora.push({ name, source: c.source, license: c.license, files, sentences: all.length, noReading, ...r });
 
     console.log(`\n### ${name}: ${all.length} 文（計測 ${r.used}、読めない語あり ${noReading}、打てない文字あり ${r.untypable}）、かな ${r.kana} 字`);
     const w = Math.max(...series.map((s) => width(s.name))) + 2;
     for (const s of r.series) {
-      console.log(`${s.name + " ".repeat(w - width(s.name))} ${String(s.strokes).padStart(8)} 打  打鍵効率 ${s.efficiency.toFixed(4)}  ${s.perKana.toFixed(3)} 打/かな  ${series[0].name}比 ${(s.ratio * 100).toFixed(1)}%`);
+      console.log(`${s.name + " ".repeat(w - width(s.name))} ${String(s.strokes).padStart(8)} 打  打鍵効率 ${s.efficiency.toFixed(4)}  ${s.perKana.toFixed(3)} 打/かな  ${series[0].name}比 ${(s.ratio * 100).toFixed(1)}%  同指 ${(s.sameFingerRate * 100).toFixed(2)}%（うち連打 ${(s.sameKey / s.strokes * 100).toFixed(2)}%）`);
     }
     if (r.diff) console.log(`${r.diff.b} と ${r.diff.a} で打鍵数が違う文: ${r.diff.b} が少ない ${r.diff.fewer} 文（${r.diff.fewerStrokes} 打）、多い ${r.diff.more} 文（${r.diff.moreStrokes} 打）`);
     if (diffPair) {

@@ -10,9 +10,11 @@
     "test": "bun test",
     "test:watch": "bun test --watch",
     "serve": "bun tools/serve.js",
-    "build": "bun tools/build-tables.js"
+    "build": "bun tools/build-tables.js",
+    "keystrokes": "bun tools/keystrokes.js"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.16"
+    "@types/bun": "^1.2.16",
+    "kuromoji": "0.1.2"
   }
 }

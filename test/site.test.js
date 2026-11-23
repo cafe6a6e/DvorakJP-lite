@@ -88,6 +88,16 @@ describe("共有用の表示（OGP）とアイコン", () => {
   });
 });
 
+test("トップページの構造化データ（JSON-LD）が説明文・正規 URL・VERSION と一致する", () => {
+  const html = pages[0].html;
+  const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  expect(ld["@type"]).toBe("SoftwareApplication");
+  expect(ld.description).toBe(html.match(/<meta name="description" content="([^"]+)">/)[1]);
+  expect(ld.url).toBe(BASE);
+  expect(ld.softwareVersion).toBe(VERSION);
+  expect(ld.downloadUrl).toBe(BASE + "install/");
+});
+
 test("サイトマップの URL が 4 つのページと一致する", async () => {
   const xml = await readText(join(docs, "sitemap.xml"));
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);

@@ -21,6 +21,20 @@
 
 DvorakJP lite 本体は今後バージョンアップすることがあります。バージョン番号は `docs/keymap.js` の `VERSION` にあり、公式ページの導入方法の「短縮拡張」のボタンにも書いています。
 
+## 打鍵効率比較
+
+打鍵効率は、日本語文の文字数 ÷ ローマ字テーブルで最短で打つときの打鍵数です。値が大きいほど、少ない打鍵数で日本語を入力できることを示します。JSUT・ITA コーパス・Tatoeba・livedoor ニュースコーパス・京都大学 Wikipedia 注釈コーパスの合計で計測しました（グラフとコーパス別の値は[公式ページ](https://cafe6a6e.github.io/DvorakJP-lite/#efficiency)、計測方法は `tools/keystrokes.js`）。
+
+<!-- keystroke-chart:start（tools/keystroke-chart.js が生成） -->
+| ローマ字テーブル | 打鍵効率 |
+|---|--:|
+| QWERTY | 0.4727 |
+| DvorakJP | 0.5091 |
+| DvorakJP lite | 0.5093 |
+| AZIK | 0.5388 |
+| DvorakJP lite ＋ 短縮拡張（Experimental） | 0.5418 |
+<!-- keystroke-chart:end -->
+
 ## 設計思想
 
 ### 1. 「ん」の後でも最小の打鍵数で打てるようにする
@@ -238,6 +252,8 @@ QWERTY 版の表は、Dvorak 版から `bun run build` で作ります（「Dvor
 | `docs/index.html` ほか | 公式ページ（GitHub Pages）。`index.html`（DvorakJP lite とは）、`install/`（導入方法）、`playground/`（練習）、`dvorakjp/`（DvorakJP の解説）の 4 ページ。ヘッダーとフッターは 4 つの HTML に同じものを書いている（`test/site.test.js` で確認） |
 | `docs/analytics.js` | Google Analytics のイベント送信（`download_romantable`・`playground_start`・`playground_complete`）。本番サイトで自分のアクセスを計測しないときは、そのブラウザで URL に `?ga=off` を付けて一度開く（`?ga=on` で戻す） |
 | `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため） |
+| `tools/keystrokes.js` | 打鍵効率の計測（`bun run keystrokes`）。コーパスを `.cache/corpus/` にダウンロードし、結果を `docs/data/keystrokes.json`・`.csv` に書く。最後に `tools/keystroke-chart.js` で、公式ページのグラフとこの README の表を作り直す |
+| `test/fixtures/` | 比較用のローマ字テーブル（`qwerty-base.txt` 標準ローマ字、`dvorakjp-original.txt` 元祖 DvorakJP、`azik.txt` AZIK） |
 
 QWERTY 用のテーブルについては [QWERTY 版](#qwerty-版) を見てください。この README の打ち方は、特に書いていない限り Dvorak 配列の文字で書いています。
 

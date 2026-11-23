@@ -1,0 +1,374 @@
+{
+  "generated": "2026-11-23",
+  "corpora": [
+    {
+      "name": "JSUT",
+      "source": "https://github.com/sarulab-speech/jsut-label",
+      "license": "CC BY-SA 4.0",
+      "sentences": 5000,
+      "noReading": 92,
+      "used": 4907,
+      "untypable": 1,
+      "kana": 183486,
+      "chars": 143388,
+      "series": [
+        {
+          "name": "QWERTY",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "strokes": 312029,
+          "efficiency": 0.4595,
+          "perKana": 1.7006,
+          "ratio": 1
+        },
+        {
+          "name": "AZIK",
+          "table": "test/fixtures/azik.txt",
+          "ext": true,
+          "strokes": 273503,
+          "efficiency": 0.5243,
+          "perKana": 1.4906,
+          "ratio": 0.8765
+        },
+        {
+          "name": "DvorakJP",
+          "table": "test/fixtures/dvorakjp-original.txt",
+          "ext": true,
+          "strokes": 288649,
+          "efficiency": 0.4968,
+          "perKana": 1.5731,
+          "ratio": 0.9251
+        },
+        {
+          "name": "DvorakJP lite",
+          "table": "docs/romantable_dvorakjplite.txt",
+          "ext": true,
+          "strokes": 288578,
+          "efficiency": 0.4969,
+          "perKana": 1.5728,
+          "ratio": 0.9248
+        },
+        {
+          "name": "DvorakJP lite ＋ 短縮拡張",
+          "table": "docs/romantable_dvorakjplite_abbr.txt",
+          "ext": true,
+          "strokes": 271059,
+          "efficiency": 0.529,
+          "perKana": 1.4773,
+          "ratio": 0.8687
+        }
+      ],
+      "diff": {
+        "a": "DvorakJP",
+        "b": "DvorakJP lite",
+        "fewer": 71,
+        "fewerStrokes": 72,
+        "more": 1,
+        "moreStrokes": 1
+      }
+    },
+    {
+      "name": "ITA",
+      "source": "https://github.com/mmorise/ita-corpus",
+      "license": "CC0",
+      "sentences": 424,
+      "noReading": 12,
+      "used": 412,
+      "untypable": 0,
+      "kana": 11067,
+      "chars": 9001,
+      "series": [
+        {
+          "name": "QWERTY",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "strokes": 18493,
+          "efficiency": 0.4867,
+          "perKana": 1.671,
+          "ratio": 1
+        },
+        {
+          "name": "AZIK",
+          "table": "test/fixtures/azik.txt",
+          "ext": true,
+          "strokes": 16331,
+          "efficiency": 0.5512,
+          "perKana": 1.4756,
+          "ratio": 0.8831
+        },
+        {
+          "name": "DvorakJP",
+          "table": "test/fixtures/dvorakjp-original.txt",
+          "ext": true,
+          "strokes": 17232,
+          "efficiency": 0.5223,
+          "perKana": 1.5571,
+          "ratio": 0.9318
+        },
+        {
+          "name": "DvorakJP lite",
+          "table": "docs/romantable_dvorakjplite.txt",
+          "ext": true,
+          "strokes": 17227,
+          "efficiency": 0.5225,
+          "perKana": 1.5566,
+          "ratio": 0.9315
+        },
+        {
+          "name": "DvorakJP lite ＋ 短縮拡張",
+          "table": "docs/romantable_dvorakjplite_abbr.txt",
+          "ext": true,
+          "strokes": 16223,
+          "efficiency": 0.5548,
+          "perKana": 1.4659,
+          "ratio": 0.8773
+        }
+      ],
+      "diff": {
+        "a": "DvorakJP",
+        "b": "DvorakJP lite",
+        "fewer": 6,
+        "fewerStrokes": 8,
+        "more": 3,
+        "moreStrokes": 3
+      }
+    },
+    {
+      "name": "Tatoeba",
+      "source": "https://tatoeba.org/ja/downloads",
+      "license": "CC BY 2.0 FR",
+      "sentences": 249006,
+      "noReading": 4027,
+      "used": 244964,
+      "untypable": 15,
+      "kana": 5359277,
+      "chars": 4363979,
+      "series": [
+        {
+          "name": "QWERTY",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "strokes": 9247793,
+          "efficiency": 0.4719,
+          "perKana": 1.7256,
+          "ratio": 1
+        },
+        {
+          "name": "AZIK",
+          "table": "test/fixtures/azik.txt",
+          "ext": true,
+          "strokes": 8146716,
+          "efficiency": 0.5357,
+          "perKana": 1.5201,
+          "ratio": 0.8809
+        },
+        {
+          "name": "DvorakJP",
+          "table": "test/fixtures/dvorakjp-original.txt",
+          "ext": true,
+          "strokes": 8651950,
+          "efficiency": 0.5044,
+          "perKana": 1.6144,
+          "ratio": 0.9356
+        },
+        {
+          "name": "DvorakJP lite",
+          "table": "docs/romantable_dvorakjplite.txt",
+          "ext": true,
+          "strokes": 8650040,
+          "efficiency": 0.5045,
+          "perKana": 1.614,
+          "ratio": 0.9354
+        },
+        {
+          "name": "DvorakJP lite ＋ 短縮拡張",
+          "table": "docs/romantable_dvorakjplite_abbr.txt",
+          "ext": true,
+          "strokes": 8119558,
+          "efficiency": 0.5375,
+          "perKana": 1.515,
+          "ratio": 0.878
+        }
+      ],
+      "diff": {
+        "a": "DvorakJP",
+        "b": "DvorakJP lite",
+        "fewer": 1937,
+        "fewerStrokes": 1956,
+        "more": 41,
+        "moreStrokes": 46
+      }
+    },
+    {
+      "name": "livedoor",
+      "source": "https://www.rondhuit.com/download.html#ldcc",
+      "license": "CC BY-ND 2.1 JP",
+      "sentences": 212597,
+      "noReading": 99771,
+      "used": 112818,
+      "untypable": 8,
+      "kana": 4746782,
+      "chars": 3839331,
+      "series": [
+        {
+          "name": "QWERTY",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "strokes": 8049536,
+          "efficiency": 0.477,
+          "perKana": 1.6958,
+          "ratio": 1
+        },
+        {
+          "name": "AZIK",
+          "table": "test/fixtures/azik.txt",
+          "ext": true,
+          "strokes": 7044418,
+          "efficiency": 0.545,
+          "perKana": 1.484,
+          "ratio": 0.8751
+        },
+        {
+          "name": "DvorakJP",
+          "table": "test/fixtures/dvorakjp-original.txt",
+          "ext": true,
+          "strokes": 7432151,
+          "efficiency": 0.5166,
+          "perKana": 1.5657,
+          "ratio": 0.9233
+        },
+        {
+          "name": "DvorakJP lite",
+          "table": "docs/romantable_dvorakjplite.txt",
+          "ext": true,
+          "strokes": 7430729,
+          "efficiency": 0.5167,
+          "perKana": 1.5654,
+          "ratio": 0.9231
+        },
+        {
+          "name": "DvorakJP lite ＋ 短縮拡張",
+          "table": "docs/romantable_dvorakjplite_abbr.txt",
+          "ext": true,
+          "strokes": 6990561,
+          "efficiency": 0.5492,
+          "perKana": 1.4727,
+          "ratio": 0.8684
+        }
+      ],
+      "diff": {
+        "a": "DvorakJP",
+        "b": "DvorakJP lite",
+        "fewer": 1604,
+        "fewerStrokes": 1645,
+        "more": 201,
+        "moreStrokes": 223
+      }
+    },
+    {
+      "name": "Wikipedia",
+      "source": "https://github.com/ku-nlp/WikipediaAnnotatedCorpus",
+      "license": "CC BY-SA 4.0",
+      "sentences": 15902,
+      "noReading": 2990,
+      "used": 12912,
+      "untypable": 0,
+      "kana": 439504,
+      "chars": 319556,
+      "series": [
+        {
+          "name": "QWERTY",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "strokes": 724739,
+          "efficiency": 0.4409,
+          "perKana": 1.649,
+          "ratio": 1
+        },
+        {
+          "name": "AZIK",
+          "table": "test/fixtures/azik.txt",
+          "ext": true,
+          "strokes": 618745,
+          "efficiency": 0.5165,
+          "perKana": 1.4078,
+          "ratio": 0.8537
+        },
+        {
+          "name": "DvorakJP",
+          "table": "test/fixtures/dvorakjp-original.txt",
+          "ext": true,
+          "strokes": 648935,
+          "efficiency": 0.4924,
+          "perKana": 1.4765,
+          "ratio": 0.8954
+        },
+        {
+          "name": "DvorakJP lite",
+          "table": "docs/romantable_dvorakjplite.txt",
+          "ext": true,
+          "strokes": 648767,
+          "efficiency": 0.4926,
+          "perKana": 1.4761,
+          "ratio": 0.8952
+        },
+        {
+          "name": "DvorakJP lite ＋ 短縮拡張",
+          "table": "docs/romantable_dvorakjplite_abbr.txt",
+          "ext": true,
+          "strokes": 613946,
+          "efficiency": 0.5205,
+          "perKana": 1.3969,
+          "ratio": 0.8471
+        }
+      ],
+      "diff": {
+        "a": "DvorakJP",
+        "b": "DvorakJP lite",
+        "fewer": 177,
+        "fewerStrokes": 196,
+        "more": 24,
+        "moreStrokes": 28
+      }
+    }
+  ],
+  "total": {
+    "used": 376013,
+    "chars": 8675255,
+    "series": [
+      {
+        "name": "QWERTY",
+        "strokes": 18352590,
+        "efficiency": 0.4727
+      },
+      {
+        "name": "AZIK",
+        "strokes": 16099713,
+        "efficiency": 0.5388
+      },
+      {
+        "name": "DvorakJP",
+        "strokes": 17038917,
+        "efficiency": 0.5091
+      },
+      {
+        "name": "DvorakJP lite",
+        "strokes": 17035341,
+        "efficiency": 0.5093
+      },
+      {
+        "name": "DvorakJP lite ＋ 短縮拡張",
+        "strokes": 16011347,
+        "efficiency": 0.5418
+      }
+    ],
+    "diff": {
+      "a": "DvorakJP",
+      "b": "DvorakJP lite",
+      "fewer": 3795,
+      "fewerStrokes": 3877,
+      "more": 270,
+      "moreStrokes": 301
+    }
+  }
+}

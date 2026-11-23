@@ -346,3 +346,23 @@ ol li { margin-bottom: 6px; }
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
+
+/* 打鍵効率比較のグラフ（tools/keystroke-chart.js が生成） */
+.kc-figure { margin: 16px auto; max-width: 640px; }
+.kc-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.kc-chart text { fill: var(--fg); font-size: 13px; }
+.kc-chart .kc-tick { fill: var(--muted); font-size: 12px; }
+.kc-chart .kc-sub { fill: var(--muted); font-size: 13px; }
+.kc-chart .kc-value { font-size: 14px; font-variant-numeric: tabular-nums; }
+.kc-chart .kc-strong { font-weight: 700; }
+.kc-chart .kc-bar:hover path { opacity: .8; }
+.kc-details summary { cursor: pointer; }
+.kc-table td { text-align: right; font-variant-numeric: tabular-nums; }
+.kc-table th, .kc-table td { white-space: nowrap; }
+.kc-formula { margin: 12px 0; padding: 4px 0; overflow-x: auto; overflow-y: hidden; }
+.kc-formula math { font-family: inherit; font-size: 15px; }
+.kc-formula mtext { font-family: inherit; }
+.kc-table { font-size: 14px; }
+.kc-table th, .kc-table td { padding: 6px 8px; }
+.kc-table thead th { vertical-align: bottom; }
+.kc-table thead th:not(:first-child) { text-align: right; }

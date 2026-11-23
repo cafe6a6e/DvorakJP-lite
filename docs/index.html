@@ -65,14 +65,100 @@
     <h1>DvorakJP lite とは？</h1>
     <p class="note">DvorakJP をご存じない方は、まずは<a href="dvorakjp/">DvorakJP の解説</a>をご一読ください。</p>
     <p>DvorakJP lite は、DvorakJP の効率的な拡張ローマ字入力の仕組みを維持しつつ、普通のローマ字入力を妨げないように見直した、いわば<strong>軽量版 DvorakJP</strong> です。打鍵数の削減につながらない拡張は削ぎ落としました。一般的なローマ字入力の打ち方に干渉せず、ご自身のペースで拡張ローマ字を徐々に取り入れられることを目指しています。</p>
-    <p>導入は、ローマ字テーブルを差し替えるのが中心です。キー配列が Dvorak の方はもちろん、QWERTY の方にも気軽にお試しいただけるよう、Dvorak 版と QWERTY 版（JIS・US）のテーブルを別々に配布しています。</p>
-    <p>また実験的に <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> の拡張ルールを、競合しないものに限り採用し、さらに打鍵数を削減可能とします（<a href="install/">導入方法</a>で短縮拡張を「有」にした場合）。</p>
+    <p><a href="install/">ローマ字テーブルの差替え</a>だけで導入でき、Dvorak 配列の方はもちろん、QWERTY 配列の方でも気軽に試せます。</p>
 
     <figure>
       <img src="images/layout.webp" width="1200" height="455"
            alt="Dvorak 配列のキー配置図。左手に母音と拡張キー、右手に子音が並ぶ。">
-      <figcaption>左手に母音と拡張キー、右手に子音。赤い拡張キーを使うと、二重母音や「ん」をまとめて入力できます。</figcaption>
+      <figcaption>DvorakJP lite 配列図。左手の赤い拡張キーを使うと、二重母音や「ん」をまとめて入力できます。</figcaption>
     </figure>
+
+    <h2 id="efficiency">打鍵効率比較</h2>
+    <p><b>打鍵効率</b>を以下で定義します。値が大きいほど、少ない打鍵数で日本語を入力できることを示します。</p>
+    <p class="kc-formula">
+      <math display="block">
+        <mrow>
+          <mtext>打鍵効率</mtext><mo>=</mo>
+          <mfrac>
+            <mtext>日本語文の文字数</mtext>
+            <mtext>ローマ字テーブルで最短で打つときの打鍵数</mtext>
+          </mfrac>
+        </mrow>
+      </math>
+    </p>
+    <!-- keystroke-chart:start（tools/keystroke-chart.js が生成） -->
+<figure class="kc-figure">
+<svg class="kc-chart" viewBox="0 0 640 350" role="img" aria-labelledby="kc-title kc-desc">
+<title id="kc-title">配列ごとの打鍵効率</title>
+<desc id="kc-desc">QWERTY 0.4727、DvorakJP 0.5091、DvorakJP lite 0.5093、AZIK 0.5388、DvorakJP lite ＋ 短縮拡張 0.5418</desc>
+<defs><pattern id="kc-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f6c3ca"/><line x1="0" y1="0" x2="0" y2="6" stroke="#d7263d" stroke-width="2.5"/></pattern></defs>
+<line x1="48" x2="624" y1="300.0" y2="300.0" stroke="var(--fg)" stroke-width="1"/>
+<text x="40" y="300.0" dy="0.35em" text-anchor="end" class="kc-tick">0.0</text>
+<line x1="48" x2="624" y1="254.7" y2="254.7" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="254.7" dy="0.35em" text-anchor="end" class="kc-tick">0.1</text>
+<line x1="48" x2="624" y1="209.3" y2="209.3" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="209.3" dy="0.35em" text-anchor="end" class="kc-tick">0.2</text>
+<line x1="48" x2="624" y1="164.0" y2="164.0" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="164.0" dy="0.35em" text-anchor="end" class="kc-tick">0.3</text>
+<line x1="48" x2="624" y1="118.7" y2="118.7" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="118.7" dy="0.35em" text-anchor="end" class="kc-tick">0.4</text>
+<line x1="48" x2="624" y1="73.3" y2="73.3" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="73.3" dy="0.35em" text-anchor="end" class="kc-tick">0.5</text>
+<line x1="48" x2="624" y1="28.0" y2="28.0" stroke="var(--line)" stroke-width="1"/>
+<text x="40" y="28.0" dy="0.35em" text-anchor="end" class="kc-tick">0.6</text>
+<text x="8" y="16" class="kc-tick">打鍵効率（文字/打）</text>
+<g class="kc-bar"><title>QWERTY: 打鍵効率 0.4727（18,352,590 打）</title>
+<rect x="50.0" y="28" width="111.2" height="272" fill="transparent"/>
+<path d="M69.6,300V89.70933333333332Q69.6,85.70933333333332 73.6,85.70933333333332H137.6Q141.6,85.70933333333332 141.6,89.70933333333332V300Z" fill="#c9c9c9"/>
+<text x="105.6" y="77.70933333333332" text-anchor="middle" class="kc-value">0.4727</text>
+<text x="105.6" y="320" text-anchor="middle" class="kc-label">QWERTY</text>
+</g>
+<g class="kc-bar"><title>DvorakJP: 打鍵効率 0.5091（17,038,917 打）</title>
+<rect x="165.2" y="28" width="111.2" height="272" fill="transparent"/>
+<path d="M184.8,300V73.208Q184.8,69.208 188.8,69.208H252.8Q256.8,69.208 256.8,73.208V300Z" fill="#8c8c8c"/>
+<text x="220.8" y="61.208" text-anchor="middle" class="kc-value">0.5091</text>
+<text x="220.8" y="320" text-anchor="middle" class="kc-label">DvorakJP</text>
+</g>
+<g class="kc-bar"><title>DvorakJP lite: 打鍵効率 0.5093（17,035,341 打）</title>
+<rect x="280.4" y="28" width="111.2" height="272" fill="transparent"/>
+<path d="M300,300V73.11733333333333Q300,69.11733333333333 304,69.11733333333333H368Q372,69.11733333333333 372,73.11733333333333V300Z" fill="#d7263d"/>
+<text x="336" y="61.117333333333335" text-anchor="middle" class="kc-value kc-strong">0.5093</text>
+<text x="336" y="320" text-anchor="middle" class="kc-label kc-strong">DvorakJP lite</text>
+</g>
+<g class="kc-bar"><title>AZIK: 打鍵効率 0.5388（16,099,713 打）</title>
+<rect x="395.6" y="28" width="111.2" height="272" fill="transparent"/>
+<path d="M415.2,300V59.74400000000003Q415.2,55.74400000000003 419.2,55.74400000000003H483.2Q487.2,55.74400000000003 487.2,59.74400000000003V300Z" fill="#ababab"/>
+<text x="451.2" y="47.74400000000003" text-anchor="middle" class="kc-value">0.5388</text>
+<text x="451.2" y="320" text-anchor="middle" class="kc-label">AZIK</text>
+</g>
+<g class="kc-bar"><title>DvorakJP lite ＋ 短縮拡張: 打鍵効率 0.5418（16,011,347 打）</title>
+<rect x="510.8" y="28" width="111.2" height="272" fill="transparent"/>
+<path d="M530.4,300V58.384000000000015Q530.4,54.384000000000015 534.4,54.384000000000015H598.4Q602.4,54.384000000000015 602.4,58.384000000000015V300Z" fill="url(#kc-hatch)" stroke="#d7263d" stroke-width="1.5"/>
+<text x="566.4" y="46.384000000000015" text-anchor="middle" class="kc-value">0.5418</text>
+<text x="566.4" y="320" text-anchor="middle" class="kc-label">DvorakJP lite</text>
+<text x="558.4" y="338" text-anchor="middle" class="kc-label">＋ 短縮拡張</text>
+<svg x="598.4" y="326" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d7263d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+</g>
+</svg>
+</figure>
+<details class="kc-details">
+<summary>コーパス別の打鍵効率</summary>
+<div class="table-wrap">
+<table class="kc-table">
+<thead><tr><th>コーパス</th><th>文</th><th>QWERTY</th><th>DvorakJP</th><th>DvorakJP lite</th><th>AZIK</th><th>DvorakJP lite<br>＋ 短縮拡張 <svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></th></tr></thead>
+<tbody>
+<tr><th><a href="https://github.com/sarulab-speech/jsut-label">JSUT</a></th><td>4,907</td><td>0.4595</td><td>0.4968</td><td>0.4969</td><td>0.5243</td><td>0.5290</td></tr>
+<tr><th><a href="https://github.com/mmorise/ita-corpus">ITA</a></th><td>412</td><td>0.4867</td><td>0.5223</td><td>0.5225</td><td>0.5512</td><td>0.5548</td></tr>
+<tr><th><a href="https://tatoeba.org/ja/downloads">Tatoeba</a></th><td>244,964</td><td>0.4719</td><td>0.5044</td><td>0.5045</td><td>0.5357</td><td>0.5375</td></tr>
+<tr><th><a href="https://www.rondhuit.com/download.html#ldcc">livedoor</a></th><td>112,818</td><td>0.4770</td><td>0.5166</td><td>0.5167</td><td>0.5450</td><td>0.5492</td></tr>
+<tr><th><a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">Wikipedia</a></th><td>12,912</td><td>0.4409</td><td>0.4924</td><td>0.4926</td><td>0.5165</td><td>0.5205</td></tr>
+<tr><th>合計</th><td>376,013</td><td>0.4727</td><td>0.5091</td><td>0.5093</td><td>0.5388</td><td>0.5418</td></tr>
+</tbody>
+</table>
+</div>
+    <p class="note">日本語の文章（<a href="https://github.com/sarulab-speech/jsut-label">JSUT</a>（CC BY-SA 4.0）、<a href="https://github.com/mmorise/ita-corpus">ITA コーパス</a>（CC0）、<a href="https://tatoeba.org/ja/downloads">Tatoeba</a>（CC BY 2.0 FR）、<a href="https://www.rondhuit.com/download.html#ldcc">livedoor ニュースコーパス</a>（CC BY-ND 2.1 JP）、<a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">京都大学 Wikipedia 注釈コーパス</a>（CC BY-SA 4.0））で計測。英字・数字を含む文は除く。AZIK のローマ字テーブルは <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK総合解説書</a>の仕様による。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a></p>
+</details>
+    <!-- keystroke-chart:end -->
 
     <h2>設計思想</h2>
 
@@ -113,7 +199,7 @@
     <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
     <h3 id="abbreviations">4. <!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg> 競合しない範囲で AZIK・gACT10 の短縮入力を採用する</h3>
-    <p>実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用しています。</p>
+    <p>DvorakJP のローマ字テーブルを軽量化した分、新たなカスタマイズの余地ができました。そこで実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用し、さらに打鍵数を減らせるようにしています。</p>
     <p class="note">この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります。</p>
     <details class="fold">
       <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>

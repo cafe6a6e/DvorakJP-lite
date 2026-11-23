@@ -1,13 +1,13 @@
-// 公開コーパスで、ローマ字変換表ごとの最短打鍵数を比べる
-//   bun tools/keystrokes.js                      既定の4系列で計測する
+// 公開コーパスで、ローマ字変換表ごとの打鍵効率と同指連続打鍵率を比べる
+//   bun tools/keystrokes.js                      既定の系列（DEFAULT_SERIES）で計測する
 //   bun tools/keystrokes.js 名前=表のパス[:noext][@キーボード] ...   系列を指定する
-//     :noext は拡張キーを使わない。@qwerty（既定）・@dvorak・@onishi は、同指連続打鍵を数えるときのキーボード配列
+//     :noext は拡張キーを使わない。@qwerty（既定）・@dvorak・@onishi は、同じ指かを判定するキーボード配列
 //   bun tools/keystrokes.js --diff=DvorakJP,DvorakJP lite   2つの系列で打鍵数が違う文を書き出す
-// 打ち方は練習ページと同じ docs/romaji.js の plan() で求める。
 //   bun tools/keystrokes.js --corpus=JSUT,ITA   計測するコーパスを絞る
+// 打ち方は練習ページと同じ docs/romaji.js の plan() で求める。
 // コーパス（JSUT、ITA、Tatoeba、livedoor ニュース、京大 Wikipedia 注釈コーパス）は初回に .cache/corpus/ へダウンロードし、
 // 表記どおりの読み（助詞の「は」もそのまま）に変換する。Wikipedia は付属の読みを、ほかは kuromoji を使う。
-// 同指連続打鍵頻度（同じ指が続く回数 ÷ 打鍵数）も数える。打ち方は、最短の打ち方のうち同じ指の連続が最も少ないもの。
+// 同指連続打鍵率（直前と同じ指で打つ打鍵数 ÷ 打鍵数）の打ち方は、最短の打ち方のうち同じ指の連続が最も少ないもの。
 // 結果は docs/data/keystrokes.json と docs/data/keystrokes.csv に書く。
 // 再現できるように、GitHub のコーパスはコミットを固定して取得し、使ったファイルの SHA-256 を JSON の files に記録する
 // （Tatoeba は毎週更新される最新版しか配布されていないので、SHA-256 で同じデータかを確かめる）。
@@ -113,21 +113,17 @@ export async function loadSeries(spec) {
   return { ...s, table: parseTable(toHira(await Bun.file(root + s.path).text())) };
 }
 
-// かな列を打つ最短の打鍵数。打てなければ null
-export function countStrokes(t, kana, allowExt) {
-  const segs = plan(t, kana, allowExt);
-  return segs ? segs.reduce((n, s) => n + s.key.length, 0) : null;
-}
-
 // かな列を、最短の打鍵数で、そのうち同じ指の連続が最も少なく打つ。打てなければ null
 // 戻り値: { strokes, sameFinger, sameKey }（sameFinger は同じ指が続く回数で、同じキーの連打 sameKey を含む）
 export function analyze(s, kana) {
   const sf = (a, b) => (sameFinger(s.keyboard, a, b) ? 1 : 0);
-  // 打鍵数を優先し、同じ打鍵数なら同じ指の連続が少ない打ち方を選ぶ
+  // 打鍵数を優先し、同じ打鍵数なら同じ指の連続が少ない打ち方を選ぶ。
+  // 同じ指の連続は打鍵数より少ないので、1 打を STROKE にすれば、打鍵数が 1 打でも少ない打ち方が必ず選ばれる
+  const STROKE = 1e6;
   const cost = (key, ext, first) => {
     let n = first === null ? 0 : sf(key.at(-1), first);
     for (let i = 1; i < key.length; i++) n += sf(key[i - 1], key[i]);
-    return key.length * 1000 + n;
+    return key.length * STROKE + n;
   };
   const segs = plan(s.table, kana, s.ext, cost);
   if (!segs) return null;
@@ -138,7 +134,7 @@ export function analyze(s, kana) {
 // 文ごとに全系列で数える。items は { kana, typed }（typed は変換後の日本語のうち打つ部分）。
 // どれかの表で打てない文は全系列から除く。
 // efficiency（打鍵効率）は 変換後の日本語の文字数 ÷ 打鍵数。cmp に2つの系列名を渡すと、打鍵数が違う文の数も数える
-// sameFingerRate（同指連続打鍵頻度）は 同じ指が続く回数 ÷ 打鍵数。
+// sameFingerRate（同指連続打鍵率）は 同じ指が続く回数 ÷ 打鍵数。
 // 前の系列と同じ変換表（キーボードだけが違う）の系列には sameTableAs を付ける（打鍵数と打鍵効率は同じになる）
 export function measure(series, items, cmp) {
   const strokes = series.map(() => 0);
@@ -258,33 +254,38 @@ const cacheDir = `${root}.cache/corpus`;
 const usedFiles = [];
 
 // 取得済みのファイルは使い回す。URL（固定したコミット）が変わったら取り直す。取得元の URL は <ファイル>.url に書いておく
-async function download(url, name = url.split("/").at(-1)) {
+// 戻り値: { path, sha256 }
+async function fetchCached(url, name) {
   const path = `${cacheDir}/${name}`;
   const urlFile = Bun.file(`${path}.url`);
   if (!(await Bun.file(path).exists()) || !(await urlFile.exists()) || (await urlFile.text()) !== url) {
     console.error(`ダウンロード: ${url}`);
-    const res = await fetch(url);
+    // 通信が止まったまま待ち続けないように、5 分で打ち切る
+    const res = await fetch(url, { signal: AbortSignal.timeout(5 * 60 * 1000) });
     if (!res.ok) throw new Error(`${url}: ${res.status}`);
-    await Bun.write(path, res);
+    // Response をそのまま Bun.write に渡すと、止まったまま終わらないことがあったので、読み終えてから書く
+    await Bun.write(path, await res.arrayBuffer());
     await Bun.write(urlFile, url);
   }
   const sha256 = new Bun.CryptoHasher("sha256").update(await Bun.file(path).arrayBuffer()).digest("hex");
   usedFiles.push({ url, sha256 });
-  return path;
+  return { path, sha256 };
 }
+
+const download = async (url, name = url.split("/").at(-1)) => (await fetchCached(url, name)).path;
 
 // tar.gz を .cache/corpus/<name>/ に展開して、そのディレクトリを返す
 // 展開済みの印 .done には、展開した tar.gz の SHA-256 を書く
 async function extract(url, name) {
   const dir = `${cacheDir}/${name}`;
-  const path = await download(url, `${name}.tar.gz`);
+  const { path, sha256 } = await fetchCached(url, `${name}.tar.gz`);
   const done = Bun.file(`${dir}/.done`);
-  if ((await done.exists()) && (await done.text()) === usedFiles.at(-1).sha256) return dir;
+  if ((await done.exists()) && (await done.text()) === sha256) return dir;
   Bun.spawnSync(["rm", "-rf", dir]);
   Bun.spawnSync(["mkdir", "-p", dir]);
   const r = Bun.spawnSync(["tar", "xzf", path, "-C", dir]);
   if (r.exitCode !== 0) throw new Error(`展開できない: ${path}\n${r.stderr}`);
-  await Bun.write(`${dir}/.done`, usedFiles.at(-1).sha256);
+  await Bun.write(`${dir}/.done`, sha256);
   return dir;
 }
 
@@ -371,5 +372,5 @@ if (import.meta.main) {
   await Bun.write(root + "docs/data/keystrokes.json", JSON.stringify(result, null, 2) + "\n");
   await Bun.write(root + "docs/data/keystrokes.csv", toCsv(result));
   await writeChart(result);
-  console.log("\n書き出し: docs/data/keystrokes.json, docs/data/keystrokes.csv、docs/index.html のグラフ");
+  console.log("\n書き出し: docs/data/keystrokes.json、docs/data/keystrokes.csv、docs/index.html のグラフ、README.md の表");
 }

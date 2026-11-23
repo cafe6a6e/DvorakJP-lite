@@ -27,7 +27,8 @@ const fillOf = (st, prefix, light = false) =>
   st.hatch ? `url(#${prefix}-hatch${light ? "-light" : ""})` : (light ? st.light : st.fill) ?? "#8c8c8c";
 
 // 斜線の模様（濃い・淡い）。prefix はページ内で id が重ならないようにするため
-const hatchDefs = (prefix) => `<defs>${[["", "#f6c3ca", "#d7263d"], ["-light", "#fdecee", "#ee9aa5"]].map(([id, bg, fg]) =>
+// light を付けると、淡い模様（同指連続打鍵率のグラフの同指同キー）も入れる
+const hatchDefs = (prefix, light = false) => `<defs>${[["", "#f6c3ca", "#d7263d"], ...(light ? [["-light", "#fdecee", "#ee9aa5"]] : [])].map(([id, bg, fg]) =>
   `<pattern id="${prefix}-hatch${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${bg}"/><line x1="0" y1="0" x2="0" y2="6" stroke="${fg}" stroke-width="2.5"/></pattern>`).join("")}</defs>`;
 
 // 棒の下の系列名（「＋ 短縮拡張」は 2 行目にしてフラスコを付ける）
@@ -209,7 +210,7 @@ export function renderSameFingerSvg(total) {
   out.push(`<svg class="kc-chart kc-narrow" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="sf-title sf-desc">`);
   out.push(`<title id="sf-title">配列ごとの同指連続打鍵率</title>`);
   out.push(`<desc id="sf-desc">${esc(series.map((s) => { const p = parts(s); return `${s.name} ${pct(p.total)}%（同指異キー ${pct(p.other)}%、同指同キー ${pct(p.same)}%）`; }).join("、"))}</desc>`);
-  out.push(hatchDefs("sf"));
+  out.push(hatchDefs("sf", true));
 
   for (let v = 0; v <= max + 1e-9; v += 0.01) {
     const yy = y(v).toFixed(1);

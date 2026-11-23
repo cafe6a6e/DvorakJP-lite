@@ -1,8 +1,8 @@
 // 打鍵数比較スクリプト（tools/keystrokes.js）のテスト。コーパスのダウンロードはしない
 import { describe, expect, test } from "bun:test";
-import { parseTable, parseText } from "../docs/romaji.js";
+import { parseText, plan } from "../docs/romaji.js";
 import { countSameFinger, fingerOf } from "../tools/fingers.js";
-import { analyze, countStrokes, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
+import { analyze, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
 import { readText } from "./helpers.js";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -38,11 +38,11 @@ describe("打鍵数", () => {
     ["AZIK", "ゔぁいおりん", 5], // vq o rk。変換表の出力はカタカナの「ヴ」
   ])("%s で %s は %i 打", (name, kana, n) => {
     const s = byName[name];
-    expect(countStrokes(s.table, kana, s.ext)).toBe(n);
+    expect(analyze(s, kana).strokes).toBe(n);
   });
 
   test("打てないかなは null", () => {
-    expect(countStrokes(byName.QWERTY.table, "々", true)).toBeNull();
+    expect(analyze(byName.QWERTY, "々")).toBeNull();
   });
 });
 
@@ -54,6 +54,22 @@ describe("同じ指の連続", () => {
     expect(fingerOf("onishi", "a")).toBe(2); // 大西配列の a は QWERTY の d の位置
     expect(fingerOf("onishi", "/")).toBe(9);
     expect(fingerOf("qwerty", "あ")).toBeNull();
+  });
+
+  test("どの系列でも、変換表のキーの文字はすべてどれかの指で打てる", () => {
+    for (const s of series) {
+      const missing = [...new Set(s.table.entries.flatMap(([k]) => [...k]))].filter((c) => fingerOf(s.keyboard, c) === null);
+      expect([s.name, missing]).toEqual([s.name, []]);
+    }
+  });
+
+  test("同指連続を減らしても、打鍵数は最短のまま（plan() だけで求めた最短と同じ）", () => {
+    for (const s of series) {
+      for (const x of items) {
+        const min = plan(s.table, x.kana, s.ext).reduce((n, g) => n + g.key.length, 0);
+        expect(analyze(s, x.kana).strokes).toBe(min);
+      }
+    }
   });
 
   test("同じ指が続く回数は、同じキーの連打を含む", () => {

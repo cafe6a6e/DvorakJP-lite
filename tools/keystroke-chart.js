@@ -14,6 +14,7 @@ const SAME_FINGER = marks("same-finger-chart");
 const STYLE = {
   "QWERTY": { fill: "#c9c9c9", light: "#e8e8e8" },
   "大西配列": { fill: "#6e6e6e", light: "#bdbdbd" },
+  "Astarte": { fill: "#505050", light: "#a8a8a8" },
   "AZIK": { fill: "#ababab", light: "#dadada" },
   "DvorakJP": { fill: "#8c8c8c", light: "#c9c9c9" },
   "DvorakJP lite": { fill: "#d7263d", light: "#f2a9b2", strong: true },
@@ -21,7 +22,7 @@ const STYLE = {
   // 英語（キーボード配列）。DvorakJP lite を打つ Dvorak を強調色にする
   "Dvorak": { fill: "#d7263d", light: "#f2a9b2", strong: true },
 };
-// 打鍵効率での表示名。QWERTY の変換表は、QWERTY・Dvorak・大西配列のどのキーボードでも打鍵数が同じなので「通常ローマ字」と呼ぶ
+// 打鍵効率での表示名。QWERTY の変換表は、QWERTY・Dvorak・大西配列・Astarte のどのキーボードでも打鍵数が同じなので「通常ローマ字」と呼ぶ
 const EFFICIENCY_LABEL = { QWERTY: "通常ローマ字" };
 const effLabel = (n) => EFFICIENCY_LABEL[n] ?? n;
 
@@ -61,7 +62,7 @@ function bar(x, y, w, h, r = 4) {
 }
 
 // 合計の打鍵効率が低い順の系列名（グラフと表の並び）。
-// 前の系列と同じ変換表でキーボードだけが違う系列（大西配列）は、打鍵効率が同じなので載せない
+// 前の系列と同じ変換表でキーボードだけが違う系列（大西配列、Astarte）は、打鍵効率が同じなので載せない
 const order = (total) => total.series.filter((s) => !s.sameTableAs)
   .sort((a, b) => a.efficiency - b.efficiency).map((s) => s.name);
 const sorted = (series, names) => names.map((n) => series.find((s) => s.name === n));
@@ -135,7 +136,7 @@ const TITLES = {
 // 計測に使ったコーパスの出典とライセンス、計測方法
 export function renderSources(result) {
   const list = result.corpora.map((c) => `<a href="${c.source}">${esc(TITLES[c.name] ?? c.name)}</a>（${esc(c.license)}）`).join("、");
-  return `    <p class="note">日本語の文章（${list}）で計測。英字・数字を含む文は除く。通常ローマ字は Google 日本語入力の標準に近いローマ字テーブルで、打鍵効率は QWERTY・Dvorak・大西配列のどのキーボード配列でも同じ。AZIK のローマ字テーブルは <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK総合解説書</a>の仕様による。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a></p>`;
+  return `    <p class="note">日本語の文章（${list}）で計測。英字・数字を含む文は除く。通常ローマ字は Google 日本語入力の標準に近いローマ字テーブルで、打鍵効率は QWERTY・Dvorak・大西配列・Astarte のどのキーボード配列でも同じ。AZIK のローマ字テーブルは <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK総合解説書</a>の仕様による。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a></p>`;
 }
 
 // ページの印の間に入れる HTML
@@ -284,12 +285,12 @@ export function renderSameFingerTable(data) {
 }
 
 // 日本語と英語（参考）のグラフを横に並べる。棒の幅と目盛りは同じ。
-// 文字が小さくなりすぎないよう、元の幅の 7 割より狭くなる画面では縦に並ぶ
+// 文字が小さくなりすぎないよう、元の幅の 7 割より狭くなる画面では縦に並ぶ（スマホでは、はみ出さないよう画面の幅まで縮める）
 export function renderSameFingerSection(result) {
   const ja = result.total, en = result.english.total;
   const max = sfMax(ja, en);
   const figure = (caption, total, opts) =>
-    [`<figure class="kc-figure" style="flex-grow: ${sfWidth(total.series.length)}; min-width: ${Math.round(sfWidth(total.series.length) * 0.7)}px">`, `<figcaption>${caption}</figcaption>`, renderSameFingerSvg(total, { ...opts, max }), `</figure>`];
+    [`<figure class="kc-figure" style="flex-grow: ${sfWidth(total.series.length)}; min-width: min(${Math.round(sfWidth(total.series.length) * 0.7)}px, 100%)">`, `<figcaption>${caption}</figcaption>`, renderSameFingerSvg(total, { ...opts, max }), `</figure>`];
   return [
     `<div class="kc-figures">`,
     ...figure("日本語（ローマ字入力）", ja, { title: "配列ごとの同指連続打鍵率（日本語）" }),
@@ -303,7 +304,7 @@ export function renderSameFingerSection(result) {
     `<p class="kc-table-title">英語（参考）</p>`,
     renderSameFingerTable(result.english),
     englishNote(result.english),
-    `    <p class="note">日本語のコーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>`,
+    `    <p class="note">日本語のコーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、<a href="https://neinvalli.hatenablog.com/entry/2018/07/21/185448">Astarte</a> は Astarte 配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列と Astarte のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>`,
     `</details>`,
   ].join("\n");
 }

@@ -1,7 +1,7 @@
 // 公開コーパスで、ローマ字変換表ごとの打鍵効率と同指連続打鍵率を比べる
 //   bun tools/keystrokes.js                      既定の系列（DEFAULT_SERIES）で計測する
 //   bun tools/keystrokes.js 名前=表のパス[:noext][@キーボード] ...   系列を指定する
-//     :noext は拡張キーを使わない。@qwerty（既定）・@dvorak・@onishi は、同じ指かを判定するキーボード配列
+//     :noext は拡張キーを使わない。@qwerty（既定）・@dvorak・@onishi・@astarte は、同じ指かを判定するキーボード配列
 //   bun tools/keystrokes.js --diff=DvorakJP,DvorakJP lite   2つの系列で打鍵数が違う文を書き出す
 //   bun tools/keystrokes.js --corpus=JSUT,ITA   計測するコーパスを絞る
 // 打ち方は練習ページと同じ docs/romaji.js の plan() で求める。
@@ -25,6 +25,8 @@ export const DEFAULT_SERIES = [
   "QWERTY=test/fixtures/qwerty-base.txt",
   // 大西配列（https://o24.works/layout/）。ローマ字の規則は変えない入れ替え配列なので、ローマ字テーブルは QWERTY と同じ
   "大西配列=test/fixtures/qwerty-base.txt@onishi",
+  // Astarte 配列（https://neinvalli.hatenablog.com/entry/2018/07/21/185448）。大西配列と同じく、ローマ字テーブルは QWERTY と同じ
+  "Astarte=test/fixtures/qwerty-base.txt@astarte",
   // AZIK（QWERTY 用）。typepedia.jp の src/romantables/azik.txt（AZIK総合解説書の仕様から作成、Unlicense）をコピーしたもの
   "AZIK=test/fixtures/azik.txt",
   "DvorakJP=test/fixtures/dvorakjp-original.txt@dvorak",
@@ -99,6 +101,7 @@ export const ENGLISH_SERIES = [
   { name: "QWERTY", keyboard: "qwerty" },
   { name: "Dvorak", keyboard: "dvorak" },
   { name: "大西配列", keyboard: "onishi" },
+  { name: "Astarte", keyboard: "astarte" },
 ];
 
 // Leipzig Corpora Collection の文（「番号<TAB>文」の行）。ファイル名に年と文の数が入っていて、版が固定されている

@@ -95,9 +95,23 @@
 
     <h2>設計思想</h2>
 
-    <h3>1. 「ん」の後でも最小の打鍵数で打てるようにする</h3>
+    <h3>1. 通常ローマ字の最短打鍵法をそのまま使える</h3>
     <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行拡張」になります（<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）。また、<code>nh</code> は「にゃ行」の拗音です。そのため、母音の直後の「ん」に、これらのキーで始まる音が続くときは、<code>n</code> を 2 回打って「ん」を確定させる必要がありました。</p>
-    <p>DvorakJP lite では、な行拡張を <code>v</code> に移し、<code>n</code> の拗音拡張も使わないことで、この衝突を解消しました。そのため、DvorakJP では余計な打鍵が必要だった「ん」の後の入力も、通常のローマ字入力と同じ打鍵数で入力できます。</p>
+    <p>DvorakJP lite では、拡張ルールを次の方針で見直しています。</p>
+    <ul class="points">
+      <li><strong>方針 1｜打鍵数を減らす拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
+        <ul>
+          <li>な行拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
+          <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで、<code>h</code> を使う拗音拡張のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は普通のローマ字では使わない組み合わせなので、衝突しない</li>
+        </ul>
+      </li>
+      <li><strong>方針 2｜打鍵数を減らさない拡張は、原則として採用しない。</strong>
+        <ul>
+          <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張（<a href="dvorakjp/#design">DvorakJP の解説</a>）は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）。DvorakJP lite では、打鍵数に寄与しないルールは廃し、拡張ルールをシンプルに保つことを優先した。主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
+        </ul>
+      </li>
+    </ul>
+    <p>その結果、「ん」の後も通常のローマ字入力と同じ打鍵数で入力できます。</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>単語</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
@@ -109,136 +123,120 @@
         </tbody>
       </table>
     </div>
-    <p>そのうえで、拡張ルールを次の方針で見直しています。</p>
-    <ul class="points">
-      <li><strong>打鍵数を減らす拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
-        <ul>
-          <li>な行拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
-          <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで、<code>h</code> を使う拗音拡張のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は普通のローマ字では使わない組み合わせなので、衝突しない</li>
-        </ul>
-      </li>
-      <li><strong>打鍵数を減らさない拡張は、原則として採用しない。</strong>
-        <ul>
-          <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）が、拗音の子音と <code>h</code>・<code>n</code> を右手で続けて打てる（アルペジオ打鍵）という DvorakJP の工夫である。DvorakJP lite では、この利点よりも、普通のローマ字との互換性と覚えるルールの少なさを優先し、主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
-        </ul>
-      </li>
-    </ul>
 
-    <h3>2. QWERTY で身に付けたローマ字入力の規則をそのまま使える</h3>
-    <p>拡張ルールを普通のローマ字で使わない組み合わせに限ったので、DvorakJP の拡張と共存しながら、かなを打つ一般的なローマ字のつづりはすべてそのまま使えます（<code>z.</code> … などの一部の記号入力は、拡張入力に使うため除きます）。</p>
-    <p>たとえば、「ん」を <code>n</code> 1 回で入力する（<code>kanji</code> → 漢字）といった、QWERTY で身に付けたローマ字入力の規則を覚え直す必要はありません。拡張入力を覚えなくても今までどおり入力でき、必要に応じて少しずつ拡張入力を取り入れられます。</p>
-
-    <h3>3. 記号キーの自由度を担保する</h3>
+    <h3>2. 記号キーの自由度を担保する</h3>
     <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
-    <h3 id="abbreviations">4. <!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg> 競合しない範囲で AZIK・gACT10 の短縮入力を採用する</h3>
-    <p>DvorakJP のローマ字テーブルを軽量化した分、新たなカスタマイズの余地ができました。そこで実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用し、さらに打鍵数を減らせるようにしています。</p>
-    <p class="note">この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります。</p>
-    <details class="fold">
-      <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>
-      <div class="abbr-tables">
-        <div class="abbr-group">
-          <p class="abbr-label">AZIK 由来</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>kt</code> <code>ct</code></td><td>こと</td></tr>
-                <tr><td><code>st</code></td><td>した</td></tr>
-                <tr><td><code>sr</code></td><td>する</td></tr>
-                <tr><td><code>kr</code> <code>cr</code></td><td>から</td></tr>
-                <tr><td><code>mn</code></td><td>もの</td></tr>
-                <tr><td><code>ms</code></td><td>ます</td></tr>
-                <tr><td><code>tm</code></td><td>ため</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>ds</code></td><td>です</td></tr>
-                <tr><td><code>ht</code></td><td>ひと</td></tr>
-                <tr><td><code>wt</code></td><td>わた</td></tr>
-                <tr><td><code>wr</code></td><td>われ</td></tr>
-                <tr><td><code>tr</code></td><td>たら</td></tr>
-                <tr><td><code>dm</code></td><td>でも</td></tr>
-                <tr><td><code>mt</code></td><td>また</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>gt</code></td><td>ごと</td></tr>
-                <tr><td><code>gr</code></td><td>がら</td></tr>
-                <tr><td><code>yr</code></td><td>よる</td></tr>
-                <tr><td><code>km</code> <code>cm</code></td><td>かも</td></tr>
-                <tr><td><code>bt</code></td><td>びと</td></tr>
-                <tr><td><code>tb</code></td><td>たび</td></tr>
-                <tr><td><code>dt</code></td><td>だち</td></tr>
-              </tbody>
-            </table>
+    <h3 id="abbreviations" class="aside-muted">3. <!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg> 競合しない範囲で AZIK・gACT10 の短縮入力を採用する</h3>
+    <div class="aside-muted">
+      <p>DvorakJP のローマ字テーブルを軽量化した分、新たなカスタマイズの余地ができました。そこで実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用し、さらに打鍵数を減らせるようにしています。</p>
+      <p class="note">この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります。</p>
+      <details class="fold">
+        <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>
+        <div class="abbr-tables">
+          <div class="abbr-group">
+            <p class="abbr-label">AZIK 由来</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>kt</code> <code>ct</code></td><td>こと</td></tr>
+                  <tr><td><code>st</code></td><td>した</td></tr>
+                  <tr><td><code>sr</code></td><td>する</td></tr>
+                  <tr><td><code>kr</code> <code>cr</code></td><td>から</td></tr>
+                  <tr><td><code>mn</code></td><td>もの</td></tr>
+                  <tr><td><code>ms</code></td><td>ます</td></tr>
+                  <tr><td><code>tm</code></td><td>ため</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>ds</code></td><td>です</td></tr>
+                  <tr><td><code>ht</code></td><td>ひと</td></tr>
+                  <tr><td><code>wt</code></td><td>わた</td></tr>
+                  <tr><td><code>wr</code></td><td>われ</td></tr>
+                  <tr><td><code>tr</code></td><td>たら</td></tr>
+                  <tr><td><code>dm</code></td><td>でも</td></tr>
+                  <tr><td><code>mt</code></td><td>また</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>gt</code></td><td>ごと</td></tr>
+                  <tr><td><code>gr</code></td><td>がら</td></tr>
+                  <tr><td><code>yr</code></td><td>よる</td></tr>
+                  <tr><td><code>km</code> <code>cm</code></td><td>かも</td></tr>
+                  <tr><td><code>bt</code></td><td>びと</td></tr>
+                  <tr><td><code>tb</code></td><td>たび</td></tr>
+                  <tr><td><code>dt</code></td><td>だち</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="abbr-group">
+            <p class="abbr-label">gACT10 由来（特殊拡張）</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>tg</code></td><td>として</td></tr>
+                  <tr><td><code>sg</code></td><td>され</td></tr>
+                  <tr><td><code>td</code></td><td>という</td></tr>
+                  <tr><td><code>tf</code></td><td>とり</td></tr>
+                  <tr><td><code>tl</code></td><td>とく</td></tr>
+                  <tr><td><code>rd</code></td><td>られ</td></tr>
+                  <tr><td><code>dc</code></td><td>でき</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>rb</code></td><td>れば</td></tr>
+                  <tr><td><code>cl</code> <code>kl</code></td><td>きょう</td></tr>
+                  <tr><td><code>cd</code></td><td>かた</td></tr>
+                  <tr><td><code>md</code></td><td>まで</td></tr>
+                  <tr><td><code>rl</code></td><td>りょう</td></tr>
+                  <tr><td><code>dg</code></td><td>だが</td></tr>
+                  <tr><td><code>hd</code></td><td>ほど</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>sn</code></td><td>させ</td></tr>
+                  <tr><td><code>gl</code></td><td>ぎょう</td></tr>
+                  <tr><td><code>bc</code></td><td>べき</td></tr>
+                  <tr><td><code>hs</code></td><td>ひょう</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="abbr-group">
+            <p class="abbr-label">gACT10 由来（拗音＋く・つ）</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th></th><th>ゃく（<code>s</code>）</th><th>ゅつ（<code>t</code>）</th><th>ょく（<code>n</code>）</th></tr></thead>
+                <tbody>
+                  <tr><th>きゃ行</th><td>きゃく <code>cys</code> <code>kys</code></td><td>—</td><td>きょく <code>cyn</code> <code>kyn</code></td></tr>
+                  <tr><th>ぎゃ行</th><td>ぎゃく <code>gys</code></td><td>—</td><td>ぎょく <code>gyn</code></td></tr>
+                  <tr><th>しゃ行</th><td>しゃく <code>shs</code> <code>sys</code></td><td>しゅつ <code>sht</code> <code>syt</code></td><td>しょく <code>shn</code> <code>syn</code></td></tr>
+                  <tr><th>じゃ行</th><td>じゃく <code>js</code></td><td>じゅつ <code>jt</code></td><td>じょく <code>jn</code></td></tr>
+                  <tr><th>ちゃ行</th><td>ちゃく <code>chs</code> <code>tys</code></td><td>—</td><td>ちょく <code>chn</code> <code>tyn</code></td></tr>
+                  <tr><th>にゃ行</th><td>にゃく <code>nys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>ひゃ行</th><td>ひゃく <code>hys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>びゃ行</th><td>びゃく <code>bys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>みゃ行</th><td>みゃく <code>mys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>りゃ行</th><td>りゃく <code>rys</code></td><td>—</td><td>りょく <code>ryn</code></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="abbr-group">
-          <p class="abbr-label">gACT10 由来（特殊拡張）</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>tg</code></td><td>として</td></tr>
-                <tr><td><code>sg</code></td><td>され</td></tr>
-                <tr><td><code>td</code></td><td>という</td></tr>
-                <tr><td><code>tf</code></td><td>とり</td></tr>
-                <tr><td><code>tl</code></td><td>とく</td></tr>
-                <tr><td><code>rd</code></td><td>られ</td></tr>
-                <tr><td><code>dc</code></td><td>でき</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>rb</code></td><td>れば</td></tr>
-                <tr><td><code>cl</code> <code>kl</code></td><td>きょう</td></tr>
-                <tr><td><code>cd</code></td><td>かた</td></tr>
-                <tr><td><code>md</code></td><td>まで</td></tr>
-                <tr><td><code>rl</code></td><td>りょう</td></tr>
-                <tr><td><code>dg</code></td><td>だが</td></tr>
-                <tr><td><code>hd</code></td><td>ほど</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>sn</code></td><td>させ</td></tr>
-                <tr><td><code>gl</code></td><td>ぎょう</td></tr>
-                <tr><td><code>bc</code></td><td>べき</td></tr>
-                <tr><td><code>hs</code></td><td>ひょう</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="abbr-group">
-          <p class="abbr-label">gACT10 由来（拗音＋く・つ）</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th></th><th>ゃく（<code>s</code>）</th><th>ゅつ（<code>t</code>）</th><th>ょく（<code>n</code>）</th></tr></thead>
-              <tbody>
-                <tr><th>きゃ行</th><td>きゃく <code>cys</code> <code>kys</code></td><td>—</td><td>きょく <code>cyn</code> <code>kyn</code></td></tr>
-                <tr><th>ぎゃ行</th><td>ぎゃく <code>gys</code></td><td>—</td><td>ぎょく <code>gyn</code></td></tr>
-                <tr><th>しゃ行</th><td>しゃく <code>shs</code> <code>sys</code></td><td>しゅつ <code>sht</code> <code>syt</code></td><td>しょく <code>shn</code> <code>syn</code></td></tr>
-                <tr><th>じゃ行</th><td>じゃく <code>js</code></td><td>じゅつ <code>jt</code></td><td>じょく <code>jn</code></td></tr>
-                <tr><th>ちゃ行</th><td>ちゃく <code>chs</code> <code>tys</code></td><td>—</td><td>ちょく <code>chn</code> <code>tyn</code></td></tr>
-                <tr><th>にゃ行</th><td>にゃく <code>nys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>ひゃ行</th><td>ひゃく <code>hys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>びゃ行</th><td>びゃく <code>bys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>みゃ行</th><td>みゃく <code>mys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>りゃ行</th><td>りゃく <code>rys</code></td><td>—</td><td>りょく <code>ryn</code></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <p class="note">子音の連打は「っ」に使うので AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、「ん」とぶつかるので <code>nt</code>（にち）などは採用していません。</p>
-    </details>
+        <p class="note">子音の連打は「っ」に使うので AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、「ん」とぶつかるので <code>nt</code>（にち）などは採用していません。</p>
+      </details>
+    </div>
 
     <h2>DvorakJP との主な違い</h2>
     <div class="table-wrap">

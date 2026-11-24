@@ -265,6 +265,10 @@ ol li { margin-bottom: 6px; }
 .fold { margin: 8px 0 16px; }
 .fold summary { cursor: pointer; width: fit-content; color: var(--muted); font-size: 14px; }
 /* 短縮入力の一覧: 「AZIK 由来」「ACT 由来」「DvorakJP lite 独自」のまとまりを縦に並べ、それぞれ「打鍵・かな」の表を横に並べる（狭い画面では折り返す） */
+/* 本筋ではない節（設計思想 3. の短縮入力）。見出しと本文を灰色にして目立たなくする */
+.aside-muted, .aside-muted a { color: var(--muted); }
+.aside-muted th { border-bottom-color: var(--muted); }
+.aside-muted tbody th, .aside-muted td { border-bottom-color: var(--line); }
 .abbr-tables { display: flex; flex-direction: column; gap: 16px; }
 .abbr-row { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: flex-start; }
 .abbr-row table { width: auto; }

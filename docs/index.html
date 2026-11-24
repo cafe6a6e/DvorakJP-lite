@@ -234,7 +234,7 @@
             </div>
           </div>
         </div>
-        <p class="note">子音の連打は「っ」に使うので AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、「ん」とぶつかるので <code>nt</code>（にち）などは採用していません。</p>
+        <p class="note">AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、子音の連打を「っ」に使うので採用していません。<code>nt</code>（にち）なども、「ん」とぶつかるので採用していません。</p>
       </details>
     </div>
 
@@ -284,7 +284,7 @@
           <mtext>打鍵効率</mtext><mo>=</mo>
           <mfrac>
             <mtext>日本語文の文字数</mtext>
-            <mtext>ローマ字テーブルで最短で打つときの打鍵数</mtext>
+            <mtext>ローマ字テーブルでの最短の打鍵数</mtext>
           </mfrac>
         </mrow>
       </math>
@@ -364,19 +364,19 @@
     <!-- keystroke-chart:end -->
 
     <h3 id="same-finger">比較2: 同指連続打鍵率</h3>
-    <p><b>同指連続打鍵率</b>を以下で定義します。値が小さいほど、同じ指で続けて打つことが少なく、指の負担が少ないことを示します。最短の打ち方が複数あるときは、同じ指が続くのが最も少ない打ち方で数えます。</p>
+    <p><b>同指連続打鍵率</b>を以下で定義します。値が小さいほど、同じ指で続けて打つことが少なく、指の負担が少ないことを示します。</p>
     <p class="kc-formula">
       <math display="block">
         <mrow>
           <mtext>同指連続打鍵率</mtext><mo>=</mo>
           <mfrac>
             <mtext>直前と同じ指で打つ打鍵数</mtext>
-            <mtext>ローマ字テーブルで最短で打つときの打鍵数</mtext>
+            <mtext>打鍵数</mtext>
           </mfrac>
         </mrow>
       </math>
     </p>
-    <p>参考として、英文をそのまま打つときの同指連続打鍵率も、キーボード配列（QWERTY・Dvorak・大西配列・Astarte）ごとに示します。</p>
+    <p>ここで、日本語文での打鍵数は、ローマ字テーブルでの最短の打ち方で数えます。最短の打ち方が複数あるときは、同指打鍵が最も少ないもので数えます。</p>
     <p>直前と同じ指で打つ打鍵は、別のキーを打つ<b>同指異キー</b>（QWERTY の <code>yu</code> など）と、同じキーを続けて打つ<b>同指同キー</b>（促音の <code>tt</code> など）に分けて示します。</p>
     <!-- same-finger-chart:start（tools/keystroke-chart.js が生成） -->
 <div class="kc-figures">

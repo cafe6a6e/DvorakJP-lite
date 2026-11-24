@@ -1,8 +1,10 @@
 // 打鍵数比較スクリプト（tools/keystrokes.js）のテスト。コーパスのダウンロードはしない
 import { describe, expect, test } from "bun:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { parseText, plan } from "../docs/romaji.js";
 import { countSameFinger, fingerOf } from "../tools/fingers.js";
-import { analyze, analyzeEnglish, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
+import { analyze, analyzeEnglish, DEFAULT_SERIES, ENGLISH_CORPORA, TATOEBA_EN_EVERY, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
 import { readText } from "./helpers.js";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -53,6 +55,9 @@ describe("同じ指の連続", () => {
     expect(fingerOf("dvorak", "u")).toBe(3); // Dvorak の u は QWERTY の f の位置
     expect(fingerOf("onishi", "a")).toBe(2); // 大西配列の a は QWERTY の d の位置
     expect(fingerOf("onishi", "/")).toBe(9);
+    expect(fingerOf("astarte", "a")).toBe(3); // Astarte の a は QWERTY の f の位置
+    expect(fingerOf("astarte", "-")).toBe(2); // - は QWERTY の c の位置
+    expect(fingerOf("astarte", ";")).toBe(9); // ; は数字の段の - の位置
     expect(fingerOf("qwerty", "あ")).toBeNull();
   });
 
@@ -82,6 +87,8 @@ describe("同じ指の連続", () => {
     ["大西配列", "ぶん", 3, 0],
     ["QWERTY", "ゆき", 4, 1], // yu（右手人差し指が続く）
     ["大西配列", "ゆき", 4, 0],
+    ["Astarte", "ゆき", 4, 0],
+    ["Astarte", "じゅう", 3, 1], // juu（u の連打）
   ])("%s で %s は %i 打、同じ指の連続 %i 回", (name, kana, strokes, same) => {
     expect(analyze(byName[name], kana)).toMatchObject({ strokes, sameFinger: same });
   });
@@ -104,10 +111,23 @@ describe("英文", () => {
   test("同じ文でも、キーボード配列で同じ指の連続が変わる", () => {
     expect(analyzeEnglish("dvorak", "hello").sameFinger).toBe(1); // ll の連打だけ
     expect(analyzeEnglish("onishi", "hello").sameFinger).toBe(1);
+    expect(analyzeEnglish("astarte", "hello").sameFinger).toBe(1);
+  });
+
+  test("英語の Tatoeba は、文の番号が TATOEBA_EN_EVERY の倍数の文だけを使う", async () => {
+    const tsv = ["6\teng\tsix", "7\teng\tseven", "13\teng\tthirteen", "14\teng\tfourteen"].join("\n");
+    const dir = mkdtempSync(`${tmpdir()}/tatoeba-`);
+    await Bun.write(`${dir}/eng.tsv`, tsv);
+    Bun.spawnSync(["bzip2", `${dir}/eng.tsv`]);
+    const sentences = await ENGLISH_CORPORA.Tatoeba.load({ file: async () => `${dir}/eng.tsv.bz2` });
+    rmSync(dir, { recursive: true });
+    expect(TATOEBA_EN_EVERY).toBe(7);
+    expect(sentences).toEqual(["seven", "fourteen"]);
   });
 
   test("大西配列の Shift の記号は、Shift を外した記号のキーで打つ", () => {
     expect(fingerOf("onishi", "?")).toBe(fingerOf("onishi", "/"));
+    expect(fingerOf("astarte", ":")).toBe(fingerOf("astarte", ";"));
   });
 });
 
@@ -130,8 +150,8 @@ describe("練習ページの問題文で計測する", () => {
     expect(r.diff.fewerStrokes - r.diff.moreStrokes).toBe(strokes.DvorakJP - strokes["DvorakJP lite"]);
   });
 
-  test("大西配列は QWERTY と変換表が同じなので、打鍵数が同じ", () => {
-    const q = r.series.find((s) => s.name === "大西配列");
+  test.each(["大西配列", "Astarte"])("%s は QWERTY と変換表が同じなので、打鍵数が同じ", (name) => {
+    const q = r.series.find((s) => s.name === name);
     expect(q.sameTableAs).toBe("QWERTY");
     expect(q.strokes).toBe(strokes.QWERTY);
   });

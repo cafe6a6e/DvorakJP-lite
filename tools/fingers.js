@@ -13,24 +13,38 @@ const SHIFT = new Map([..."~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?"].map
 const POSITION_FINGER = new Map([["`", 0]]);
 for (const row of ROWS) [...row].forEach((c, i) => POSITION_FINGER.set(c, COLUMN_FINGER[i]));
 
-// 大西配列（https://o24.works/layout/）: US 配列のキー位置 → 出る文字。ほかのキーは QWERTY のまま
-const ONISHI = new Map([
+// 入れ替え配列: US 配列のキー位置 → 出る文字。ほかのキーは QWERTY のまま
+// 大西配列（https://o24.works/layout/）
+const ONISHI = remap([
   ...pairsOf("qwertyuiop", "qlu,.fwryp"),
   ...pairsOf("asdfghjkl;", "eiao-ktnsh"),
   ...pairsOf("zxcvbnm,./", "zxcv;gdmjb"),
   ["-", "/"],
-].map(([pos, c]) => [c, pos]));
+]);
+// Astarte 配列（https://neinvalli.hatenablog.com/entry/2018/07/21/185448）。記事の Keyboard Layout Analyzer の設定による
+const ASTARTE = remap([
+  ...pairsOf("qwertyuiop", "qpuy,jdhgw"),
+  ...pairsOf("asdfghjkl;", "ioea.ktnsr"),
+  ...pairsOf("zxcvbnm,./", "zx-c/mlfbv"),
+  ["-", ";"],
+]);
 
 function pairsOf(a, b) {
   return [...a].map((c, i) => [c, b[i]]);
+}
+
+// [キー位置, 出る文字] の組 → 打つ文字からキー位置を引く関数。Shift の文字は、Shift を外した文字のキー（例: ? は / のキー）
+function remap(pairs) {
+  const map = new Map(pairs.map(([pos, c]) => [c, pos]));
+  return (c) => { const u = SHIFT.get(c) ?? c; return map.get(u) ?? u; };
 }
 
 // 打つ文字 → US 配列のキー位置
 export const KEYBOARDS = {
   qwerty: { label: "QWERTY", position: (c) => c },
   dvorak: { label: "Dvorak", position: (c) => LAYOUTS["qwerty-us"].map.get(c) ?? c },
-  // Shift の文字は、Shift を外した文字のキー（例: ? は / のキー）
-  onishi: { label: "大西配列", position: (c) => { const u = SHIFT.get(c) ?? c; return ONISHI.get(u) ?? u; } },
+  onishi: { label: "大西配列", position: ONISHI },
+  astarte: { label: "Astarte", position: ASTARTE },
 };
 
 // 打つ文字 → 指（0〜9）。キーボードにない文字は null

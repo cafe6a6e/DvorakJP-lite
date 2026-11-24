@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23",
+  "generated": "2026-11-24",
   "corpora": [
     {
       "name": "JSUT",
@@ -43,6 +43,20 @@
           "sameFinger": 9730,
           "sameKey": 6846,
           "sameFingerRate": 0.0312,
+          "sameTableAs": "QWERTY"
+        },
+        {
+          "name": "Astarte",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "astarte",
+          "strokes": 312029,
+          "efficiency": 0.4595,
+          "perKana": 1.7006,
+          "ratio": 1,
+          "sameFinger": 15410,
+          "sameKey": 6846,
+          "sameFingerRate": 0.0494,
           "sameTableAs": "QWERTY"
         },
         {
@@ -156,6 +170,20 @@
           "sameTableAs": "QWERTY"
         },
         {
+          "name": "Astarte",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "astarte",
+          "strokes": 18493,
+          "efficiency": 0.4867,
+          "perKana": 1.671,
+          "ratio": 1,
+          "sameFinger": 1068,
+          "sameKey": 494,
+          "sameFingerRate": 0.0578,
+          "sameTableAs": "QWERTY"
+        },
+        {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
@@ -259,6 +287,20 @@
           "sameFinger": 296759,
           "sameKey": 226211,
           "sameFingerRate": 0.0321,
+          "sameTableAs": "QWERTY"
+        },
+        {
+          "name": "Astarte",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "astarte",
+          "strokes": 9247793,
+          "efficiency": 0.4719,
+          "perKana": 1.7256,
+          "ratio": 1,
+          "sameFinger": 450579,
+          "sameKey": 226211,
+          "sameFingerRate": 0.0487,
           "sameTableAs": "QWERTY"
         },
         {
@@ -368,6 +410,20 @@
           "sameTableAs": "QWERTY"
         },
         {
+          "name": "Astarte",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "astarte",
+          "strokes": 8049536,
+          "efficiency": 0.477,
+          "perKana": 1.6958,
+          "ratio": 1,
+          "sameFinger": 355523,
+          "sameKey": 186497,
+          "sameFingerRate": 0.0442,
+          "sameTableAs": "QWERTY"
+        },
+        {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
@@ -474,6 +530,20 @@
           "sameTableAs": "QWERTY"
         },
         {
+          "name": "Astarte",
+          "table": "test/fixtures/qwerty-base.txt",
+          "ext": true,
+          "keyboard": "astarte",
+          "strokes": 724739,
+          "efficiency": 0.4409,
+          "perKana": 1.649,
+          "ratio": 1,
+          "sameFinger": 31945,
+          "sameKey": 16803,
+          "sameFingerRate": 0.0441,
+          "sameTableAs": "QWERTY"
+        },
+        {
           "name": "AZIK",
           "table": "test/fixtures/azik.txt",
           "ext": true,
@@ -558,6 +628,15 @@
         "sameTableAs": "QWERTY"
       },
       {
+        "name": "Astarte",
+        "strokes": 18352590,
+        "efficiency": 0.4727,
+        "sameFinger": 854525,
+        "sameKey": 436851,
+        "sameFingerRate": 0.0466,
+        "sameTableAs": "QWERTY"
+      },
+      {
         "name": "AZIK",
         "strokes": 16099713,
         "efficiency": 0.5388,
@@ -605,37 +684,46 @@
         "name": "Tatoeba",
         "source": "https://tatoeba.org/ja/downloads",
         "license": "CC BY 2.0 FR",
+        "sample": "文の番号が 7 の倍数の文",
         "files": [
           {
             "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2",
             "sha256": "0c4d3b18152bd6507bbf77ab690532b25de1e60da950f68705b3c88935c01fb4"
           }
         ],
-        "sentences": 2041577,
+        "sentences": 291787,
         "series": [
           {
             "name": "QWERTY",
             "keyboard": "qwerty",
-            "strokes": 67864187,
-            "sameFinger": 4461296,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 636442,
+            "sameKey": 199181,
             "sameFingerRate": 0.0657
           },
           {
             "name": "Dvorak",
             "keyboard": "dvorak",
-            "strokes": 67864187,
-            "sameFinger": 2787294,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 397707,
+            "sameKey": 199181,
             "sameFingerRate": 0.0411
           },
           {
             "name": "大西配列",
             "keyboard": "onishi",
-            "strokes": 67864187,
-            "sameFinger": 2984167,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 426247,
+            "sameKey": 199181,
             "sameFingerRate": 0.044
+          },
+          {
+            "name": "Astarte",
+            "keyboard": "astarte",
+            "strokes": 9687595,
+            "sameFinger": 459579,
+            "sameKey": 199181,
+            "sameFingerRate": 0.0474
           }
         ]
       },
@@ -674,6 +762,14 @@
             "sameFinger": 502980,
             "sameKey": 200589,
             "sameFingerRate": 0.0525
+          },
+          {
+            "name": "Astarte",
+            "keyboard": "astarte",
+            "strokes": 9575053,
+            "sameFinger": 476928,
+            "sameKey": 200589,
+            "sameFingerRate": 0.0498
           }
         ]
       },
@@ -712,36 +808,52 @@
             "sameFinger": 545834,
             "sameKey": 193487,
             "sameFingerRate": 0.052
+          },
+          {
+            "name": "Astarte",
+            "keyboard": "astarte",
+            "strokes": 10495307,
+            "sameFinger": 490526,
+            "sameKey": 193487,
+            "sameFingerRate": 0.0467
           }
         ]
       }
     ],
     "total": {
-      "sentences": 2241577,
+      "sentences": 491787,
       "series": [
         {
           "name": "QWERTY",
           "keyboard": "qwerty",
-          "strokes": 87934547,
-          "sameFinger": 5991800,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0681
+          "strokes": 29757955,
+          "sameFinger": 2166946,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0728
         },
         {
           "name": "Dvorak",
           "keyboard": "dvorak",
-          "strokes": 87934547,
-          "sameFinger": 3634667,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0413
+          "strokes": 29757955,
+          "sameFinger": 1245080,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0418
         },
         {
           "name": "大西配列",
           "keyboard": "onishi",
-          "strokes": 87934547,
-          "sameFinger": 4032981,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0459
+          "strokes": 29757955,
+          "sameFinger": 1475061,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0496
+        },
+        {
+          "name": "Astarte",
+          "keyboard": "astarte",
+          "strokes": 29757955,
+          "sameFinger": 1427033,
+          "sameKey": 593257,
+          "sameFingerRate": 0.048
         }
       ]
     }

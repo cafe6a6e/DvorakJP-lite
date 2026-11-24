@@ -22,6 +22,12 @@ body {
 
 a { color: var(--accent); }
 
+/* 差し色の強調（トップページの紹介文の名前など） */
+.accent { color: var(--accent); }
+/* 見出しを句（span）の区切りでだけ折り返す。狭い画面では、長いほうの句（15 字）が 1 行に収まるまで文字を小さくする */
+.phrase { font-size: min(30px, calc((100vw - 56px) / 15)); }
+.phrase span { display: inline-block; }
+
 /* 外部リンクの印。アイコン: Lucide「external-link」（ISC License, Copyright (c) Lucide Contributors 2022） */
 a[href^="http"]:not(.gh-link)::after {
   content: "";
@@ -104,9 +110,14 @@ h1 {
   border-left: 6px solid var(--accent);
 }
 
+/* 節の見出し。下線で区切り、左端に差し色の短い線を入れる（h1 の左の線と対にする） */
 h2 {
-  font-size: 20px;
-  margin: 40px 0 12px;
+  font-size: 22px;
+  line-height: 1.4;
+  margin: 48px 0 16px;
+  padding: 0 0 8px 12px;
+  border-left: 4px solid var(--accent);
+  border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -265,6 +276,10 @@ ol li { margin-bottom: 6px; }
 .fold { margin: 8px 0 16px; }
 .fold summary { cursor: pointer; width: fit-content; color: var(--muted); font-size: 14px; }
 /* 短縮入力の一覧: 「AZIK 由来」「ACT 由来」「DvorakJP lite 独自」のまとまりを縦に並べ、それぞれ「打鍵・かな」の表を横に並べる（狭い画面では折り返す） */
+/* 本筋ではない節（設計思想 3. の短縮入力）。見出しと本文を灰色にして目立たなくする */
+.aside-muted, .aside-muted a { color: var(--muted); }
+.aside-muted th { border-bottom-color: var(--muted); }
+.aside-muted tbody th, .aside-muted td { border-bottom-color: var(--line); }
 .abbr-tables { display: flex; flex-direction: column; gap: 16px; }
 .abbr-row { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: flex-start; }
 .abbr-row table { width: auto; }

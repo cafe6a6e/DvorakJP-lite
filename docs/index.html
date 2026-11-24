@@ -82,10 +82,9 @@
   </header>
 
   <main>
-    <h1>DvorakJP lite とは？</h1>
-    <p class="note">DvorakJP をご存じない方は、まずは<a href="dvorakjp/">DvorakJP の解説</a>をご一読ください。</p>
-    <p>DvorakJP lite は、DvorakJP の効率的な拡張ローマ字入力の仕組みを維持しつつ、普通のローマ字入力を妨げないように見直した、いわば<strong>軽量版 DvorakJP</strong> です。打鍵数の削減につながらない拡張は削ぎ落としました。一般的なローマ字入力の打ち方に干渉せず、ご自身のペースで拡張ローマ字を徐々に取り入れられることを目指しています。</p>
-    <p><a href="install/">ローマ字テーブルの差替え</a>だけで導入でき、Dvorak 配列の方はもちろん、QWERTY 配列の方でも気軽に試せます。</p>
+    <h1 class="phrase"><span>覚えた分だけ打鍵が減らせる、</span><span>シンプルな拡張ローマ字テーブル</span></h1>
+    <p><strong class="accent">DvorakJP lite</strong> は、DvorakJP の効率的な拡張ローマ字入力の仕組みを維持しつつ、普通のローマ字入力を妨げないように見直した、いわば <strong>DvorakJP 拡張ローマ字テーブルの軽量版</strong>です。一般的なローマ字入力の打ち方に干渉せず、ご自身のペースで拡張ローマ字を徐々に取り入れられることを目指しています。</p>
+    <p><a href="install/">Google 日本語入力等のローマ字テーブルの差替え</a>だけで導入でき、Dvorak 配列の方はもちろん、QWERTY 配列の方でも気軽に試せます。</p>
 
     <figure>
       <img src="images/layout.webp" width="1200" height="455"
@@ -93,11 +92,27 @@
       <figcaption>DvorakJP lite 配列図。左手の赤い拡張キーを使うと、二重母音や「ん」をまとめて入力できます。</figcaption>
     </figure>
 
-    <h2>設計思想</h2>
+    <h2>DvorakJP lite の設計思想</h2>
+    <p class="note">DvorakJP をご存じない方は、<a href="dvorakjp/">DvorakJP の解説</a>をぜひご一読ください。</p>
 
-    <h3>1. 「ん」の後でも最小の打鍵数で打てるようにする</h3>
-    <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行拡張」になります（<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）。また、<code>nh</code> は「にゃ行」の拗音です。そのため、母音の直後の「ん」に、これらのキーで始まる音が続くときは、<code>n</code> を 2 回打って「ん」を確定させる必要がありました。</p>
-    <p>DvorakJP lite では、な行拡張を <code>v</code> に移し、<code>n</code> の拗音拡張も使わないことで、この衝突を解消しました。そのため、DvorakJP では余計な打鍵が必要だった「ん」の後の入力も、通常のローマ字入力と同じ打鍵数で入力できます。</p>
+    <h3>1. 通常ローマ字の最短打鍵法をそのまま使える</h3>
+    <p>DvorakJP では、<code>n</code> の後の拡張キーが「な行拡張」（例：<code>nj</code> ねん、<code>n.</code> ねい、<code>np</code> ぬう）、<code>nh</code> が「にゃ行」の拗音となります。そのため、これらのキーが続くときは、通常ローマ字のように「<code>n</code>＋子音」で <code>n</code> を「ん」に確定することができません。結果、通常ローマ字では 1 打で打てた <code>n</code> を、あえて 2 打して「ん」を確定させるケースが生じてしまいます。</p>
+    <p>この通常ローマ字とのルール衝突を避け、かつ拡張ルールをシンプルにするために、次の方針で見直しました。</p>
+    <ul class="points">
+      <li><strong>方針 1｜打鍵数を減らす拡張は残す。普通のローマ字と衝突するものだけ、使わない組み合わせに移す。</strong>
+        <ul>
+          <li>二重母音、撥音（ん）拡張は、な行拡張を除いて、そのまま採用する。</li>
+          <li>な行拡張の子音は <code>n</code> ではなく、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）。</li>
+        </ul>
+      </li>
+      <li><strong>方針 2｜打鍵数を減らさない拡張は、同指連続打鍵を減らす効果が特に高い「きゃ行・ぴゃ行」の拗音拡張だけを採用する。</strong>
+        <ul>
+          <li>きゃ行・ぴゃ行は、Dvorak 配列で <code>k</code>・<code>p</code>・<code>y</code> がすべて左手の人差し指にあり、<code>kyu</code>・<code>pyu</code> などが同じ指の連続打鍵になって特に打ちにくい。そこで、右手のキーと左右交互に打てる <code>cy</code>・<code>ph</code> を「きゃ行・ぴゃ行」の拗音として採用する。</li>
+          <li>それ以外の <code>h</code>・<code>n</code> の拗音拡張（<a href="dvorakjp/#design">DvorakJP の解説</a>）は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない。打鍵数に寄与しないルールを削ぎ、拡張ルールをシンプルに保つことを優先した。ほかの拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
+        </ul>
+      </li>
+    </ul>
+    <p>その結果、「ん」の後も通常のローマ字入力と同じ打鍵数で入力できます。</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>単語</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
@@ -109,136 +124,120 @@
         </tbody>
       </table>
     </div>
-    <p>そのうえで、拡張ルールを次の方針で見直しています。</p>
-    <ul class="points">
-      <li><strong>打鍵数を減らす拡張は、普通のローマ字で使わない組み合わせに移して残す。</strong>
-        <ul>
-          <li>な行拡張は <code>n</code> の代わりに、Dvorak 配列で <code>n</code> の真下にある <code>v</code> で打つ（<code>vj</code> ねん、<code>v,</code> のう）</li>
-          <li>ぴゃ行は、Dvorak 配列で <code>p</code> と <code>y</code> がどちらも左手の上段にあり、<code>pya</code> が同じ手の連続打鍵になって打ちにくい。そこで、<code>h</code> を使う拗音拡張のうち、右手の <code>h</code> を使って左右交互に打てる <code>ph</code> だけを採用する（<code>pha</code> ぴゃ、<code>ph,</code> ぴょう）。<code>ph</code> は普通のローマ字では使わない組み合わせなので、衝突しない</li>
-        </ul>
-      </li>
-      <li><strong>打鍵数を減らさない拡張は、原則として採用しない。</strong>
-        <ul>
-          <li>ぴゃ行以外の <code>h</code>、<code>n</code> の拗音拡張は採用しない。この拡張は、<code>y</code> の代わりに使っても打鍵数は減らない（<code>cna</code> も <code>cya</code> も 3 打）が、拗音の子音と <code>h</code>・<code>n</code> を右手で続けて打てる（アルペジオ打鍵）という DvorakJP の工夫である。DvorakJP lite では、この利点よりも、普通のローマ字との互換性と覚えるルールの少なさを優先し、主要な拗音は QWERTY 同様「子音（右手）、<code>y</code>＋母音（左手）」で打つ。</li>
-        </ul>
-      </li>
-    </ul>
 
-    <h3>2. QWERTY で身に付けたローマ字入力の規則をそのまま使える</h3>
-    <p>拡張ルールを普通のローマ字で使わない組み合わせに限ったので、DvorakJP の拡張と共存しながら、かなを打つ一般的なローマ字のつづりはすべてそのまま使えます（<code>z.</code> … などの一部の記号入力は、拡張入力に使うため除きます）。</p>
-    <p>たとえば、「ん」を <code>n</code> 1 回で入力する（<code>kanji</code> → 漢字）といった、QWERTY で身に付けたローマ字入力の規則を覚え直す必要はありません。拡張入力を覚えなくても今までどおり入力でき、必要に応じて少しずつ拡張入力を取り入れられます。</p>
-
-    <h3>3. 記号キーの自由度を担保する</h3>
+    <h3>2. 記号キーの自由度を担保する</h3>
     <p>「ア段＋い」は <code>'</code> と <code>-</code> のどちらでも打てます（<code>k'</code> / <code>k-</code> → かい）。Dvorak 配列の上段左の記号キーは、好みで <code>'</code> と <code>-</code> のどちらにしていても使えます。</p>
 
-    <h3 id="abbreviations">4. <!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg> 競合しない範囲で AZIK・gACT10 の短縮入力を採用する</h3>
-    <p>DvorakJP のローマ字テーブルを軽量化した分、新たなカスタマイズの余地ができました。そこで実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用し、さらに打鍵数を減らせるようにしています。</p>
-    <p class="note">この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります。</p>
-    <details class="fold">
-      <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>
-      <div class="abbr-tables">
-        <div class="abbr-group">
-          <p class="abbr-label">AZIK 由来</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>kt</code> <code>ct</code></td><td>こと</td></tr>
-                <tr><td><code>st</code></td><td>した</td></tr>
-                <tr><td><code>sr</code></td><td>する</td></tr>
-                <tr><td><code>kr</code> <code>cr</code></td><td>から</td></tr>
-                <tr><td><code>mn</code></td><td>もの</td></tr>
-                <tr><td><code>ms</code></td><td>ます</td></tr>
-                <tr><td><code>tm</code></td><td>ため</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>ds</code></td><td>です</td></tr>
-                <tr><td><code>ht</code></td><td>ひと</td></tr>
-                <tr><td><code>wt</code></td><td>わた</td></tr>
-                <tr><td><code>wr</code></td><td>われ</td></tr>
-                <tr><td><code>tr</code></td><td>たら</td></tr>
-                <tr><td><code>dm</code></td><td>でも</td></tr>
-                <tr><td><code>mt</code></td><td>また</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>gt</code></td><td>ごと</td></tr>
-                <tr><td><code>gr</code></td><td>がら</td></tr>
-                <tr><td><code>yr</code></td><td>よる</td></tr>
-                <tr><td><code>km</code> <code>cm</code></td><td>かも</td></tr>
-                <tr><td><code>bt</code></td><td>びと</td></tr>
-                <tr><td><code>tb</code></td><td>たび</td></tr>
-                <tr><td><code>dt</code></td><td>だち</td></tr>
-              </tbody>
-            </table>
+    <h3 id="abbreviations" class="aside-muted">3. <!-- フラスコのアイコン: Lucide「flask-conical」（ISC License, Copyright (c) Lucide Contributors 2022） --><svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg> 競合しない範囲で AZIK・gACT10 の短縮入力を採用する</h3>
+    <div class="aside-muted">
+      <p>DvorakJP のローマ字テーブルを軽量化した分、新たなカスタマイズの余地ができました。そこで実験的に、<a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK</a> と <a href="https://note.com/actbemu/n/nf57180ad8316">gACT10</a> から、通常ローマ字や DvorakJP lite の拡張入力と競合しない拡張だけを採用し、さらに打鍵数を減らせるようにしています。</p>
+      <p class="note">この短縮入力を含むローマ字テーブルは「DvorakJP lite ＋ 短縮拡張」版として配布します。実験中のため、予告なく変更することがあります。</p>
+      <details class="fold">
+        <summary>短縮入力の一覧（AZIK 由来 21 種類、gACT10 由来 36 種類）</summary>
+        <div class="abbr-tables">
+          <div class="abbr-group">
+            <p class="abbr-label">AZIK 由来</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>kt</code> <code>ct</code></td><td>こと</td></tr>
+                  <tr><td><code>st</code></td><td>した</td></tr>
+                  <tr><td><code>sr</code></td><td>する</td></tr>
+                  <tr><td><code>kr</code> <code>cr</code></td><td>から</td></tr>
+                  <tr><td><code>mn</code></td><td>もの</td></tr>
+                  <tr><td><code>ms</code></td><td>ます</td></tr>
+                  <tr><td><code>tm</code></td><td>ため</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>ds</code></td><td>です</td></tr>
+                  <tr><td><code>ht</code></td><td>ひと</td></tr>
+                  <tr><td><code>wt</code></td><td>わた</td></tr>
+                  <tr><td><code>wr</code></td><td>われ</td></tr>
+                  <tr><td><code>tr</code></td><td>たら</td></tr>
+                  <tr><td><code>dm</code></td><td>でも</td></tr>
+                  <tr><td><code>mt</code></td><td>また</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>gt</code></td><td>ごと</td></tr>
+                  <tr><td><code>gr</code></td><td>がら</td></tr>
+                  <tr><td><code>yr</code></td><td>よる</td></tr>
+                  <tr><td><code>km</code> <code>cm</code></td><td>かも</td></tr>
+                  <tr><td><code>bt</code></td><td>びと</td></tr>
+                  <tr><td><code>tb</code></td><td>たび</td></tr>
+                  <tr><td><code>dt</code></td><td>だち</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="abbr-group">
+            <p class="abbr-label">gACT10 由来（特殊拡張）</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>tg</code></td><td>として</td></tr>
+                  <tr><td><code>sg</code></td><td>され</td></tr>
+                  <tr><td><code>td</code></td><td>という</td></tr>
+                  <tr><td><code>tf</code></td><td>とり</td></tr>
+                  <tr><td><code>tl</code></td><td>とく</td></tr>
+                  <tr><td><code>rd</code></td><td>られ</td></tr>
+                  <tr><td><code>dc</code></td><td>でき</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>rb</code></td><td>れば</td></tr>
+                  <tr><td><code>cl</code> <code>kl</code></td><td>きょう</td></tr>
+                  <tr><td><code>cd</code></td><td>かた</td></tr>
+                  <tr><td><code>md</code></td><td>まで</td></tr>
+                  <tr><td><code>rl</code></td><td>りょう</td></tr>
+                  <tr><td><code>dg</code></td><td>だが</td></tr>
+                  <tr><td><code>hd</code></td><td>ほど</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
+                <tbody>
+                  <tr><td><code>sn</code></td><td>させ</td></tr>
+                  <tr><td><code>gl</code></td><td>ぎょう</td></tr>
+                  <tr><td><code>bc</code></td><td>べき</td></tr>
+                  <tr><td><code>hs</code></td><td>ひょう</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="abbr-group">
+            <p class="abbr-label">gACT10 由来（拗音＋く・つ）</p>
+            <div class="abbr-row">
+              <table>
+                <thead><tr><th></th><th>ゃく（<code>s</code>）</th><th>ゅつ（<code>t</code>）</th><th>ょく（<code>n</code>）</th></tr></thead>
+                <tbody>
+                  <tr><th>きゃ行</th><td>きゃく <code>cys</code> <code>kys</code></td><td>—</td><td>きょく <code>cyn</code> <code>kyn</code></td></tr>
+                  <tr><th>ぎゃ行</th><td>ぎゃく <code>gys</code></td><td>—</td><td>ぎょく <code>gyn</code></td></tr>
+                  <tr><th>しゃ行</th><td>しゃく <code>shs</code> <code>sys</code></td><td>しゅつ <code>sht</code> <code>syt</code></td><td>しょく <code>shn</code> <code>syn</code></td></tr>
+                  <tr><th>じゃ行</th><td>じゃく <code>js</code></td><td>じゅつ <code>jt</code></td><td>じょく <code>jn</code></td></tr>
+                  <tr><th>ちゃ行</th><td>ちゃく <code>chs</code> <code>tys</code></td><td>—</td><td>ちょく <code>chn</code> <code>tyn</code></td></tr>
+                  <tr><th>にゃ行</th><td>にゃく <code>nys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>ひゃ行</th><td>ひゃく <code>hys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>びゃ行</th><td>びゃく <code>bys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>みゃ行</th><td>みゃく <code>mys</code></td><td>—</td><td>—</td></tr>
+                  <tr><th>りゃ行</th><td>りゃく <code>rys</code></td><td>—</td><td>りょく <code>ryn</code></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="abbr-group">
-          <p class="abbr-label">gACT10 由来（特殊拡張）</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>tg</code></td><td>として</td></tr>
-                <tr><td><code>sg</code></td><td>され</td></tr>
-                <tr><td><code>td</code></td><td>という</td></tr>
-                <tr><td><code>tf</code></td><td>とり</td></tr>
-                <tr><td><code>tl</code></td><td>とく</td></tr>
-                <tr><td><code>rd</code></td><td>られ</td></tr>
-                <tr><td><code>dc</code></td><td>でき</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>rb</code></td><td>れば</td></tr>
-                <tr><td><code>cl</code> <code>kl</code></td><td>きょう</td></tr>
-                <tr><td><code>cd</code></td><td>かた</td></tr>
-                <tr><td><code>md</code></td><td>まで</td></tr>
-                <tr><td><code>rl</code></td><td>りょう</td></tr>
-                <tr><td><code>dg</code></td><td>だが</td></tr>
-                <tr><td><code>hd</code></td><td>ほど</td></tr>
-              </tbody>
-            </table>
-            <table>
-              <thead><tr><th>打鍵</th><th>かな</th></tr></thead>
-              <tbody>
-                <tr><td><code>sn</code></td><td>させ</td></tr>
-                <tr><td><code>gl</code></td><td>ぎょう</td></tr>
-                <tr><td><code>bc</code></td><td>べき</td></tr>
-                <tr><td><code>hs</code></td><td>ひょう</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="abbr-group">
-          <p class="abbr-label">gACT10 由来（拗音＋く・つ）</p>
-          <div class="abbr-row">
-            <table>
-              <thead><tr><th></th><th>ゃく（<code>s</code>）</th><th>ゅつ（<code>t</code>）</th><th>ょく（<code>n</code>）</th></tr></thead>
-              <tbody>
-                <tr><th>きゃ行</th><td>きゃく <code>cys</code> <code>kys</code></td><td>—</td><td>きょく <code>cyn</code> <code>kyn</code></td></tr>
-                <tr><th>ぎゃ行</th><td>ぎゃく <code>gys</code></td><td>—</td><td>ぎょく <code>gyn</code></td></tr>
-                <tr><th>しゃ行</th><td>しゃく <code>shs</code> <code>sys</code></td><td>しゅつ <code>sht</code> <code>syt</code></td><td>しょく <code>shn</code> <code>syn</code></td></tr>
-                <tr><th>じゃ行</th><td>じゃく <code>js</code></td><td>じゅつ <code>jt</code></td><td>じょく <code>jn</code></td></tr>
-                <tr><th>ちゃ行</th><td>ちゃく <code>chs</code> <code>tys</code></td><td>—</td><td>ちょく <code>chn</code> <code>tyn</code></td></tr>
-                <tr><th>にゃ行</th><td>にゃく <code>nys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>ひゃ行</th><td>ひゃく <code>hys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>びゃ行</th><td>びゃく <code>bys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>みゃ行</th><td>みゃく <code>mys</code></td><td>—</td><td>—</td></tr>
-                <tr><th>りゃ行</th><td>りゃく <code>rys</code></td><td>—</td><td>りょく <code>ryn</code></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <p class="note">子音の連打は「っ」に使うので AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、「ん」とぶつかるので <code>nt</code>（にち）などは採用していません。</p>
-    </details>
+        <p class="note">AZIK の <code>tt</code>（たち）・<code>rr</code>（られ。gACT10 由来の <code>rd</code> で打てます）は、子音の連打を「っ」に使うので採用していません。<code>nt</code>（にち）なども、「ん」とぶつかるので採用していません。</p>
+      </details>
+    </div>
 
     <h2>DvorakJP との主な違い</h2>
     <div class="table-wrap">
@@ -247,7 +246,7 @@
         <tbody>
           <tr><td>「ん」の後の入力</td><td>一部の組み合わせで <code>nn</code> が必要（<code>ennpitu</code> 鉛筆）</td><td>拡張ルールとの衝突による <code>nn</code> は不要（<code>enpitu</code> 鉛筆）</td></tr>
           <tr><td>な行拡張</td><td><code>n</code>（<code>n'</code> ない、<code>nj</code> ねん）</td><td><code>v</code>（<code>v'</code> ない、<code>vj</code> ねん）</td></tr>
-          <tr><td>拗音拡張</td><td><code>h</code> と <code>n</code></td><td>原則 <code>y</code>。ぴゃ行のみ <code>h</code> による拡張も使える</td></tr>
+          <tr><td>拗音拡張</td><td><code>h</code> と <code>n</code></td><td>原則 <code>y</code>。きゃ行は <code>cy</code>、ぴゃ行は <code>ph</code> でも打てる</td></tr>
           <tr><td>ア段＋い</td><td><code>'</code></td><td><code>'</code> と <code>-</code>（Dvorak 版）</td></tr>
           <tr><td>記号入力</td><td><code>z</code>（<code>z.</code> …）</td><td>主に <code>;</code>（<code>;.</code> …）。<code>z.</code> などは拡張入力（<code>z.</code> ぜい）</td></tr>
         </tbody>
@@ -286,7 +285,7 @@
           <mtext>打鍵効率</mtext><mo>=</mo>
           <mfrac>
             <mtext>日本語文の文字数</mtext>
-            <mtext>ローマ字テーブルで最短で打つときの打鍵数</mtext>
+            <mtext>ローマ字テーブルでの最短の打鍵数</mtext>
           </mfrac>
         </mrow>
       </math>
@@ -361,52 +360,52 @@
 </tbody>
 </table>
 </div>
-    <p class="note">日本語の文章（<a href="https://github.com/sarulab-speech/jsut-label">JSUT</a>（CC BY-SA 4.0）、<a href="https://github.com/mmorise/ita-corpus">ITA コーパス</a>（CC0）、<a href="https://tatoeba.org/ja/downloads">Tatoeba</a>（CC BY 2.0 FR）、<a href="https://www.rondhuit.com/download.html#ldcc">livedoor ニュースコーパス</a>（CC BY-ND 2.1 JP）、<a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">京都大学 Wikipedia 注釈コーパス</a>（CC BY-SA 4.0））で計測。英字・数字を含む文は除く。通常ローマ字は Google 日本語入力の標準に近いローマ字テーブルで、打鍵効率は QWERTY・Dvorak・大西配列のどのキーボード配列でも同じ。AZIK のローマ字テーブルは <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK総合解説書</a>の仕様による。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a></p>
+    <p class="note">日本語の文章（<a href="https://github.com/sarulab-speech/jsut-label">JSUT</a>（CC BY-SA 4.0）、<a href="https://github.com/mmorise/ita-corpus">ITA コーパス</a>（CC0）、<a href="https://tatoeba.org/ja/downloads">Tatoeba</a>（CC BY 2.0 FR）、<a href="https://www.rondhuit.com/download.html#ldcc">livedoor ニュースコーパス</a>（CC BY-ND 2.1 JP）、<a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">京都大学 Wikipedia 注釈コーパス</a>（CC BY-SA 4.0））で計測。英字・数字を含む文は除く。通常ローマ字は Google 日本語入力の標準に近いローマ字テーブルで、打鍵効率は QWERTY・Dvorak・大西配列・Astarte のどのキーボード配列でも同じ。AZIK のローマ字テーブルは <a href="https://note.com/actbemu/n/n74f1c04c9a2e">AZIK総合解説書</a>の仕様による。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a></p>
 </details>
     <!-- keystroke-chart:end -->
 
     <h3 id="same-finger">比較2: 同指連続打鍵率</h3>
-    <p><b>同指連続打鍵率</b>を以下で定義します。値が小さいほど、同じ指で続けて打つことが少なく、指の負担が少ないことを示します。最短の打ち方が複数あるときは、同じ指が続くのが最も少ない打ち方で数えます。</p>
+    <p><b>同指連続打鍵率</b>を以下で定義します。値が小さいほど、同じ指で続けて打つことが少なく、指の負担が少ないことを示します。</p>
     <p class="kc-formula">
       <math display="block">
         <mrow>
           <mtext>同指連続打鍵率</mtext><mo>=</mo>
           <mfrac>
             <mtext>直前と同じ指で打つ打鍵数</mtext>
-            <mtext>ローマ字テーブルで最短で打つときの打鍵数</mtext>
+            <mtext>打鍵数</mtext>
           </mfrac>
         </mrow>
       </math>
     </p>
-    <p>参考として、英文をそのまま打つときの同指連続打鍵率も、キーボード配列（QWERTY・Dvorak・大西配列）ごとに示します。</p>
+    <p>ここで、日本語文での打鍵数は、ローマ字テーブルでの最短の打ち方で数えます。最短の打ち方が複数あるときは、同指打鍵が最も少ないもので数えます。</p>
     <p>直前と同じ指で打つ打鍵は、別のキーを打つ<b>同指異キー</b>（QWERTY の <code>yu</code> など）と、同じキーを続けて打つ<b>同指同キー</b>（促音の <code>tt</code> など）に分けて示します。</p>
     <!-- same-finger-chart:start（tools/keystroke-chart.js が生成） -->
 <div class="kc-figures">
-<figure class="kc-figure" style="flex-grow: 556; min-width: 389px">
+<figure class="kc-figure" style="flex-grow: 640; min-width: min(448px, 100%)">
 <figcaption>日本語（ローマ字入力）</figcaption>
-<svg class="kc-chart kc-narrow" viewBox="0 0 556 360" role="img" aria-labelledby="sf-title sf-desc">
+<svg class="kc-chart kc-narrow" viewBox="0 0 640 360" role="img" aria-labelledby="sf-title sf-desc">
 <title id="sf-title">配列ごとの同指連続打鍵率（日本語）</title>
-<desc id="sf-desc">QWERTY 7.75%（同指異キー 5.37%、同指同キー 2.38%）、AZIK 6.22%（同指異キー 4.86%、同指同キー 1.36%）、DvorakJP lite ＋ 短縮拡張 4.83%（同指異キー 2.43%、同指同キー 2.40%）、DvorakJP lite 3.82%（同指異キー 1.69%、同指同キー 2.13%）、DvorakJP 3.77%（同指異キー 1.60%、同指同キー 2.17%）、大西配列 3.29%（同指異キー 0.91%、同指同キー 2.38%）</desc>
+<desc id="sf-desc">QWERTY 7.75%（同指異キー 5.37%、同指同キー 2.38%）、AZIK 6.22%（同指異キー 4.86%、同指同キー 1.36%）、DvorakJP lite ＋ 短縮拡張 4.83%（同指異キー 2.43%、同指同キー 2.40%）、Astarte 4.66%（同指異キー 2.28%、同指同キー 2.38%）、DvorakJP lite 3.82%（同指異キー 1.69%、同指同キー 2.13%）、DvorakJP 3.77%（同指異キー 1.60%、同指同キー 2.17%）、大西配列 3.29%（同指異キー 0.91%、同指同キー 2.38%）</desc>
 <defs><pattern id="sf-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f6c3ca"/><line x1="0" y1="0" x2="0" y2="6" stroke="#d7263d" stroke-width="2.5"/></pattern><pattern id="sf-hatch-light" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fdecee"/><line x1="0" y1="0" x2="0" y2="6" stroke="#ee9aa5" stroke-width="2.5"/></pattern></defs>
-<line x1="44" x2="548" y1="300.0" y2="300.0" stroke="var(--fg)" stroke-width="1"/>
+<line x1="44" x2="632" y1="300.0" y2="300.0" stroke="var(--fg)" stroke-width="1"/>
 <text x="36" y="300.0" dy="0.35em" text-anchor="end" class="kc-tick">0%</text>
-<line x1="44" x2="548" y1="269.8" y2="269.8" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="269.8" y2="269.8" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="269.8" dy="0.35em" text-anchor="end" class="kc-tick">1%</text>
-<line x1="44" x2="548" y1="239.6" y2="239.6" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="239.6" y2="239.6" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="239.6" dy="0.35em" text-anchor="end" class="kc-tick">2%</text>
-<line x1="44" x2="548" y1="209.3" y2="209.3" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="209.3" y2="209.3" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="209.3" dy="0.35em" text-anchor="end" class="kc-tick">3%</text>
-<line x1="44" x2="548" y1="179.1" y2="179.1" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="179.1" y2="179.1" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="179.1" dy="0.35em" text-anchor="end" class="kc-tick">4%</text>
-<line x1="44" x2="548" y1="148.9" y2="148.9" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="148.9" y2="148.9" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="148.9" dy="0.35em" text-anchor="end" class="kc-tick">5%</text>
-<line x1="44" x2="548" y1="118.7" y2="118.7" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="118.7" y2="118.7" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="118.7" dy="0.35em" text-anchor="end" class="kc-tick">6%</text>
-<line x1="44" x2="548" y1="88.4" y2="88.4" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="88.4" y2="88.4" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="88.4" dy="0.35em" text-anchor="end" class="kc-tick">7%</text>
-<line x1="44" x2="548" y1="58.2" y2="58.2" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="58.2" y2="58.2" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="58.2" dy="0.35em" text-anchor="end" class="kc-tick">8%</text>
-<line x1="44" x2="548" y1="28.0" y2="28.0" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="632" y1="28.0" y2="28.0" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="28.0" dy="0.35em" text-anchor="end" class="kc-tick">9%</text>
 <text x="8" y="16" class="kc-tick">同指連続打鍵率</text>
 <g class="kc-bar"><title>QWERTY: 同指連続打鍵率 7.75%（同指異キー 5.37%、同指同キー 2.38%）</title>
@@ -439,89 +438,107 @@
 <text x="246" y="348" text-anchor="middle" class="kc-label">＋ 短縮拡張</text>
 <svg x="284" y="336" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d7263d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
 </g>
-<g class="kc-bar"><title>DvorakJP lite: 同指連続打鍵率 3.82%（同指異キー 1.69%、同指同キー 2.13%）</title>
+<g class="kc-bar"><title>Astarte: 同指連続打鍵率 4.66%（同指異キー 2.28%、同指同キー 2.38%）</title>
 <rect x="298.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="310" y="248.9" width="56" height="51.1" fill="#d7263d"/>
-<path d="M310,246.9395708473213V188.62545011573292Q310,184.62545011573292 314,184.62545011573292H362Q366,184.62545011573292 366,188.62545011573292V246.9395708473213Z" fill="#f2a9b2"/>
-<text x="338" y="274.5" dy="0.35em" text-anchor="middle" class="kc-seg">1.69</text>
-<text x="338" y="215.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.13</text>
-<text x="338" y="176.6" text-anchor="middle" class="kc-value kc-strong">3.82%</text>
-<text x="338" y="318" text-anchor="middle" class="kc-label kc-strong">DvorakJP</text>
-<text x="338" y="333" text-anchor="middle" class="kc-label kc-strong">lite</text>
+<rect x="310" y="231.2" width="56" height="68.8" fill="#505050"/>
+<path d="M310,229.21931866595156V163.2806549678032Q310,159.2806549678032 314,159.2806549678032H362Q366,159.2806549678032 366,163.2806549678032V229.21931866595156Z" fill="#a8a8a8"/>
+<text x="338" y="265.6" dy="0.35em" text-anchor="middle" class="kc-seg">2.28</text>
+<text x="338" y="194.2" dy="0.35em" text-anchor="middle" class="kc-seg">2.38</text>
+<text x="338" y="151.3" text-anchor="middle" class="kc-value">4.66%</text>
+<text x="338" y="318" text-anchor="middle" class="kc-label">Astarte</text>
+</g>
+<g class="kc-bar"><title>DvorakJP lite: 同指連続打鍵率 3.82%（同指異キー 1.69%、同指同キー 2.13%）</title>
+<rect x="382.0" y="28" width="80" height="272" fill="transparent"/>
+<rect x="394" y="248.9" width="56" height="51.1" fill="#d7263d"/>
+<path d="M394,246.9395708473213V188.62545011573292Q394,184.62545011573292 398,184.62545011573292H446Q450,184.62545011573292 450,188.62545011573292V246.9395708473213Z" fill="#f2a9b2"/>
+<text x="422" y="274.5" dy="0.35em" text-anchor="middle" class="kc-seg">1.69</text>
+<text x="422" y="215.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.13</text>
+<text x="422" y="176.6" text-anchor="middle" class="kc-value kc-strong">3.82%</text>
+<text x="422" y="318" text-anchor="middle" class="kc-label kc-strong">DvorakJP</text>
+<text x="422" y="333" text-anchor="middle" class="kc-label kc-strong">lite</text>
 </g>
 <g class="kc-bar"><title>DvorakJP: 同指連続打鍵率 3.77%（同指異キー 1.60%、同指同キー 2.17%）</title>
-<rect x="382.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="394" y="251.6" width="56" height="48.4" fill="#8c8c8c"/>
-<path d="M394,249.60855717662233V189.96168276292312Q394,185.96168276292312 398,185.96168276292312H446Q450,185.96168276292312 450,189.96168276292312V249.60855717662233Z" fill="#c9c9c9"/>
-<text x="422" y="275.8" dy="0.35em" text-anchor="middle" class="kc-seg">1.60</text>
-<text x="422" y="217.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.17</text>
-<text x="422" y="178.0" text-anchor="middle" class="kc-value">3.77%</text>
-<text x="422" y="318" text-anchor="middle" class="kc-label">DvorakJP</text>
+<rect x="466.0" y="28" width="80" height="272" fill="transparent"/>
+<rect x="478" y="251.6" width="56" height="48.4" fill="#8c8c8c"/>
+<path d="M478,249.60855717662233V189.96168276292312Q478,185.96168276292312 482,185.96168276292312H530Q534,185.96168276292312 534,189.96168276292312V249.60855717662233Z" fill="#c9c9c9"/>
+<text x="506" y="275.8" dy="0.35em" text-anchor="middle" class="kc-seg">1.60</text>
+<text x="506" y="217.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.17</text>
+<text x="506" y="178.0" text-anchor="middle" class="kc-value">3.77%</text>
+<text x="506" y="318" text-anchor="middle" class="kc-label">DvorakJP</text>
 </g>
 <g class="kc-bar"><title>大西配列: 同指連続打鍵率 3.29%（同指異キー 0.91%、同指同キー 2.38%）</title>
-<rect x="466.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="478" y="272.5" width="56" height="27.5" fill="#6e6e6e"/>
-<path d="M478,270.4537384399453V204.51507474179695Q478,200.51507474179695 482,200.51507474179695H530Q534,200.51507474179695 534,204.51507474179695V270.4537384399453Z" fill="#bdbdbd"/>
-<text x="506" y="286.2" dy="0.35em" text-anchor="middle" class="kc-seg">0.91</text>
-<text x="506" y="235.5" dy="0.35em" text-anchor="middle" class="kc-seg">2.38</text>
-<text x="506" y="192.5" text-anchor="middle" class="kc-value">3.29%</text>
-<text x="506" y="318" text-anchor="middle" class="kc-label">大西配列</text>
+<rect x="550.0" y="28" width="80" height="272" fill="transparent"/>
+<rect x="562" y="272.5" width="56" height="27.5" fill="#6e6e6e"/>
+<path d="M562,270.4537384399453V204.51507474179695Q562,200.51507474179695 566,200.51507474179695H614Q618,200.51507474179695 618,204.51507474179695V270.4537384399453Z" fill="#bdbdbd"/>
+<text x="590" y="286.2" dy="0.35em" text-anchor="middle" class="kc-seg">0.91</text>
+<text x="590" y="235.5" dy="0.35em" text-anchor="middle" class="kc-seg">2.38</text>
+<text x="590" y="192.5" text-anchor="middle" class="kc-value">3.29%</text>
+<text x="590" y="318" text-anchor="middle" class="kc-label">大西配列</text>
 </g>
 </svg>
 </figure>
-<figure class="kc-figure" style="flex-grow: 304; min-width: 213px">
+<figure class="kc-figure" style="flex-grow: 388; min-width: min(272px, 100%)">
 <figcaption>英語（参考）</figcaption>
-<svg class="kc-chart kc-narrow" viewBox="0 0 304 360" role="img" aria-labelledby="sfe-title sfe-desc">
+<svg class="kc-chart kc-narrow" viewBox="0 0 388 360" role="img" aria-labelledby="sfe-title sfe-desc">
 <title id="sfe-title">キーボード配列ごとの同指連続打鍵率（英語）</title>
-<desc id="sfe-desc">QWERTY 6.81%（同指異キー 4.78%、同指同キー 2.04%）、大西配列 4.59%（同指異キー 2.55%、同指同キー 2.04%）、Dvorak 4.13%（同指異キー 2.10%、同指同キー 2.04%）</desc>
+<desc id="sfe-desc">QWERTY 7.28%（同指異キー 5.29%、同指同キー 1.99%）、大西配列 4.96%（同指異キー 2.96%、同指同キー 1.99%）、Astarte 4.80%（同指異キー 2.80%、同指同キー 1.99%）、Dvorak 4.18%（同指異キー 2.19%、同指同キー 1.99%）</desc>
 <defs><pattern id="sfe-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f6c3ca"/><line x1="0" y1="0" x2="0" y2="6" stroke="#d7263d" stroke-width="2.5"/></pattern><pattern id="sfe-hatch-light" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fdecee"/><line x1="0" y1="0" x2="0" y2="6" stroke="#ee9aa5" stroke-width="2.5"/></pattern></defs>
-<line x1="44" x2="296" y1="300.0" y2="300.0" stroke="var(--fg)" stroke-width="1"/>
+<line x1="44" x2="380" y1="300.0" y2="300.0" stroke="var(--fg)" stroke-width="1"/>
 <text x="36" y="300.0" dy="0.35em" text-anchor="end" class="kc-tick">0%</text>
-<line x1="44" x2="296" y1="269.8" y2="269.8" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="269.8" y2="269.8" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="269.8" dy="0.35em" text-anchor="end" class="kc-tick">1%</text>
-<line x1="44" x2="296" y1="239.6" y2="239.6" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="239.6" y2="239.6" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="239.6" dy="0.35em" text-anchor="end" class="kc-tick">2%</text>
-<line x1="44" x2="296" y1="209.3" y2="209.3" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="209.3" y2="209.3" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="209.3" dy="0.35em" text-anchor="end" class="kc-tick">3%</text>
-<line x1="44" x2="296" y1="179.1" y2="179.1" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="179.1" y2="179.1" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="179.1" dy="0.35em" text-anchor="end" class="kc-tick">4%</text>
-<line x1="44" x2="296" y1="148.9" y2="148.9" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="148.9" y2="148.9" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="148.9" dy="0.35em" text-anchor="end" class="kc-tick">5%</text>
-<line x1="44" x2="296" y1="118.7" y2="118.7" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="118.7" y2="118.7" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="118.7" dy="0.35em" text-anchor="end" class="kc-tick">6%</text>
-<line x1="44" x2="296" y1="88.4" y2="88.4" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="88.4" y2="88.4" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="88.4" dy="0.35em" text-anchor="end" class="kc-tick">7%</text>
-<line x1="44" x2="296" y1="58.2" y2="58.2" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="58.2" y2="58.2" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="58.2" dy="0.35em" text-anchor="end" class="kc-tick">8%</text>
-<line x1="44" x2="296" y1="28.0" y2="28.0" stroke="var(--line)" stroke-width="1"/>
+<line x1="44" x2="380" y1="28.0" y2="28.0" stroke="var(--line)" stroke-width="1"/>
 <text x="36" y="28.0" dy="0.35em" text-anchor="end" class="kc-tick">9%</text>
 <text x="8" y="16" class="kc-tick">同指連続打鍵率</text>
-<g class="kc-bar"><title>QWERTY: 同指連続打鍵率 6.81%（同指異キー 4.78%、同指同キー 2.04%）</title>
+<g class="kc-bar"><title>QWERTY: 同指連続打鍵率 7.28%（同指異キー 5.29%、同指同キー 1.99%）</title>
 <rect x="46.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="58" y="155.6" width="56" height="144.4" fill="#c9c9c9"/>
-<path d="M58,153.58906823427807V98.06784103736715Q58,94.06784103736715 62,94.06784103736715H110Q114,94.06784103736715 114,98.06784103736715V153.58906823427807Z" fill="#e8e8e8"/>
-<text x="86" y="227.8" dy="0.35em" text-anchor="middle" class="kc-seg">4.78</text>
-<text x="86" y="123.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.04</text>
-<text x="86" y="86.1" text-anchor="middle" class="kc-value">6.81%</text>
+<rect x="58" y="140.2" width="56" height="159.8" fill="#c9c9c9"/>
+<path d="M58,138.17591710631103V83.92465021351248Q58,79.92465021351248 62,79.92465021351248H110Q114,79.92465021351248 114,83.92465021351248V138.17591710631103Z" fill="#e8e8e8"/>
+<text x="86" y="220.1" dy="0.35em" text-anchor="middle" class="kc-seg">5.29</text>
+<text x="86" y="109.1" dy="0.35em" text-anchor="middle" class="kc-seg">1.99</text>
+<text x="86" y="71.9" text-anchor="middle" class="kc-value">7.28%</text>
 <text x="86" y="318" text-anchor="middle" class="kc-label">QWERTY</text>
 </g>
-<g class="kc-bar"><title>大西配列: 同指連続打鍵率 4.59%（同指異キー 2.55%、同指同キー 2.04%）</title>
+<g class="kc-bar"><title>大西配列: 同指連続打鍵率 4.96%（同指異キー 2.96%、同指同キー 1.99%）</title>
 <rect x="130.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="142" y="222.9" width="56" height="77.1" fill="#6e6e6e"/>
-<path d="M142,220.91171346392952V165.3904862670186Q142,161.3904862670186 146,161.3904862670186H194Q198,161.3904862670186 198,165.3904862670186V220.91171346392952Z" fill="#bdbdbd"/>
-<text x="170" y="261.5" dy="0.35em" text-anchor="middle" class="kc-seg">2.55</text>
-<text x="170" y="191.2" dy="0.35em" text-anchor="middle" class="kc-seg">2.04</text>
-<text x="170" y="153.4" text-anchor="middle" class="kc-value">4.59%</text>
+<rect x="142" y="210.4" width="56" height="89.6" fill="#6e6e6e"/>
+<path d="M142,208.44385797194585V154.1925910791473Q142,150.1925910791473 146,150.1925910791473H194Q198,150.1925910791473 198,154.1925910791473V208.44385797194585Z" fill="#bdbdbd"/>
+<text x="170" y="255.2" dy="0.35em" text-anchor="middle" class="kc-seg">2.96</text>
+<text x="170" y="179.3" dy="0.35em" text-anchor="middle" class="kc-seg">1.99</text>
+<text x="170" y="142.2" text-anchor="middle" class="kc-value">4.96%</text>
 <text x="170" y="318" text-anchor="middle" class="kc-label">大西配列</text>
 </g>
-<g class="kc-bar"><title>Dvorak: 同指連続打鍵率 4.13%（同指異キー 2.10%、同指同キー 2.04%）</title>
+<g class="kc-bar"><title>Astarte: 同指連続打鍵率 4.80%（同指異キー 2.80%、同指同キー 1.99%）</title>
 <rect x="214.0" y="28" width="80" height="272" fill="transparent"/>
-<rect x="226" y="236.6" width="56" height="63.4" fill="#d7263d"/>
-<path d="M226,234.60136631700243V179.08013912009147Q226,175.08013912009147 230,175.08013912009147H278Q282,175.08013912009147 282,179.08013912009147V234.60136631700243Z" fill="#f2a9b2"/>
-<text x="254" y="268.3" dy="0.35em" text-anchor="middle" class="kc-seg">2.10</text>
-<text x="254" y="204.8" dy="0.35em" text-anchor="middle" class="kc-seg">2.04</text>
-<text x="254" y="167.1" text-anchor="middle" class="kc-value kc-strong">4.13%</text>
-<text x="254" y="318" text-anchor="middle" class="kc-label kc-strong">Dvorak</text>
+<rect x="226" y="215.3" width="56" height="84.7" fill="#505050"/>
+<path d="M226,213.32158861200122V159.07032171920264Q226,155.07032171920264 230,155.07032171920264H278Q282,155.07032171920264 282,159.07032171920264V213.32158861200122Z" fill="#a8a8a8"/>
+<text x="254" y="257.7" dy="0.35em" text-anchor="middle" class="kc-seg">2.80</text>
+<text x="254" y="184.2" dy="0.35em" text-anchor="middle" class="kc-seg">1.99</text>
+<text x="254" y="147.1" text-anchor="middle" class="kc-value">4.80%</text>
+<text x="254" y="318" text-anchor="middle" class="kc-label">Astarte</text>
+</g>
+<g class="kc-bar"><title>Dvorak: 同指連続打鍵率 4.18%（同指異キー 2.19%、同指同キー 1.99%）</title>
+<rect x="298.0" y="28" width="80" height="272" fill="transparent"/>
+<rect x="310" y="233.8" width="56" height="66.2" fill="#d7263d"/>
+<path d="M310,231.80076166001476V177.54949476721623Q310,173.54949476721623 314,173.54949476721623H362Q366,173.54949476721623 366,177.54949476721623V231.80076166001476Z" fill="#f2a9b2"/>
+<text x="338" y="266.9" dy="0.35em" text-anchor="middle" class="kc-seg">2.19</text>
+<text x="338" y="202.7" dy="0.35em" text-anchor="middle" class="kc-seg">1.99</text>
+<text x="338" y="165.5" text-anchor="middle" class="kc-value kc-strong">4.18%</text>
+<text x="338" y="318" text-anchor="middle" class="kc-label kc-strong">Dvorak</text>
 </g>
 </svg>
 </figure>
@@ -532,35 +549,35 @@
 <p class="kc-table-title">日本語</p>
 <div class="table-wrap">
 <table class="kc-table">
-<thead><tr><th>コーパス（%）</th><th>文</th><th>QWERTY</th><th>AZIK</th><th>DvorakJP lite<br>＋ 短縮拡張 <svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></th><th>DvorakJP lite</th><th>DvorakJP</th><th>大西配列</th></tr></thead>
+<thead><tr><th>コーパス（%）</th><th>文</th><th>QWERTY</th><th>AZIK</th><th>DvorakJP lite<br>＋ 短縮拡張 <svg class="exp-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Experimental"><title>Experimental（実験中）</title><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></th><th>Astarte</th><th>DvorakJP lite</th><th>DvorakJP</th><th>大西配列</th></tr></thead>
 <tbody>
-<tr><th><a href="https://github.com/sarulab-speech/jsut-label">JSUT</a></th><td>4,907</td><td>7.89</td><td>6.90</td><td>4.54</td><td>3.58</td><td>3.49</td><td>3.12</td></tr>
-<tr><th><a href="https://github.com/mmorise/ita-corpus">ITA</a></th><td>412</td><td>9.11</td><td>6.48</td><td>5.25</td><td>4.35</td><td>4.04</td><td>3.57</td></tr>
-<tr><th><a href="https://tatoeba.org/ja/downloads">Tatoeba</a></th><td>244,964</td><td>7.48</td><td>5.84</td><td>4.77</td><td>3.54</td><td>3.50</td><td>3.21</td></tr>
-<tr><th><a href="https://www.rondhuit.com/download.html#ldcc">livedoor</a></th><td>112,818</td><td>7.95</td><td>6.54</td><td>4.96</td><td>4.17</td><td>4.15</td><td>3.40</td></tr>
-<tr><th><a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">Wikipedia</a></th><td>12,912</td><td>8.96</td><td>7.35</td><td>4.20</td><td>3.49</td><td>3.27</td><td>3.19</td></tr>
-<tr><th>合計</th><td>376,013</td><td>7.75</td><td>6.22</td><td>4.83</td><td>3.82</td><td>3.77</td><td>3.29</td></tr>
-<tr><th>うち同指異キー</th><td></td><td>5.37</td><td>4.86</td><td>2.43</td><td>1.69</td><td>1.60</td><td>0.91</td></tr>
-<tr><th>うち同指同キー</th><td></td><td>2.38</td><td>1.36</td><td>2.40</td><td>2.13</td><td>2.17</td><td>2.38</td></tr>
+<tr><th><a href="https://github.com/sarulab-speech/jsut-label">JSUT</a></th><td>4,907</td><td>7.89</td><td>6.90</td><td>4.54</td><td>4.94</td><td>3.58</td><td>3.49</td><td>3.12</td></tr>
+<tr><th><a href="https://github.com/mmorise/ita-corpus">ITA</a></th><td>412</td><td>9.11</td><td>6.48</td><td>5.25</td><td>5.78</td><td>4.35</td><td>4.04</td><td>3.57</td></tr>
+<tr><th><a href="https://tatoeba.org/ja/downloads">Tatoeba</a></th><td>244,964</td><td>7.48</td><td>5.84</td><td>4.77</td><td>4.87</td><td>3.54</td><td>3.50</td><td>3.21</td></tr>
+<tr><th><a href="https://www.rondhuit.com/download.html#ldcc">livedoor</a></th><td>112,818</td><td>7.95</td><td>6.54</td><td>4.96</td><td>4.42</td><td>4.17</td><td>4.15</td><td>3.40</td></tr>
+<tr><th><a href="https://github.com/ku-nlp/WikipediaAnnotatedCorpus">Wikipedia</a></th><td>12,912</td><td>8.96</td><td>7.35</td><td>4.20</td><td>4.41</td><td>3.49</td><td>3.27</td><td>3.19</td></tr>
+<tr><th>合計</th><td>376,013</td><td>7.75</td><td>6.22</td><td>4.83</td><td>4.66</td><td>3.82</td><td>3.77</td><td>3.29</td></tr>
+<tr><th>うち同指異キー</th><td></td><td>5.37</td><td>4.86</td><td>2.43</td><td>2.28</td><td>1.69</td><td>1.60</td><td>0.91</td></tr>
+<tr><th>うち同指同キー</th><td></td><td>2.38</td><td>1.36</td><td>2.40</td><td>2.38</td><td>2.13</td><td>2.17</td><td>2.38</td></tr>
 </tbody>
 </table>
 </div>
 <p class="kc-table-title">英語（参考）</p>
 <div class="table-wrap">
 <table class="kc-table">
-<thead><tr><th>コーパス（%）</th><th>文</th><th>QWERTY</th><th>大西配列</th><th>Dvorak</th></tr></thead>
+<thead><tr><th>コーパス（%）</th><th>文</th><th>QWERTY</th><th>大西配列</th><th>Astarte</th><th>Dvorak</th></tr></thead>
 <tbody>
-<tr><th><a href="https://tatoeba.org/ja/downloads">Tatoeba</a></th><td>2,041,577</td><td>6.57</td><td>4.40</td><td>4.11</td></tr>
-<tr><th><a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig News</a></th><td>100,000</td><td>7.60</td><td>5.25</td><td>4.31</td></tr>
-<tr><th><a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig Wikipedia</a></th><td>100,000</td><td>7.65</td><td>5.20</td><td>4.14</td></tr>
-<tr><th>合計</th><td>2,241,577</td><td>6.81</td><td>4.59</td><td>4.13</td></tr>
-<tr><th>うち同指異キー</th><td></td><td>4.78</td><td>2.55</td><td>2.10</td></tr>
-<tr><th>うち同指同キー</th><td></td><td>2.04</td><td>2.04</td><td>2.04</td></tr>
+<tr><th><a href="https://tatoeba.org/ja/downloads">Tatoeba</a></th><td>291,787</td><td>6.57</td><td>4.40</td><td>4.74</td><td>4.11</td></tr>
+<tr><th><a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig News</a></th><td>100,000</td><td>7.60</td><td>5.25</td><td>4.98</td><td>4.31</td></tr>
+<tr><th><a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig Wikipedia</a></th><td>100,000</td><td>7.65</td><td>5.20</td><td>4.67</td><td>4.14</td></tr>
+<tr><th>合計</th><td>491,787</td><td>7.28</td><td>4.96</td><td>4.80</td><td>4.18</td></tr>
+<tr><th>うち同指異キー</th><td></td><td>5.29</td><td>2.96</td><td>2.80</td><td>2.19</td></tr>
+<tr><th>うち同指同キー</th><td></td><td>1.99</td><td>1.99</td><td>1.99</td><td>1.99</td></tr>
 </tbody>
 </table>
 </div>
-    <p class="note">英語は <a href="https://tatoeba.org/ja/downloads">Tatoeba</a>（CC BY 2.0 FR）、<a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig News</a>（CC BY）、<a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig Wikipedia</a>（CC BY） の英文を、そのまま打つものとして数えた。英字（大文字は小文字として数え、Shift は数えない）と Shift なしで打つ記号（<code>, . ; ' / - [ ]</code>）を数え、空白（親指）・数字・そのほかの記号で区切る。Dvorak は DvorakJP 系を打つキーボード配列。</p>
-    <p class="note">日本語のコーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>
+    <p class="note">英語は <a href="https://tatoeba.org/ja/downloads">Tatoeba</a>（CC BY 2.0 FR、文の番号が 7 の倍数の文）、<a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig News</a>（CC BY）、<a href="https://wortschatz.uni-leipzig.de/en/download/English">Leipzig Wikipedia</a>（CC BY） の英文を、そのまま打つものとして数えた。Tatoeba はほかより大きく合計が偏るので、文の番号で間引いて文字数をそろえた。英字（大文字は小文字として数え、Shift は数えない）と Shift なしで打つ記号（<code>, . ; ' / - [ ]</code>）を数え、空白（親指）・数字・そのほかの記号で区切る。Dvorak は DvorakJP 系を打つキーボード配列。</p>
+    <p class="note">日本語のコーパスは比較1と同じ。指はタッチタイピングの一般的な割り当てとし、DvorakJP 系は Dvorak 配列、<a href="https://o24.works/layout/">大西配列</a>は大西配列、<a href="https://neinvalli.hatenablog.com/entry/2018/07/21/185448">Astarte</a> は Astarte 配列、そのほかは QWERTY 配列のキーボードで打つものとして数えた。大西配列と Astarte のローマ字テーブルは通常ローマ字（QWERTY と同じ）。計測スクリプト： <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/keystrokes.js">tools/keystrokes.js</a>（指の割り当ては <a href="https://github.com/cafe6a6e/DvorakJP-lite/blob/main/tools/fingers.js">tools/fingers.js</a>）</p>
 </details>
     <!-- same-finger-chart:end -->
   </main>

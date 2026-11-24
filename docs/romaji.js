@@ -24,7 +24,7 @@ export async function loadTable(url) {
   return parseTable(await res.text());
 }
 
-// ---- 変換エンジン（Google日本語入力 / Mozc の動きの近似）----
+// ---- 変換エンジン（Google 日本語入力 / Mozc の動きの近似）----
 
 // keys を打ったときの結果。committed = 確定したかな、pending = 保留中のキー
 function run(t, keys, flushAtEnd) {

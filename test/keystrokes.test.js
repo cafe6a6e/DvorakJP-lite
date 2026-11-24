@@ -1,8 +1,10 @@
 // 打鍵数比較スクリプト（tools/keystrokes.js）のテスト。コーパスのダウンロードはしない
 import { describe, expect, test } from "bun:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { parseText, plan } from "../docs/romaji.js";
 import { countSameFinger, fingerOf } from "../tools/fingers.js";
-import { analyze, analyzeEnglish, DEFAULT_SERIES, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
+import { analyze, analyzeEnglish, DEFAULT_SERIES, ENGLISH_CORPORA, TATOEBA_EN_EVERY, diffSentences, joinReadings, loadSeries, measure, parseKnp, parseSeries } from "../tools/keystrokes.js";
 import { readText } from "./helpers.js";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -104,6 +106,17 @@ describe("英文", () => {
   test("同じ文でも、キーボード配列で同じ指の連続が変わる", () => {
     expect(analyzeEnglish("dvorak", "hello").sameFinger).toBe(1); // ll の連打だけ
     expect(analyzeEnglish("onishi", "hello").sameFinger).toBe(1);
+  });
+
+  test("英語の Tatoeba は、文の番号が TATOEBA_EN_EVERY の倍数の文だけを使う", async () => {
+    const tsv = ["6\teng\tsix", "7\teng\tseven", "13\teng\tthirteen", "14\teng\tfourteen"].join("\n");
+    const dir = mkdtempSync(`${tmpdir()}/tatoeba-`);
+    await Bun.write(`${dir}/eng.tsv`, tsv);
+    Bun.spawnSync(["bzip2", `${dir}/eng.tsv`]);
+    const sentences = await ENGLISH_CORPORA.Tatoeba.load({ file: async () => `${dir}/eng.tsv.bz2` });
+    rmSync(dir, { recursive: true });
+    expect(TATOEBA_EN_EVERY).toBe(7);
+    expect(sentences).toEqual(["seven", "fourteen"]);
   });
 
   test("大西配列の Shift の記号は、Shift を外した記号のキーで打つ", () => {

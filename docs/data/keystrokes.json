@@ -605,36 +605,37 @@
         "name": "Tatoeba",
         "source": "https://tatoeba.org/ja/downloads",
         "license": "CC BY 2.0 FR",
+        "sample": "文の番号が 7 の倍数の文",
         "files": [
           {
             "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2",
             "sha256": "0c4d3b18152bd6507bbf77ab690532b25de1e60da950f68705b3c88935c01fb4"
           }
         ],
-        "sentences": 2041577,
+        "sentences": 291787,
         "series": [
           {
             "name": "QWERTY",
             "keyboard": "qwerty",
-            "strokes": 67864187,
-            "sameFinger": 4461296,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 636442,
+            "sameKey": 199181,
             "sameFingerRate": 0.0657
           },
           {
             "name": "Dvorak",
             "keyboard": "dvorak",
-            "strokes": 67864187,
-            "sameFinger": 2787294,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 397707,
+            "sameKey": 199181,
             "sameFingerRate": 0.0411
           },
           {
             "name": "大西配列",
             "keyboard": "onishi",
-            "strokes": 67864187,
-            "sameFinger": 2984167,
-            "sameKey": 1395945,
+            "strokes": 9687595,
+            "sameFinger": 426247,
+            "sameKey": 199181,
             "sameFingerRate": 0.044
           }
         ]
@@ -717,31 +718,31 @@
       }
     ],
     "total": {
-      "sentences": 2241577,
+      "sentences": 491787,
       "series": [
         {
           "name": "QWERTY",
           "keyboard": "qwerty",
-          "strokes": 87934547,
-          "sameFinger": 5991800,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0681
+          "strokes": 29757955,
+          "sameFinger": 2166946,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0728
         },
         {
           "name": "Dvorak",
           "keyboard": "dvorak",
-          "strokes": 87934547,
-          "sameFinger": 3634667,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0413
+          "strokes": 29757955,
+          "sameFinger": 1245080,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0418
         },
         {
           "name": "大西配列",
           "keyboard": "onishi",
-          "strokes": 87934547,
-          "sameFinger": 4032981,
-          "sameKey": 1790021,
-          "sameFingerRate": 0.0459
+          "strokes": 29757955,
+          "sameFinger": 1475061,
+          "sameKey": 593257,
+          "sameFingerRate": 0.0496
         }
       ]
     }

@@ -323,8 +323,8 @@ export function renderSameFingerReadme(result) {
 
 // 英語のコーパスの出典と数え方
 function englishNote(english) {
-  const list = english.corpora.map((c) => `<a href="${c.source}">${esc(c.name)}</a>（${esc(c.license)}）`).join("、");
-  return `    <p class="note">英語は ${list} の英文を、そのまま打つものとして数えた。英字（大文字は小文字として数え、Shift は数えない）と Shift なしで打つ記号（<code>, . ; ' / - [ ]</code>）を数え、空白（親指）・数字・そのほかの記号で区切る。Dvorak は DvorakJP 系を打つキーボード配列。</p>`;
+  const list = english.corpora.map((c) => `<a href="${c.source}">${esc(c.name)}</a>（${esc(c.license)}${c.sample ? `、${esc(c.sample)}` : ""}）`).join("、");
+  return `    <p class="note">英語は ${list} の英文を、そのまま打つものとして数えた。Tatoeba はほかより大きく合計が偏るので、文の番号で間引いて文字数をそろえた。英字（大文字は小文字として数え、Shift は数えない）と Shift なしで打つ記号（<code>, . ; ' / - [ ]</code>）を数え、空白（親指）・数字・そのほかの記号で区切る。Dvorak は DvorakJP 系を打つキーボード配列。</p>`;
 }
 
 if (import.meta.main) {

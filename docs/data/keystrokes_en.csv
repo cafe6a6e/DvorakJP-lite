@@ -1,7 +1,7 @@
 corpus,series,keyboard,strokes,same_finger,same_key,same_finger_rate
-Tatoeba,QWERTY,qwerty,67864187,4461296,1395945,0.0657
-Tatoeba,Dvorak,dvorak,67864187,2787294,1395945,0.0411
-Tatoeba,大西配列,onishi,67864187,2984167,1395945,0.044
+Tatoeba,QWERTY,qwerty,9687595,636442,199181,0.0657
+Tatoeba,Dvorak,dvorak,9687595,397707,199181,0.0411
+Tatoeba,大西配列,onishi,9687595,426247,199181,0.044
 Leipzig News,QWERTY,qwerty,9575053,727403,200589,0.076
 Leipzig News,Dvorak,dvorak,9575053,412978,200589,0.0431
 Leipzig News,大西配列,onishi,9575053,502980,200589,0.0525

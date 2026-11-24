@@ -46,8 +46,11 @@ export const CORPORA = {
     license: "CC0",
     // 「EMOTION100_001:えっ嘘でしょ。,エッウソデショ。」の、: と , の間
     load: async ({ text, kuromoji }) => {
-      const files = await Promise.all(["emotion", "recitation"].map(
-        (f) => text(`https://raw.githubusercontent.com/mmorise/ita-corpus/994844bcac6925c900fd4ab45beab11b0b9ea7bd/${f}_transcript_utf8.txt`)));
+      // 記録するファイルの順（JSON の files）が毎回同じになるよう、1 つずつ取得する
+      const files = [];
+      for (const f of ["emotion", "recitation"]) {
+        files.push(await text(`https://raw.githubusercontent.com/mmorise/ita-corpus/994844bcac6925c900fd4ab45beab11b0b9ea7bd/${f}_transcript_utf8.txt`));
+      }
       return kuromoji(files.join("\n").split("\n").filter((l) => l.includes(":"))
         .map((l) => l.slice(l.indexOf(":") + 1).split(",")[0]));
     },
@@ -105,16 +108,23 @@ const leipzig = (id) => async ({ archive }) => {
   return text.split("\n").filter(Boolean).map((l) => l.slice(l.indexOf("\t") + 1));
 };
 
-// 英語のコーパス。load は文の配列を返す
+// 英語の Tatoeba から使う文の間隔（文の番号がこの数の倍数の文）
+export const TATOEBA_EN_EVERY = 7;
+
+// 英語のコーパス。load は文の配列を返す。sample は文を間引いたときの選び方
 export const ENGLISH_CORPORA = {
-  // 日常の短文・会話
+  // 日常の短文・会話。全部で約 200 万文と、ほかの 2 つより 7 倍ほど大きいので、
+  // 合計が Tatoeba に偏らないよう、文の番号が TATOEBA_EN_EVERY の倍数の文だけを使う（ほかの 2 つと文字数がほぼそろう）。
+  // 乱数を使わないので、同じファイルからは同じ文が選ばれる。文が追加されても、既にある文が選ばれるかは変わらない
   Tatoeba: {
     source: "https://tatoeba.org/ja/downloads",
     license: "CC BY 2.0 FR",
+    sample: "文の番号が 7 の倍数の文",
     load: async ({ file }) => {
       const path = await file("https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2");
       const tsv = Bun.spawnSync(["bunzip2", "-c", path]).stdout.toString();
-      return tsv.split("\n").filter(Boolean).map((l) => l.split("\t")[2]);
+      return tsv.split("\n").filter(Boolean).map((l) => l.split("\t"))
+        .filter(([id]) => Number(id) % TATOEBA_EN_EVERY === 0).map((x) => x[2]);
     },
   },
   // ニュース記事（2023 年、10 万文）
@@ -470,7 +480,7 @@ if (import.meta.main) {
     const sentences = await c.load(ctx);
     const files = [...usedFiles];
     const r = measureEnglish(ENGLISH_SERIES, sentences);
-    english.push({ name, source: c.source, license: c.license, files, ...r });
+    english.push({ name, source: c.source, license: c.license, ...(c.sample ? { sample: c.sample } : {}), files, ...r });
     console.log(`\n### 英語 ${name}: ${r.sentences} 文、${r.series[0].strokes} 字`);
     for (const s of r.series) console.log(`${s.name.padEnd(10)} 同指 ${(s.sameFingerRate * 100).toFixed(2)}%（うち連打 ${(s.sameKey / s.strokes * 100).toFixed(2)}%）`);
   }

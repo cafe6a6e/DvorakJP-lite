@@ -197,6 +197,11 @@ th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--lin
 th { border-bottom: 2px solid var(--fg); }
 
 .note { color: var(--muted); font-size: 14px; }
+/* 表の注釈（*1 など）。表の中の印と、表の下の説明 */
+.fn { color: var(--muted); font-size: .75em; margin-left: 2px; }
+.fn-list { margin-top: 8px; line-height: 1.7; }
+/* 打ち方の例で、注目するキー（同指連続打鍵率の例で、直前と同じ指で打つキーなど） */
+code b { color: var(--accent); }
 .warn {
   border-left: 4px solid var(--accent);
   background: var(--soft);

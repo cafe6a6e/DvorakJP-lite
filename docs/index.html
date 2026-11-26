@@ -244,17 +244,20 @@
       <table>
         <thead><tr><th>項目</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
         <tbody>
-          <tr><td>「ん」の後の入力</td><td>一部の組み合わせで <code>nn</code> が必要（<code>ennpitu</code> 鉛筆）</td><td>拡張ルールとの衝突による <code>nn</code> は不要（<code>enpitu</code> 鉛筆）</td></tr>
+          <tr><td>「ん」入力</td><td>一部 <code>nn</code> が必要（<code>ennpitu</code> 鉛筆）</td><td>不要（<code>enpitu</code> 鉛筆）</td></tr>
           <tr><td>な行拡張</td><td><code>n</code>（<code>n'</code> ない、<code>nj</code> ねん）</td><td><code>v</code>（<code>v'</code> ない、<code>vj</code> ねん）</td></tr>
-          <tr><td>拗音拡張</td><td><code>h</code> と <code>n</code></td><td>原則 <code>y</code>。きゃ行は <code>cy</code>、ぴゃ行は <code>ph</code> でも打てる</td></tr>
-          <tr><td>ア段＋い</td><td><code>'</code></td><td><code>'</code> と <code>-</code>（Dvorak 版）</td></tr>
-          <tr><td>記号入力</td><td><code>z</code>（<code>z.</code> …）</td><td>主に <code>;</code>（<code>;.</code> …）。<code>z.</code> などは拡張入力（<code>z.</code> ぜい）</td></tr>
+          <tr><td>拗音拡張</td><td><code>h</code> と <code>n</code></td><td><code>y</code>（きゃ行は <code>cy</code>、ぴゃ行は <code>ph</code> も可）</td></tr>
+          <tr><td>ア段＋い</td><td><code>'</code></td><td><code>'</code> と <code>-</code>&#8288;<sup class="fn">*1</sup></td></tr>
+          <tr><td>記号入力</td><td><code>z</code>（<code>z.</code> …）</td><td><code>;</code>（<code>;.</code> …）&#8288;<sup class="fn">*2</sup></td></tr>
         </tbody>
       </table>
     </div>
+    <p class="note fn-list">
+      *1 <code>-</code> は Dvorak 版だけ。QWERTY 版は <code>'</code> の位置のキーだけ。<br>
+      *2 ざ行拡張と衝突する <code>z</code> の記号入力（<code>z.</code> など）は削除。
+    </p>
 
     <h2>DvorakJP lite の拡張キー</h2>
-    <p>拡張キーは、子音や拗音のすぐ後に打って、二重母音や「ん」までをまとめて入力するキーです。たとえば「ア段＋い」の <code>'</code> を <code>s</code> の後に打つと、<code>s'</code> で「さい」になります。</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行</th><th>拗音の例（きゃ行・ぴゃ行）</th></tr></thead>
@@ -290,6 +293,7 @@
         </mrow>
       </math>
     </p>
+    <p>例：「遠心力」<code>ensinryoku</code> → 3 文字 ÷ 10 打 = 0.30</p>
     <!-- keystroke-chart:start（tools/keystroke-chart.js が生成） -->
 <figure class="kc-figure">
 <svg class="kc-chart" viewBox="0 0 640 350" role="img" aria-labelledby="kc-title kc-desc">
@@ -379,6 +383,7 @@
     </p>
     <p>ここで、日本語文での打鍵数は、ローマ字テーブルでの最短の打ち方で数えます。最短の打ち方が複数あるときは、同指打鍵が最も少ないもので数えます。</p>
     <p>直前と同じ指で打つ打鍵は、別のキーを打つ<b>同指異キー</b>（QWERTY の <code>yu</code> など）と、同じキーを続けて打つ<b>同指同キー</b>（促音の <code>tt</code> など）に分けて示します。</p>
+    <p>例：「キュリー温度」<code>cy<b>u</b>ri-ondo</code>（Dvorak 配列）→ 1 打 ÷ 10 打 = 10%</p>
     <!-- same-finger-chart:start（tools/keystroke-chart.js が生成） -->
 <div class="kc-figures">
 <figure class="kc-figure" style="flex-grow: 640; min-width: min(448px, 100%)">

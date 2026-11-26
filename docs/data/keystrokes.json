@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24",
+  "generated": "2026-11-26",
   "corpora": [
     {
       "name": "JSUT",
@@ -334,7 +334,7 @@
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
           "keyboard": "dvorak",
-          "strokes": 8650040,
+          "strokes": 8650038,
           "efficiency": 0.5045,
           "perKana": 1.614,
           "ratio": 0.9354,
@@ -347,7 +347,7 @@
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
           "keyboard": "dvorak",
-          "strokes": 8119558,
+          "strokes": 8119556,
           "efficiency": 0.5375,
           "perKana": 1.515,
           "ratio": 0.878,
@@ -361,8 +361,8 @@
         "b": "DvorakJP lite",
         "fewer": 1937,
         "fewerStrokes": 1956,
-        "more": 41,
-        "moreStrokes": 46
+        "more": 40,
+        "moreStrokes": 44
       }
     },
     {
@@ -454,7 +454,7 @@
           "table": "docs/romantable_dvorakjplite.txt",
           "ext": true,
           "keyboard": "dvorak",
-          "strokes": 7430729,
+          "strokes": 7430707,
           "efficiency": 0.5167,
           "perKana": 1.5654,
           "ratio": 0.9231,
@@ -467,11 +467,11 @@
           "table": "docs/romantable_dvorakjplite_abbr.txt",
           "ext": true,
           "keyboard": "dvorak",
-          "strokes": 6990561,
+          "strokes": 6990539,
           "efficiency": 0.5492,
           "perKana": 1.4727,
           "ratio": 0.8684,
-          "sameFinger": 346803,
+          "sameFinger": 346804,
           "sameKey": 162983,
           "sameFingerRate": 0.0496
         }
@@ -481,8 +481,8 @@
         "b": "DvorakJP lite",
         "fewer": 1604,
         "fewerStrokes": 1645,
-        "more": 201,
-        "moreStrokes": 223
+        "more": 182,
+        "moreStrokes": 201
       }
     },
     {
@@ -654,7 +654,7 @@
       },
       {
         "name": "DvorakJP lite",
-        "strokes": 17035341,
+        "strokes": 17035317,
         "efficiency": 0.5093,
         "sameFinger": 650331,
         "sameKey": 362519,
@@ -662,9 +662,9 @@
       },
       {
         "name": "DvorakJP lite ＋ 短縮拡張",
-        "strokes": 16011347,
+        "strokes": 16011323,
         "efficiency": 0.5418,
-        "sameFinger": 773427,
+        "sameFinger": 773428,
         "sameKey": 384819,
         "sameFingerRate": 0.0483
       }
@@ -674,8 +674,8 @@
       "b": "DvorakJP lite",
       "fewer": 3795,
       "fewerStrokes": 3877,
-      "more": 270,
-      "moreStrokes": 301
+      "more": 250,
+      "moreStrokes": 277
     }
   },
   "english": {

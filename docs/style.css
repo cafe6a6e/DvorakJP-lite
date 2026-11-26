@@ -76,11 +76,6 @@ a[href^="http"]:not(.gh-link)::after {
 }
 .gh-link:hover { color: var(--bg); }
 
-/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に回す */
-@media (max-width: 640px) {
-  .gh-link { order: 2; }
-  .tabs { order: 3; flex-basis: 100%; }
-}
 .tabs a {
   color: #cfcfcf;
   text-decoration: none;
@@ -92,6 +87,27 @@ a[href^="http"]:not(.gh-link)::after {
 .tabs a[aria-current="page"] {
   color: var(--bg);
   border-bottom-color: var(--accent);
+}
+
+/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に 1 行で並べる。
+   「補足：DvorakJP の解説」は「補足」だけにし、それでも収まらない幅では横にスクロールする */
+@media (max-width: 640px) {
+  .site-header { padding: 10px 16px; }
+  .gh-link { order: 2; }
+  .tabs {
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 0 -8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs a { padding: 6px 8px; white-space: nowrap; }
+  .tab-long { display: none; }
+}
+@media (max-width: 360px) {
+  .tabs a { padding: 6px 6px; font-size: 14px; }
 }
 
 /* 本文 */

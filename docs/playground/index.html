@@ -54,7 +54,7 @@
       <a href="../">DvorakJP lite とは</a>
       <a href="../install/">導入方法</a>
       <a href="../playground/" aria-current="page">練習</a>
-      <a href="../dvorakjp/">補足：DvorakJP の解説</a>
+      <a href="../dvorakjp/">補足<span class="tab-long">：DvorakJP の解説</span></a>
     </nav>
     <a class="gh-link" href="https://github.com/cafe6a6e/DvorakJP-lite" aria-label="GitHub リポジトリ" title="GitHub リポジトリ">
       <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
@@ -68,6 +68,7 @@
       <summary>練習のしかた</summary>
       <ul>
         <li>下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。</li>
+        <li>練習エリアの下のキーボードの図で、次に打てるキーを<span class="cand-sample">薄い赤</span>で、そのうち最後まで最短の打鍵数で打てるキー（拡張入力を使う打ち方）を<span class="best-sample">濃い赤</span>で示します。最短の打ち方が複数あるときは、同じ指で続けて打つことが少なく、左右の手を交互に打つものを濃い赤にします。</li>
         <li>かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。</li>
         <li>キーボード配列と短縮拡張の有無は、導入方法で選んだものと同じにしてください。</li>
         <li>QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。</li>
@@ -103,9 +104,14 @@
     <p class="pg-stats" id="pg-stats"></p>
 
     <div class="pg-area" id="pg-area" tabindex="0" aria-label="タイピング練習エリア">
-      <p class="pg-status" id="pg-status">読み込み中…</p>
+      <div class="pg-head">
+        <p class="pg-status" id="pg-status">読み込み中…</p>
+        <span class="pg-count" id="pg-count" aria-label="今の文 / 文の数"></span>
+      </div>
       <div class="pg-text" id="pg-text"></div>
     </div>
+
+    <div class="pg-keyboard" id="pg-keyboard" aria-hidden="true"></div>
   </main>
 
   <footer class="site-footer">

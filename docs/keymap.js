@@ -16,6 +16,22 @@ const DVORAK_SHIFT = "{}" + '"<>PYFGCRL?+' + "AOEUIDHTNS_" + ":QJKXBMWVZ";
 const US_SHIFT = "_+" + "QWERTYUIOP{}" + 'ASDFGHJKL:"' + "ZXCVBNM<>?";
 const JIS_SHIFT = "=~" + "QWERTYUIOP`{" + "ASDFGHJKL+*" + "ZXCVBNM<>?";
 
+// 練習ページのキーボードの図に並べるキー（数字段・上段・ホーム段・下段）。キーにはその配列の文字を書く
+function keyRows(keys) {
+  return ["1234567890" + keys.slice(0, 2), keys.slice(2, 14), keys.slice(14, 25), keys.slice(25)];
+}
+
+// キーの位置（列）→ 指（0〜3: 左の小指・薬指・中指・人差し指、6〜9: 右の人差し指・中指・薬指・小指）。
+// 一般的なタッチタイピングの割り当て（tools/fingers.js と同じ）
+const COLUMN_FINGER = [0, 1, 2, 3, 3, 6, 6, 7, 8, 9, 9, 9];
+
+// キーボード配列のキーの文字 → 指（rows は LAYOUTS の rows）。キーボードにない文字は null
+export function fingerOf(rows) {
+  const m = new Map();
+  for (const row of rows) [...row].forEach((c, i) => m.set(c, COLUMN_FINGER[i]));
+  return (c) => m.get(c) ?? null;
+}
+
 function pairs(from, to) {
   return [...from].map((c, i) => [c, to[i]]);
 }
@@ -29,6 +45,7 @@ const EXTRA_KEYS = new Map([["-", "z"]]);
 const QWERTY_SYMBOLS = new Map([["z.", "…"], ["z,", "‥"], ["z/", "・"]]);
 
 // suffix: ローマ字テーブルのファイル名で、版の後ろに付ける文字（tableFile を参照）
+// rows: キーボードの図に並べるキー（keyRows を参照）
 // map: Dvorak の文字 → そのキーで出る文字（Dvorak 用は null）
 // extra: map とは別に、同じ Dvorak の文字として使える QWERTY の文字
 // symbols: QWERTY 版だけに足す記号の行（QWERTY で打つキー → かな）
@@ -36,6 +53,7 @@ export const LAYOUTS = {
   "qwerty-jis": {
     label: "QWERTY(JIS)",
     suffix: "_qwerty_jis",
+    rows: keyRows(JIS),
     // Dvorak の } は JIS 配列では ~ の位置になり、そのまま使う ~（〜）と重なるので対応させない
     map: new Map([...pairs(DVORAK, JIS), ...pairs(DVORAK_SHIFT, JIS_SHIFT).filter(([d]) => d !== "}")]),
     extra: EXTRA_KEYS,
@@ -44,6 +62,7 @@ export const LAYOUTS = {
   "qwerty-us": {
     label: "QWERTY(US)",
     suffix: "_qwerty_us",
+    rows: keyRows(US),
     map: new Map([...pairs(DVORAK, US), ...pairs(DVORAK_SHIFT, US_SHIFT)]),
     extra: EXTRA_KEYS,
     symbols: QWERTY_SYMBOLS,
@@ -51,6 +70,7 @@ export const LAYOUTS = {
   dvorak: {
     label: "Dvorak",
     suffix: "",
+    rows: keyRows(DVORAK),
     map: null,
   },
 };

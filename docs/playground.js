@@ -1,6 +1,6 @@
 // 練習ページ（playground/）: 長文タイピング練習
-import { loadTable, parseTable, deletePending, judge, romajiLayout, parseText } from "./romaji.js";
-import { LAYOUTS, convertKeys, invert, simplifyForQwerty, tableFile } from "./keymap.js";
+import { loadTable, parseTable, deletePending, judge, nextKeys, romajiLayout, parseText } from "./romaji.js";
+import { LAYOUTS, convertKeys, fingerOf, invert, simplifyForQwerty, tableFile } from "./keymap.js";
 import { currentEdition, currentLayout, onEditionChange, onLayoutChange } from "./layout-select.js";
 import { track } from "./analytics.js";
 
@@ -10,6 +10,8 @@ const statusEl = $("pg-status");
 const textEl = $("pg-text");
 const statsEl = $("pg-stats");
 const genresEl = $("pg-genres");
+const countEl = $("pg-count");
+const keyboardEl = $("pg-keyboard");
 
 // 下段のローマ字とヒントは、どのキーボード配列でも Dvorak 配列の文字で表示する（Dvorak 用の表で作る）。
 // QWERTY 配列では、QWERTY 用の表と同じく簡単にした Dvorak 用の表で作る（QWERTY 用の表で打てない打ち方を出さないため）
@@ -19,6 +21,8 @@ const displayTables = new Map(); // 表示用の表（版と Dvorak 用 / QWERTY
 // 入力の判定には、選んだキーボード配列と版のローマ字テーブルを使う
 let table = null;
 let toDvorak = null; // 押したキーの文字 → Dvorak 配列の文字（入力中の表示用）
+const keyEls = new Map(); // キーボードの図のキー（押すキーの文字ごと）
+let finger = null; // 押すキーの文字 → 指（打鍵数が同じ打ち方から、打ちやすいものを選ぶのに使う）
 const tables = new Map(); // 読み込んだローマ字テーブル（ファイル名ごと）
 let texts = [];
 let state = null;
@@ -38,7 +42,8 @@ function el(tag, className, text) {
   return e;
 }
 
-// 問題文を「。」ごとに区切り、上段＝文章・下段＝ローマ字で描画する
+// 問題文を「。」ごとに区切り、上段＝文章・下段＝ローマ字で描画する。
+// 文は同じ場所に重ねて置き、今の文だけを見せる（練習エリアの高さは一番長い文に合い、文が変わっても同じ）
 function render(text) {
   const items = parseText(text.text);
   const sentences = [[]];
@@ -50,6 +55,7 @@ function render(text) {
 
   textEl.replaceChildren();
   const spans = [];
+  const boxes = [];
   let offset = 0;
   for (const sentence of sentences) {
     const box = el("div", "pg-sentence");
@@ -93,32 +99,55 @@ function render(text) {
     box.append(jp, romaji);
     textEl.append(box);
     offset += kana.length;
+    boxes.push({ el: box, end: offset });
   }
 
-  return { target: items.map((x) => x.kana).join(""), spans };
+  return { target: items.map((x) => x.kana).join(""), spans, boxes };
 }
 
-// 打ち終えた部分を薄く、今の位置に下線を引く
+// 打ち終えた部分を薄く、今の位置に下線を引き、今の文を見せる
 function updateProgress() {
   const c = state.committed.length;
-  let currentBox = null;
   for (const s of state.spans) {
     const done = s.end <= c;
-    const current = !done && s.start <= c;
     s.el.classList.toggle("done", done);
-    s.el.classList.toggle("current", current);
-    if (current) currentBox = s.box;
+    s.el.classList.toggle("current", !done && s.start <= c);
   }
-  if (currentBox) scrollWithinArea(currentBox);
+  // 打ち終えたら最後の文を見せたままにする
+  const i = Math.max(0, state.finishedAt ? state.boxes.length - 1 : state.boxes.findIndex((b) => b.end > c));
+  state.boxes.forEach((b, j) => b.el.classList.toggle("active", j === i));
+  countEl.textContent = `${i + 1} / ${state.boxes.length}`;
+  updateNextKey();
 }
 
-// 今の文が練習エリアの外に出たら、エリアの中だけをスクロールする（ページ全体は動かさない）
-function scrollWithinArea(box) {
-  const a = area.getBoundingClientRect();
-  const b = box.getBoundingClientRect();
-  if (b.top < a.top || b.bottom > a.bottom) {
-    area.scrollTop += b.top - a.top - 48;
-  }
+// ---- キーボードの図 ----
+
+// 選んだキーボード配列のキーを並べる。行ごとに右へずらす量（キー 1/4 個分の単位）
+const ROW_OFFSETS = [0, 2, 3, 5];
+// ホームポジションの目印を付けるキー（ホーム段の左から4つ目と7つ目）
+const HOME_KEYS = [3, 6];
+
+function renderKeyboard(rows) {
+  keyboardEl.replaceChildren();
+  keyEls.clear();
+  rows.forEach((row, r) => {
+    [...row].forEach((c, i) => {
+      const k = el("span", "pg-key", c);
+      k.style.gridRow = String(r + 1);
+      k.style.gridColumn = `${ROW_OFFSETS[r] + i * 4 + 1} / span 4`;
+      if (r === 2 && HOME_KEYS.includes(i)) k.classList.add("home");
+      keyboardEl.append(k);
+      keyEls.set(c, k);
+    });
+  });
+}
+
+// 次に打てるキーをすべて薄い赤で示し、最後まで最短の打鍵数で打てるキー（拡張入力も使う）を濃い赤で示す。
+// 最短のキーが複数あれば、同じ指の連続が少なく、左右の手を交互に打つものを1つだけ選ぶ
+function updateNextKey() {
+  const candidates = state && !state.finishedAt ? nextKeys(table, state.typed, state.target, keyEls.keys(), finger) : [];
+  for (const k of keyEls.values()) k.classList.remove("cand", "best");
+  for (const { key, preferred } of candidates) keyEls.get(key).classList.add(preferred ? "best" : "cand");
 }
 
 const MAX_MS = 999 * 1000; // 時間は 999 秒で止める
@@ -148,10 +177,8 @@ function start(text) {
   for (const b of genresEl.querySelectorAll("button")) {
     b.setAttribute("aria-pressed", String(b.dataset.id === text.id));
   }
-  const { target, spans } = render(text);
-  state = { text, target, spans, typed: "", committed: "", pending: "", correct: 0, miss: 0, startedAt: 0, finishedAt: 0 };
-  textEl.scrollTop = 0;
-  area.scrollTop = 0;
+  const { target, spans, boxes } = render(text);
+  state = { text, target, spans, boxes, typed: "", committed: "", pending: "", correct: 0, miss: 0, startedAt: 0, finishedAt: 0 };
   updateProgress();
   updateStats();
   idleStatus();
@@ -187,6 +214,7 @@ function onBackspace() {
   state.typed = r.typed;
   state.pending = r.pending;
   showPending();
+  updateNextKey();
 }
 
 function onKeyDown(e) {
@@ -275,6 +303,8 @@ async function useTables() {
   table = t;
   displayTable = d;
   toDvorak = invert(layout.map);
+  renderKeyboard(layout.rows);
+  finger = fingerOf(layout.rows);
   return true;
 }
 

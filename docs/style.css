@@ -76,11 +76,6 @@ a[href^="http"]:not(.gh-link)::after {
 }
 .gh-link:hover { color: var(--bg); }
 
-/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に回す */
-@media (max-width: 640px) {
-  .gh-link { order: 2; }
-  .tabs { order: 3; flex-basis: 100%; }
-}
 .tabs a {
   color: #cfcfcf;
   text-decoration: none;
@@ -92,6 +87,27 @@ a[href^="http"]:not(.gh-link)::after {
 .tabs a[aria-current="page"] {
   color: var(--bg);
   border-bottom-color: var(--accent);
+}
+
+/* 狭い画面では、GitHub マークを右上に置き、タブを次の行に 1 行で並べる。
+   「補足：DvorakJP の解説」は「補足」だけにし、それでも収まらない幅では横にスクロールする */
+@media (max-width: 640px) {
+  .site-header { padding: 10px 16px; }
+  .gh-link { order: 2; }
+  .tabs {
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 0 -8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs a { padding: 6px 8px; white-space: nowrap; }
+  .tab-long { display: none; }
+}
+@media (max-width: 360px) {
+  .tabs a { padding: 6px 6px; font-size: 14px; }
 }
 
 /* 本文 */
@@ -181,6 +197,11 @@ th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--lin
 th { border-bottom: 2px solid var(--fg); }
 
 .note { color: var(--muted); font-size: 14px; }
+/* 表の注釈（*1 など）。表の中の印と、表の下の説明 */
+.fn { color: var(--muted); font-size: .75em; margin-left: 2px; }
+.fn-list { margin-top: 8px; line-height: 1.7; }
+/* 打ち方の例で、注目するキー（同指連続打鍵率の例で、直前と同じ指で打つキーなど） */
+code b { color: var(--accent); }
 .warn {
   border-left: 4px solid var(--accent);
   background: var(--soft);
@@ -310,24 +331,26 @@ ol li { margin-bottom: 6px; }
   border: 2px solid var(--fg);
   border-radius: 10px;
   padding: 16px 20px;
-  max-height: 60vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   outline: none;
   transition: box-shadow .1s, border-color .1s;
 }
 .pg-area:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(215, 38, 61, .15); }
 .pg-area.miss { box-shadow: 0 0 0 4px rgba(215, 38, 61, .45); }
 
+.pg-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; }
+.pg-count { margin-left: auto; font-family: var(--mono); font-size: 14px; color: var(--muted); white-space: nowrap; }
 .pg-status {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 14px;
   color: var(--muted);
 }
 .pg-status.warn { color: var(--accent); font-weight: 700; }
 .pg-status.done { color: var(--fg); font-weight: 700; }
 
-.pg-sentence { margin-bottom: 18px; }
+/* 文は同じ場所に重ね、今の文（.active）だけを見せる。高さは一番長い文に合う */
+.pg-text { display: grid; }
+.pg-sentence { grid-area: 1 / 1; visibility: hidden; }
+.pg-sentence.active { visibility: visible; }
 .pg-jp { font-size: 20px; line-height: 1.9; }
 .pg-romaji {
   font-family: var(--mono);
@@ -360,6 +383,39 @@ ol li { margin-bottom: 6px; }
   text-decoration-color: var(--accent);
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+}
+
+/* キーボードの図。列はキー 1/4 個分の単位で、行ごとに右へずらす */
+.pg-keyboard {
+  display: grid;
+  grid-template-columns: repeat(50, minmax(0, 1fr));
+  row-gap: 4px;
+  max-width: 640px;
+  margin: 16px auto 0;
+  user-select: none;
+}
+.pg-key {
+  margin: 0 2px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--soft);
+  font-family: var(--mono);
+  font-size: 15px;
+  transition: background-color .08s, border-color .08s;
+}
+.pg-key.home { text-decoration: underline; text-underline-offset: 4px; }
+/* 次に打てるキー（.cand）と、最短の打鍵数で打てるキー（.best） */
+.pg-key.cand, .cand-sample { background: #fde4e8; }
+.pg-key.cand { border-color: #f2b3bc; }
+.pg-key.best, .best-sample { background: #f39aa7; }
+.pg-key.best { border-color: var(--accent); font-weight: 700; }
+.cand-sample, .best-sample { padding: 0 4px; border-radius: 4px; }
+@media (max-width: 480px) {
+  .pg-key { margin: 0 1px; height: 32px; font-size: 13px; border-radius: 4px; }
 }
 
 /* 打鍵効率比較のグラフ（tools/keystroke-chart.js が生成） */

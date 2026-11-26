@@ -126,7 +126,7 @@ describe.each(Object.keys(EDITIONS))("%s 版", (edition) => {
       const dash = removed.filter((k) => k.endsWith("-"));
       const zSymbols = removed.filter((k) => k.startsWith("z") && !k.endsWith("-"));
       const inner = removed.filter((k) => k.slice(0, -1).includes("'"));
-      expect(dash.length).toBe(36);
+      expect(dash.length).toBe(37);
       expect(zSymbols.sort()).toEqual(["z/", "z[", "z]", "zh", "zl"]);
       expect(inner.sort()).toEqual(["d'i", "d'u", "d'y", "d'yu", "t'i", "t'u", "t'y", "t'yu"]);
       expect(removed.length).toBe(dash.length + zSymbols.length + inner.length);

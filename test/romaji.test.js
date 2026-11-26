@@ -1,9 +1,10 @@
 // 練習ページのロジック（docs/romaji.js）のテスト
 import { describe, expect, test } from "bun:test";
 import {
-  compose, deletePending, flush, isExtensionKey, judge, loadTable, parseTable, parseText, plan, romajiLayout,
+  completion, compose, deletePending, flush, isExtensionKey, judge, loadTable, nextKeys, parseTable, parseText, plan, romajiLayout,
 } from "../docs/romaji.js";
-import { loadTableFile, readText } from "./helpers.js";
+import { loadTableFile, readText, STANDARD_PATH } from "./helpers.js";
+import { LAYOUTS, fingerOf } from "../docs/keymap.js";
 
 const t = await loadTableFile();
 const texts = JSON.parse(await readText(new URL("../docs/playground-texts.json", import.meta.url).pathname));
@@ -274,3 +275,77 @@ describe("問題文のデータ（docs/playground-texts.json）", () => {
   });
 });
 
+// 練習ページのキーボードの図: 次に打てるキーと、最短の打鍵数で打てるキー（拡張入力も使う）
+describe("次に打てるキー", async () => {
+  // 短縮入力が混ざらないよう、標準版の表で確かめる
+  const std = await loadTableFile(STANDARD_PATH);
+  const KEYS = "1234567890[]',.pyfgcrl/=aoeuidhtns-;qjkxbmwvz"; // Dvorak 配列のキーボードのキー
+  const next = (typed, target) => {
+    const r = nextKeys(std, typed, target, KEYS);
+    const keys = (best) => r.filter((x) => x.best === best).map((x) => x.key).sort().join("");
+    return { best: keys(true), other: keys(false) };
+  };
+
+  test.each([
+    // く は c・k・q のどれでも打てる（kk は っ なので、k の後に k は打てない）
+    ["", "く", "ckq", ""],
+    // きょうは: ky, / cy, が最短。ki（き）の後に ょ を打つのは長い
+    ["", "きょうは", "ck", ""],
+    ["c", "きょうは", "y", "i"],
+    ["cy", "きょうは", ",", "o"],
+    // 拡張なしで途中まで打ったら、その続き（kyo きょ の後は u。wu でも う）
+    ["kyo", "きょうは", "u", "w"],
+    // ぴゅう: ph と py は同じ打鍵数（php / pyp）
+    ["p", "ぴゅう", "hy", "i"],
+    // 打ち終えたらなし
+    ["ka", "か", "", ""],
+  ])("%p まで打って %p: 最短は %p、ほかに %p", (typed, target, best, other) => {
+    expect(next(typed, target)).toEqual({ best, other });
+  });
+
+  // 打鍵数が同じ最短の打ち方からは、同じ指の連続が少なく、左右の手を交互に打つものを1つ選ぶ（Dvorak 配列の指で）
+  const finger = fingerOf(LAYOUTS.dvorak.rows);
+  test.each([
+    ["", "き", "c"], // ci（右→左）。ki は k・i が左の人差し指
+    ["", "きゃ", "c"], // cya。kya は k・y が左の人差し指
+    ["c", "きゃ", "y"],
+    ["p", "ぴゅう", "h"], // php。pyp は p・y が左の人差し指
+    ["s", "しゅう", "h"], // shp。syp は y・p が左の人差し指
+    ["", "く", "c"], // cu。ku は k・u が左の人差し指、qu は左手だけ
+  ])("%p まで打って %p: 優先するのは %p", (typed, target, key) => {
+    const r = nextKeys(std, typed, target, KEYS, finger);
+    expect(r.filter((x) => x.preferred).map((x) => x.key)).toEqual([key]);
+  });
+
+  test("優先するキーは、最短の打鍵数で打てるキーの中から1つだけ", () => {
+    const r = nextKeys(std, "", "きょうは", KEYS, finger);
+    expect(r.filter((x) => x.preferred).length).toBe(1);
+    expect(r.find((x) => x.preferred).best).toBe(true);
+  });
+
+  test("保留中のキーからも、拡張入力を使う最短の続きを求める（せんせい を se まで打ったら n s.）", () => {
+    expect(completion(std, "", "せんせい")).toBe("sjs.");
+    expect(completion(std, "se", "せんせい")).toBe("sens.");
+  });
+
+  test.each([
+    ["かんじ", "k;"],
+    ["っか", "kk"],
+    ["こんにちは", "k"],
+  ])("保留中のキーの続き: %p を %p まで打った後も最後まで打てる", (kana, typed) => {
+    expect(flush(std, completion(std, typed, kana))).toBe(kana);
+  });
+
+  test.each(texts.map((x) => [x.genre, x]))("「%s」を、最短のキーだけで、拡張入力を使う最短の打鍵数で最後まで打てる", (_genre, x) => {
+    const kana = parseText(x.text).map((i) => i.kana).join("");
+    const shortest = plan(std, kana, true, (key) => key.length).map((s) => s.key).join("").length;
+    let typed = "";
+    for (let n = 0; n < shortest; n++) {
+      const best = nextKeys(std, typed, kana, KEYS).find((x) => x.best);
+      expect(best.strokes).toBe(shortest - n);
+      typed += best.key;
+    }
+    expect(flush(std, typed)).toBe(kana);
+    expect(nextKeys(std, typed, kana, KEYS)).toEqual([]);
+  });
+});

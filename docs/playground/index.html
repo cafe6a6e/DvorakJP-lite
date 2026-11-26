@@ -68,6 +68,7 @@
       <summary>練習のしかた</summary>
       <ul>
         <li>下段の<span class="ext-sample">赤字</span>の部分は、拡張入力で打鍵を減らせます（マウスを乗せると打ち方が出ます）。</li>
+        <li>練習エリアの下のキーボードの図で、次に打てるキーを<span class="cand-sample">薄い赤</span>で、そのうち最後まで最短の打鍵数で打てるキー（拡張入力を使う打ち方）を<span class="best-sample">濃い赤</span>で示します。最短の打ち方が複数あるときは、同じ指で続けて打つことが少なく、左右の手を交互に打つものを濃い赤にします。</li>
         <li>かなに確定する前の入力中のキーは、Backspace で消して打ち直せます。</li>
         <li>キーボード配列と短縮拡張の有無は、導入方法で選んだものと同じにしてください。</li>
         <li>QWERTY(JIS)・QWERTY(US) では、OS の配列は QWERTY のまま、Dvorak 配列と同じ位置のキーで打ちます。</li>
@@ -103,9 +104,14 @@
     <p class="pg-stats" id="pg-stats"></p>
 
     <div class="pg-area" id="pg-area" tabindex="0" aria-label="タイピング練習エリア">
-      <p class="pg-status" id="pg-status">読み込み中…</p>
+      <div class="pg-head">
+        <p class="pg-status" id="pg-status">読み込み中…</p>
+        <span class="pg-count" id="pg-count" aria-label="今の文 / 文の数"></span>
+      </div>
       <div class="pg-text" id="pg-text"></div>
     </div>
+
+    <div class="pg-keyboard" id="pg-keyboard" aria-hidden="true"></div>
   </main>
 
   <footer class="site-footer">

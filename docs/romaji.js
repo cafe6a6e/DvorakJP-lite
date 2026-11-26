@@ -239,6 +239,74 @@ export function romajiLayout(t, kana) {
   });
 }
 
+// ---- 次に打つキー ----
+
+const keysOf = (segs) => segs.map((s) => s.key).join("");
+
+// 打ちやすさのコスト。続けて打つ2つのキーが、同じ指なら 1e-3、同じ手なら 1e-6 を足す。
+// 打鍵数の 1 より十分小さく（長文でも足し合わせて 1 に届かない）、打鍵数が同じときだけ効く。
+// finger はキーの文字 → 指（0〜4 が左手、5〜9 が右手。キーボードにない文字は null）
+function pairCost(finger, a, b) {
+  const fa = finger(a), fb = finger(b);
+  if (fa == null || fb == null) return 0;
+  if (fa === fb) return 1e-3;
+  return (fa < 5) === (fb < 5) ? 1e-6 : 0;
+}
+function easeOf(finger, keys) {
+  let c = 0;
+  if (finger) for (let i = 1; i < keys.length; i++) c += pairCost(finger, keys[i - 1], keys[i]);
+  return c;
+}
+
+// typed まで打った状態から、target を最後まで打つ最短のキー列（typed を含む）を求める。拡張入力も使う。
+// finger を渡すと、打鍵数が同じなら打ちやすいもの（easeOf が小さいもの）を選ぶ。
+// 保留中のキーがあれば、それに続けて打てる行を試す。打てなければ null
+export function completion(t, typed, target, finger = null) {
+  const { committed, pending } = compose(t, typed);
+  if (!target.startsWith(committed)) return null;
+  const rest = target.slice(committed.length);
+  // plan の既定のコストは使わない（同じ打鍵数のときの好みの小さな減点が、長い文では足し合わさって打鍵数を超えるため）
+  const cost = (key, _ext, first) => key.length + easeOf(finger, first === null ? key : key + first);
+  const score = (keys) => keys.length + easeOf(finger, keys.slice(Math.max(0, typed.length - 1)));
+  const valid = (keys) => (flush(t, keys) === target ? keys : null);
+  if (!pending) {
+    const p = plan(t, rest, true, cost);
+    return p && valid(typed + keysOf(p));
+  }
+  let best = null;
+  for (const [key, e] of t.entries) {
+    if (!e.out || !key.startsWith(pending) || !rest.startsWith(e.out)) continue;
+    const after = plan(t, rest.slice(e.out.length), true, cost);
+    if (!after) continue;
+    let tail = keysOf(after);
+    // 促音（tt → っ、次の入力 t）は、次の入力のキーを打ち直さない
+    if (e.pend && tail.startsWith(e.pend)) tail = tail.slice(e.pend.length);
+    const keys = valid(typed + key.slice(pending.length) + tail);
+    if (keys && (!best || score(keys) < score(best))) best = keys;
+  }
+  return best;
+}
+
+// 次に打てるキー。keys（キーボードのキーの文字）のうち、打っても最後まで打ち切れるものを返す。
+//   strokes: そのキーを含めて最後まで打つ最短の打鍵数
+//   best: strokes が最小（最短の打鍵数で打てる）
+//   preferred: best のうち、一番打ちやすいもの（1つだけ。同じなら keys の順で先のもの）
+export function nextKeys(t, typed, target, keys, finger = null) {
+  const out = [];
+  for (const key of keys) {
+    const r = judge(t, typed, key, target);
+    if (!r.ok) continue;
+    const c = r.done ? typed + key : completion(t, typed + key, target, finger);
+    if (!c) continue;
+    const rest = c.slice(typed.length);
+    out.push({ key, strokes: rest.length, ease: easeOf(finger, c.slice(Math.max(0, typed.length - 1))) });
+  }
+  const min = Math.min(...out.map((x) => x.strokes));
+  let pick = null;
+  for (const x of out) if (x.strokes === min && (!pick || x.ease < pick.ease)) pick = x;
+  return out.map(({ key, strokes }, i) => ({ key, strokes, best: strokes === min, preferred: out[i] === pick }));
+}
+
 // ---- 問題文 ----
 
 // 「{今日|きょう}は」形式を [{ display, kana }] に分ける

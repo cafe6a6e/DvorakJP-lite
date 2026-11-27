@@ -27,6 +27,10 @@ a { color: var(--accent); }
 /* 見出しを句（span）の区切りでだけ折り返す。狭い画面では、長いほうの句（15 字）が 1 行に収まるまで文字を小さくする */
 .phrase { font-size: min(30px, calc((100vw - 56px) / 15)); }
 .phrase span { display: inline-block; }
+/* h1 の先頭に小さく添える、ページの主題（トップページの「DvorakJP lite」） */
+/* 見出しを句の区切りでだけ折り返す（導入方法・練習の h1） */
+h1 .nb { display: inline-block; }
+.phrase .h1-kicker { display: block; font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
 
 /* 外部リンクの印。アイコン: Lucide「external-link」（ISC License, Copyright (c) Lucide Contributors 2022） */
 a[href^="http"]:not(.gh-link)::after {

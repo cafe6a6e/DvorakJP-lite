@@ -279,7 +279,8 @@ QWERTY 版の表は、Dvorak 版から `bun run build` で作ります（「Dvor
 | `docs/romantable_dvorakjplite[_abbr]_qwerty_us.txt` | 各版のローマ字テーブル（QWERTY・US 配列用。同上） |
 | `docs/index.html` ほか | 公式ページ（GitHub Pages）。`index.html`（DvorakJP lite とは）、`install/`（導入方法）、`playground/`（練習）、`dvorakjp/`（DvorakJP の解説）の 4 ページ。ヘッダーとフッターは 4 つの HTML に同じものを書いている（`test/site.test.js` で確認） |
 | `docs/analytics.js` | Google Analytics のイベント送信（`download_romantable`・`playground_start`・`playground_complete`）。本番サイトで自分のアクセスを計測しないときは、そのブラウザで URL に `?ga=off` を付けて一度開く（`?ga=on` で戻す） |
-| `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため） |
+| `docs/sitemap.xml` | 公式ページのサイトマップ。Google Search Console から送信する（GitHub Pages のプロジェクトサイトでは `robots.txt` が読まれないため）。`bun run build` で `tools/sitemap.js` が作り直し、各ページの更新日（HTML を最後にコミットした日。未コミットの変更があれば今日）を入れる。ページを直したら build してから一緒にコミットする |
+| `docs/toc.js` | 「DvorakJP lite とは」「DvorakJP の解説」の目次（id 付きの h2 から作る）と、ページの先頭に戻るボタン |
 | `tools/keystrokes.js` | 打鍵効率と同指連続打鍵率の計測（`bun run keystrokes`）。日本語と英語（参考）のコーパスを `.cache/corpus/` にダウンロードし、結果を `docs/data/keystrokes.json`・`keystrokes.csv`・`keystrokes_en.csv`（英語）に書く。最後に `tools/keystroke-chart.js` で、公式ページのグラフとこの README の表を作り直す |
 | `tools/fingers.js` | 同指連続打鍵率の計測で使う、キーボード配列（QWERTY・Dvorak・大西配列・Astarte）ごとの指の割り当て |
 | `test/fixtures/` | 比較用のローマ字テーブル（`qwerty-base.txt` 標準ローマ字、`dvorakjp-original.txt` 元祖 DvorakJP、`azik.txt` AZIK） |

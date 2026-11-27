@@ -23,6 +23,32 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="../style.css">
 
+  <!-- 検索エンジン向けの構造化データ（schema.org）。パンくずリスト -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "DvorakJP lite",
+            "item": "https://cafe6a6e.github.io/DvorakJP-lite/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "練習",
+            "item": "https://cafe6a6e.github.io/DvorakJP-lite/playground/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJE1TE4DDM"></script>
   <script>
@@ -62,7 +88,7 @@
   </header>
 
   <main>
-    <h1>練習</h1>
+    <h1><span class="nb">DvorakJP lite の</span><span class="nb">タイピング練習</span></h1>
     <p class="lead">日本語入力をオフにして、英字の直接入力で打つ長文タイピング練習です。</p>
     <details class="pg-help">
       <summary>練習のしかた</summary>

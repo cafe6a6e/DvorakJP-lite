@@ -125,3 +125,15 @@ describe("短縮拡張の有無の選択（導入方法・練習）", () => {
     expect(abbr).toContain('aria-label="Experimental"');
   });
 });
+
+// 目次（docs/toc.js）は id 付きの h2 から作る。トップページの id は、以前の URL の転送（docs/app.js の MOVED）とぶつけない
+describe.each([["（トップ）", ""], ["dvorakjp/", "dvorakjp/"]])("%s: 目次", (_, path) => {
+  const { html } = pages.find((p) => p.path === path);
+  test("toc.js を読み込み、h2 にすべて id がある", () => {
+    expect(html).toContain(`<script type="module" src="${path ? "../" : ""}toc.js"></script>`);
+    const h2 = [...html.matchAll(/<h2([^>]*)>/g)].map((m) => m[1]);
+    expect(h2.length).toBeGreaterThanOrEqual(3);
+    for (const attrs of h2) expect(attrs).toMatch(/ id="[\w-]+"/);
+    for (const id of ["install", "playground", "dvorakjp"]) expect(html).not.toContain(`id="${id}"`);
+  });
+});

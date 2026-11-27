@@ -445,3 +445,84 @@ ol li { margin-bottom: 6px; }
 .kc-table th, .kc-table td { padding: 6px 8px; }
 .kc-table thead th { vertical-align: bottom; }
 .kc-table thead th:not(:first-child) { text-align: right; }
+
+/* ページ内リンクで移った見出しが、上に固定したヘッダーに隠れないようにする */
+main [id] { scroll-margin-top: 80px; }
+
+/* 目次（docs/toc.js が作る）。本文の右の余白に固定し、余白が足りない幅では出さない */
+.page-toc {
+  display: none;
+  position: fixed;
+  top: 96px;
+  left: calc(50% + 440px + 8px);
+  width: min(220px, calc(50% - 440px - 24px));
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+@media (min-width: 1240px) {
+  .page-toc { display: block; }
+}
+.page-toc-title {
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+.page-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--line);
+}
+.page-toc a {
+  display: block;
+  margin-left: -2px;
+  padding: 6px 0 6px 12px;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  text-decoration: none;
+}
+.page-toc a:hover { color: var(--fg); }
+.page-toc a[aria-current] {
+  color: var(--accent);
+  font-weight: 700;
+  border-left-color: var(--accent);
+}
+
+/* ページの先頭に戻るボタン（docs/toc.js が作る）。少し下まで読むと右下に出る */
+.to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg);
+  box-shadow: 0 2px 8px rgb(0 0 0 / .2);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity .2s, transform .2s, visibility .2s, background-color .2s;
+}
+.to-top.show { opacity: .85; visibility: visible; transform: none; }
+.to-top:hover, .to-top:focus-visible { opacity: 1; background: var(--accent); }
+.to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 640px) {
+  .to-top { right: 12px; bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: none; }
+}
+@media (max-width: 640px) {
+  main [id] { scroll-margin-top: 112px; }
+}

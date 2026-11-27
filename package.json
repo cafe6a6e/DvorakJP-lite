@@ -10,7 +10,7 @@
     "test": "bun test",
     "test:watch": "bun test --watch",
     "serve": "bun tools/serve.js",
-    "build": "bun tools/build-tables.js",
+    "build": "bun tools/build-tables.js && bun tools/sitemap.js",
     "keystrokes": "bun tools/keystrokes.js"
   },
   "devDependencies": {

@@ -66,6 +66,7 @@
   </script>
 
   <script type="module" src="app.js"></script>
+  <script type="module" src="toc.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -82,7 +83,7 @@
   </header>
 
   <main>
-    <h1 class="phrase"><span>覚えた分だけ打鍵が減らせる、</span><span>シンプルな拡張ローマ字テーブル</span></h1>
+    <h1 class="phrase"><span class="h1-kicker">DvorakJP lite</span><span>覚えた分だけ打鍵が減らせる、</span><span>シンプルな拡張ローマ字テーブル</span></h1>
     <p><strong class="accent">DvorakJP lite</strong> は、DvorakJP の効率的な拡張ローマ字入力の仕組みを維持しつつ、普通のローマ字入力を妨げないように見直した、いわば <strong>DvorakJP 拡張ローマ字テーブルの軽量版</strong>です。一般的なローマ字入力の打ち方に干渉せず、ご自身のペースで拡張ローマ字を徐々に取り入れられることを目指しています。</p>
     <p><a href="install/">Google 日本語入力等のローマ字テーブルの差替え</a>だけで導入でき、Dvorak 配列の方はもちろん、QWERTY 配列の方でも気軽に試せます。</p>
 
@@ -92,7 +93,7 @@
       <figcaption>DvorakJP lite 配列図。左手の赤い拡張キーを使うと、二重母音や「ん」をまとめて入力できます。</figcaption>
     </figure>
 
-    <h2>DvorakJP lite の設計思想</h2>
+    <h2 id="design">DvorakJP lite の設計思想</h2>
     <p class="note">DvorakJP をご存じない方は、<a href="dvorakjp/">DvorakJP の解説</a>をぜひご一読ください。</p>
 
     <h3>1. 通常ローマ字の最短打鍵法をそのまま使える</h3>
@@ -239,7 +240,7 @@
       </details>
     </div>
 
-    <h2>DvorakJP との主な違い</h2>
+    <h2 id="differences">DvorakJP との主な違い</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>項目</th><th>DvorakJP</th><th>DvorakJP lite</th></tr></thead>
@@ -257,7 +258,7 @@
       *2 ざ行拡張と衝突する <code>z</code> の記号入力（<code>z.</code> など）は削除。
     </p>
 
-    <h2>DvorakJP lite の拡張キー</h2>
+    <h2 id="keys">DvorakJP lite の拡張キー</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>キー</th><th>意味</th><th>直音の例</th><th>な行</th><th>拗音の例（きゃ行・ぴゃ行）</th></tr></thead>

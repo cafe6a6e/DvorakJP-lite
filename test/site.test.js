@@ -63,6 +63,9 @@ test("Google Analytics のタグが 4 つのページで同じ", () => {
   for (const t of tags) expect(t).toBe(tags[0]);
 });
 
+// 共有用の画像がほかと違うページ
+const OG_IMAGES = { "dvorakjp/": "images/og-dvorakjp.png" };
+
 describe("共有用の表示（OGP）とアイコン", () => {
   const get = (html, re) => html.match(re)?.[1];
   test.each(pages.map((p) => [p.path || "（トップ）", p]))("%s: OGP がタイトル・説明文・正規 URL と一致する", (_, p) => {
@@ -70,7 +73,8 @@ describe("共有用の表示（OGP）とアイコン", () => {
     expect(og("title")).toBe(get(p.html, /<title>([^<]+)<\/title>/));
     expect(og("description")).toBe(get(p.html, /<meta name="description" content="([^"]+)">/));
     expect(og("url")).toBe(BASE + p.path);
-    expect(og("image")).toBe(BASE + "images/og.png");
+    expect(og("image")).toBe(BASE + (OG_IMAGES[p.path] ?? "images/og.png"));
+    expect(og("type")).toBe(p.path === "dvorakjp/" ? "article" : "website");
     expect(og("site_name")).toBe("DvorakJP lite");
     expect(get(p.html, /<meta name="twitter:card" content="([^"]+)">/)).toBe("summary_large_image");
   });
@@ -80,8 +84,8 @@ describe("共有用の表示（OGP）とアイコン", () => {
     expect(p.html).toMatch(/<link rel="apple-touch-icon" href="(\.\.\/)?images\/apple-touch-icon\.png">/);
   });
 
-  test("共有用の画像は 1200×630 の PNG", async () => {
-    const png = new Uint8Array(await Bun.file(join(docs, "images/og.png")).arrayBuffer());
+  test.each(["images/og.png", ...Object.values(OG_IMAGES)])("共有用の画像 %s は 1200×630 の PNG", async (file) => {
+    const png = new Uint8Array(await Bun.file(join(docs, file)).arrayBuffer());
     const view = new DataView(png.buffer);
     expect([...png.slice(1, 4)].map((c) => String.fromCharCode(c)).join("")).toBe("PNG");
     expect([view.getUint32(16), view.getUint32(20)]).toEqual([1200, 630]);
@@ -98,10 +102,41 @@ test("トップページの構造化データ（JSON-LD）が説明文・正規 
   expect(ld.downloadUrl).toBe(BASE + "install/");
 });
 
-test("サイトマップの URL が 4 つのページと一致する", async () => {
-  const xml = await readText(join(docs, "sitemap.xml"));
-  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+const sitemap = await readText(join(docs, "sitemap.xml"));
+const lastmod = Object.fromEntries([...sitemap.matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]]));
+
+test("サイトマップの URL が 4 つのページと一致し、どれにも更新日がある（bun run build で作る）", () => {
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   expect(locs).toEqual(PAGES.map((path) => BASE + path));
+  expect(Object.keys(lastmod)).toEqual(locs);
+  for (const date of Object.values(lastmod)) expect(date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+});
+
+describe("トップページ以外の構造化データ（JSON-LD）", () => {
+  const ld = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const names = { "install/": "導入方法", "playground/": "練習", "dvorakjp/": "DvorakJP の解説" };
+
+  test.each(pages.filter((p) => p.path).map((p) => [p.path, p]))("%s: パンくずリストが トップ › ページ（ヘッダーのタブと同じ名前）", (_, p) => {
+    const crumbs = ld(p.html)["@graph"].find((x) => x["@type"] === "BreadcrumbList").itemListElement;
+    expect(crumbs.map((c) => [c.position, c.name, c.item])).toEqual([[1, "DvorakJP lite", BASE], [2, names[p.path], BASE + p.path]]);
+  });
+
+  test("DvorakJP の解説: Article の見出し・説明文・画像・更新日が、タイトル・OGP・サイトマップと一致する", () => {
+    const { html } = pages.find((p) => p.path === "dvorakjp/");
+    const article = ld(html)["@graph"].find((x) => x["@type"] === "Article");
+    expect(article.headline).toBe(html.match(/<title>([^<｜]+)｜/)[1]);
+    expect(article.description).toBe(html.match(/<meta name="description" content="([^"]+)">/)[1]);
+    expect(article.image).toBe(BASE + OG_IMAGES["dvorakjp/"]);
+    expect(article.mainEntityOfPage).toBe(BASE + "dvorakjp/");
+    expect(article.dateModified).toBe(lastmod[BASE + "dvorakjp/"]);
+    expect(article.datePublished <= article.dateModified).toBe(true);
+  });
+});
+
+test.each(pages.map((p) => [p.path || "（トップ）", p]))("%s: h1 が 1 つで、ページの主題（「DvorakJP」）を含む", (_, p) => {
+  const h1 = [...p.html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => m[1].replace(/<[^>]+>/g, ""));
+  expect(h1).toHaveLength(1);
+  expect(h1[0]).toContain("DvorakJP");
 });
 
 describe("短縮拡張の有無の選択（導入方法・練習）", () => {
@@ -123,5 +158,17 @@ describe("短縮拡張の有無の選択（導入方法・練習）", () => {
     const abbr = p.html.match(/data-edition="abbr">(.*?)<\/button>/s)[1];
     expect(abbr).toContain('class="exp-icon"');
     expect(abbr).toContain('aria-label="Experimental"');
+  });
+});
+
+// 目次（docs/toc.js）は id 付きの h2 から作る。トップページの id は、以前の URL の転送（docs/app.js の MOVED）とぶつけない
+describe.each([["（トップ）", ""], ["dvorakjp/", "dvorakjp/"]])("%s: 目次", (_, path) => {
+  const { html } = pages.find((p) => p.path === path);
+  test("toc.js を読み込み、h2 にすべて id がある", () => {
+    expect(html).toContain(`<script type="module" src="${path ? "../" : ""}toc.js"></script>`);
+    const h2 = [...html.matchAll(/<h2([^>]*)>/g)].map((m) => m[1]);
+    expect(h2.length).toBeGreaterThanOrEqual(3);
+    for (const attrs of h2) expect(attrs).toMatch(/ id="[\w-]+"/);
+    for (const id of ["install", "playground", "dvorakjp"]) expect(html).not.toContain(`id="${id}"`);
   });
 });
